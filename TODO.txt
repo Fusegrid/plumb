@@ -1,0 +1,7 @@
+TODO!
+
+- Fix messiness with offset translation (sometimes we don't have to use cumulativeOffset but we do anyway, etc.)
+- "Force feedback" -- immediate feedback for grouping
+- Group guiding
+- Liquid/jelly layouts
+- Work on the interface!

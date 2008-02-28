@@ -1,0 +1,175 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="test.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../lib/prototype.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lib/unittest.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/plumb.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/recognition.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/layout.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/column.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/output.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css" media="screen">
+      
+      #arena {
+        color: #f00;
+      }
+      
+      #arena .shape {
+        background: #999;
+        color: #fff;
+      }
+      
+    </style>
+  </head>
+  <body>
+    
+    <div id="arena">
+    </div>
+    
+    <div id="testlog">
+    </div>
+    
+    <script type="text/javascript" charset="utf-8">
+    
+      Plumb.setup({
+        layout: { element: new Element('div'), width: 12 },
+        output: { width: 25, margin: 5 }
+      });
+      
+      Object.extend(Test.Unit.Testcase.prototype, {
+        assertStyles: function(expected, element) {
+          element = $(element);
+          
+          $H(expected).each(function(p) {
+            this.assertEqual(p.value, element.getStyle(p.key), p.key);
+            if (p.value != element.getStyle(p.key))
+              console.log(element);
+          }.bind(this));
+        }
+      });
+      
+      Fixtures = {
+        // |--a--| |------------------b------------------|
+        twoPlainColumns: {
+          id: 'ab',
+          root: true,
+          type: "columns",
+          width: 12,
+          children: [
+            { id: 'a', width: 2 },
+            { id: 'b', width: 10 }
+          ]
+        },
+        
+        // |--a--| |------------------b------------------|
+        // |-----| 
+        // |-----| |--------c--------| |--------d--------|
+        //
+        // |----------------------e----------------------|
+        nestedRowsAndColumns: {
+          id: 'abcde',
+          root: true,
+          type: "rows",
+          width: 12,
+          children: [
+            {
+              id: 'abcd',
+              root: false,
+              type: "columns",
+              width: 12,
+              children: [
+                { id: 'a', width: 2 },
+                {
+                  id: 'bcd',
+                  root: false,
+                  type: "rows",
+                  width: 10,
+                  children: [
+                    { id: 'b', width: 10 },
+                    {
+                      id: 'cd',
+                      root: false,
+                      type: "columns",
+                      width: 10,
+                      children: [
+                        { id: 'c', width: 5 },
+                        { id: 'd', width: 5 }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            { id: 'e', width: 12 }
+          ]
+        },
+        
+        // |--a--| |<-----------------b----------------->|
+        stretchyColumn: {
+          id: 'ab',
+          root: true,
+          type: "columns",
+          width: { percentage: 100, subtrahend: 0 },
+          children: [
+            { id: 'a', width: 2 },
+            { id: 'b', width: { percentage: 100, subtrahend: 2 } }
+          ]
+        },
+      }
+      
+      new Test.Unit.Runner({
+        setup: function() {
+          $("arena").innerHTML = "";
+        },
+        
+        testTwoPlainColumns: function() { with(this) {
+          var element = Plumb.Output.elementForContainer(Fixtures.twoPlainColumns);
+          $("arena").insert(element);
+          
+          assertStyles({ 'width': "365px", 'float': 'none' }, 'ab');
+          
+          assertStyles({ 'marginLeft': "5px", 'width': "55px", 'float': 'left' }, 'a');
+          assertStyles({ 'marginLeft': "5px", 'width': "295px", 'float': 'left' }, 'b');
+        }},
+        
+        testNestedRowsAndColumns: function() { with(this) {
+          var element = Plumb.Output.elementForContainer(Fixtures.nestedRowsAndColumns);
+          $("arena").insert(element);
+          
+          assertStyles({ 'width': "365px", 'float': 'none' }, 'abcde');
+          
+          assertStyles({ 'width': "365px", 'float': 'none' }, 'abcd');
+          assertStyles({ 'width': "355px", 'marginLeft': "5px", 'float': 'none' }, 'e');
+          
+          assertStyles({ 'width': "55px", 'marginLeft': "5px", 'float': 'left' }, 'a');
+          assertStyles({ 'width': "305px", 'float': 'left' }, 'bcd');
+          
+          assertStyles({ 'width': "295px", 'marginLeft': "5px", 'float': 'none' }, 'b');
+          assertStyles({ 'width': "305px", 'float': 'none' }, 'cd');
+          
+          assertStyles({ 'width': "145px", 'marginLeft': "5px", 'float': 'left' }, 'c');
+          assertStyles({ 'width': "145px", 'marginLeft': "5px", 'float': 'left' }, 'd');
+        }},
+                        
+        testStretchyColumn: function() { with(this) {
+          var element = Plumb.Output.elementForContainer(Fixtures.stretchyColumn);
+          $("arena").insert(element);
+          
+          element.select('.shape').invoke("insert", "Lorem ipsum dolor sit amet");
+          
+          $("arena").setStyle({ 'width': "365px" });
+          assertEqual(295, $("b").offsetWidth);
+          
+          $("arena").setStyle({ 'width': "375px" });
+          assertEqual(305, $("b").offsetWidth);
+          
+          $("arena").setStyle({ 'width': "385px" });
+          assertEqual(315, $("b").offsetWidth);
+        }}
+      });
+      
+    </script>
+    
+  </body>
+</html>

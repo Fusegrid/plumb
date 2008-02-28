@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="test.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../lib/prototype.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lib/unittest.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/stylesheet.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body>
+    
+    <div id="testlog">
+    </div>
+    
+    <script type="text/javascript" charset="utf-8">
+      
+      Test.context("Stylesheet generation", {
+        "should generate a stylesheet from provided rules": function() {
+          var stylesheet = new StylesheetRuleGroup();
+          
+          stylesheet.rule("#home", {
+            width: "300px",
+            marginRight: "20px"
+          });
+          
+          stylesheet.rule(".something", {
+            padding: "1px"
+          });
+          
+          stylesheet.toString().shouldEqual("#home {\n  width: 300px;\n  margin-right: 20px;\n}\n\n.something {\n  padding: 1px;\n}");
+        },
+        
+        "should be able to call rule function outside of initializer": function() {
+          var stylesheet = new StylesheetRuleGroup();
+          stylesheet.rule("#okay", { "width": "1px" });
+          stylesheet.toString().shouldEqual("#okay {\n  width: 1px;\n}");
+        },
+        
+        "should be able to make compact rules": function() {
+          var stylesheet = new StylesheetRuleGroup();
+          stylesheet.rule("#okay", { "width": "1px", "height": "2px" }, { compact: true });
+          stylesheet.toString().shouldEqual("#okay { width: 1px; height: 2px; }");
+        },
+        
+        "should be able to group rules": function() {
+          var stylesheet = new StylesheetRuleGroup();
+          
+          stylesheet.group("stuff", function(stuff) {
+            stuff.rule("#okay", { "width": "1px" });
+          });
+          
+          stylesheet.group("other", function(other) {
+            other.rule("#yeah", { "width": "2px" });
+          });
+          
+          stylesheet.toString().shouldEqual("/* stuff */\n\n#okay {\n  width: 1px;\n}\n\n/* other */\n\n#yeah {\n  width: 2px;\n}");
+        },
+        
+        "should be able to make compact groups": function() {
+          var stylesheet = new StylesheetRuleGroup();
+          
+          stylesheet.group("stuff", function(stuff) {
+            stuff.rule("#okay", { "width": "1px" });
+            stuff.rule("#another", { "width": "2px" });
+          }, { compact: true });
+          
+          stylesheet.toString().shouldEqual("/* stuff */\n\n#okay { width: 1px; }\n#another { width: 2px; }");
+        }
+      });
+      
+    </script>
+    
+  </body>
+</html>

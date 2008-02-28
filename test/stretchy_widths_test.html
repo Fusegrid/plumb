@@ -1,0 +1,157 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="test.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../lib/prototype.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lib/unittest.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/plumb.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/recognition.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/layout.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/column.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body>
+    
+    <div id="testlog">
+    </div>
+    
+    <script type="text/javascript" charset="utf-8">
+    
+      Plumb.setup({
+        layout: { element: new Element('div'), width: 12 }
+      });
+      
+      Object.extend(Test.Unit.Testcase.prototype, {
+        assertWidths: function(expected, shapes) {
+          var container = Plumb.Recognition.buildContainer(shapes.map(function(s) { return Object.clone(s); }));
+          var widths = $H();
+          expected = $H(expected);
+          
+          (function(c) {
+            if (Object.isNumber(c.width))
+              var width = c.width;
+            else
+              var width = c.width.percentage + "% - " + c.width.subtrahend;
+            
+            if (c.children) {
+              var ids = c.children.map(arguments.callee).join("");
+              widths.set(ids, width);
+              return ids;
+            } else {
+              widths.set(c.id, width);
+              return c.id;
+            }
+          })(container);
+          
+          var message = this.buildMessage('assertWidths', '<?> was not the same as <?>', expected, widths);
+          var block = function() {
+            return expected.keys().length == widths.keys().length &&
+                    widths.all(function(p) {
+                      return expected.get(p.key) == p.value;
+                    });
+          };
+          this.assertBlock(message, block);
+        }
+      });
+      
+      var Fixtures = {
+        // |<-----a----->|
+        //
+        // |--b--| |<-c->|
+        headerAndTwoSubordinateColumns: [
+          { id: "a", left: 0, right: 11, top: 10, bottom: 90, width: 12, stretchy: true },
+          { id: "b", left: 0, right: 5, top: 100, bottom: 190, width: 6, stretchy: false },
+          { id: "c", left: 6, right: 11, top: 100, bottom: 190, width: 6, stretchy: true }
+        ],
+        
+        // |<-----a----->|
+        //
+        //         |<-b->|
+        fullHeaderAndRowWithPrepend: [
+          { id: "a", left: 0, right: 11, top: 10, bottom: 90, width: 12, stretchy: true },
+          { id: "b", left: 6, right: 11, top: 100, bottom: 190, width: 6, stretchy: true }
+        ],
+        
+        //      |<-a->|
+        rootWithPrependAndAppend: [
+          { id: "a", left: 5, right: 5, top: 10, bottom: 90, width: 1, stretchy: true }
+        ],
+        
+        // |<---------------------a--------------------->|
+        //
+        // |--b--|         |<-c->|         |--d--| |--e--|
+        columnWithPrependAndAppend: [
+          { id: "a", left: 0, right: 11, top: 0, bottom: 10, width: 12, stretchy: true },
+          { id: "b", left: 0, right: 1, top: 20, bottom: 30, width: 2, stretchy: false },
+          { id: "c", left: 4, right: 5, top: 20, bottom: 30, width: 2, stretchy: true },
+          { id: "d", left: 8, right: 9, top: 20, bottom: 30, width: 2, stretchy: false },
+          { id: "e", left: 10, right: 11, top: 20, bottom: 30, width: 2, stretchy: false }
+        ],
+        
+        // |<-b->| |--b--| |<-c->|
+        twoStretchyColumnsSurroundingFixed: [
+          { id: "a", left: 0, right: 3, top: 0, bottom: 10, width: 4, stretchy: true },
+          { id: "b", left: 4, right: 7, top: 0, bottom: 10, width: 4, stretchy: false },
+          { id: "c", left: 8, right: 11, top: 0, bottom: 10, width: 4, stretchy: true }
+        ],
+        
+        // |<-a->| |<-----b----->|
+        differentlySizedStretchyColumns: [
+          { id: "a", left: 0, right: 3, top: 0, bottom: 10, width: 4, stretchy: true },
+          { id: "b", left: 4, right: 11, top: 0, bottom: 10, width: 8, stretchy: true }
+        ],
+        
+        // |<-a->| |--b--| |<-----c----->| |------d------|
+        differentlySizedStretchyColumnsWithFixedColumns: [
+          { id: "a", left: 0, right: 1, top: 0, bottom: 10, width: 2, stretchy: true },
+          { id: "b", left: 2, right: 3, top: 0, bottom: 10, width: 2, stretchy: false },
+          { id: "c", left: 4, right: 7, top: 0, bottom: 10, width: 4, stretchy: true },
+          { id: "d", left: 8, right: 11, top: 0, bottom: 10, width: 4, stretchy: false }
+        ],
+        
+        // |<-a->|         |<-b->|         |<-c->|         |----------------------d----------------------|
+        differentlySizedStretchyColumnsWithSpacing: [
+          { id: "a", left: 0, right: 0, top: 0, bottom: 10, width: 1, stretchy: true },
+          { id: "b", left: 2, right: 2, top: 0, bottom: 10, width: 1, stretchy: true },
+          { id: "c", left: 4, right: 4, top: 0, bottom: 10, width: 1, stretchy: true },
+          { id: "d", left: 6, right: 11, top: 0, bottom: 10, width: 6, stretchy: false }
+        ]
+      }
+      
+      new Test.Unit.Runner({
+        testHeaderAndTwoSubordinateColumns: function() { with(this) {
+          assertWidths({ abc: "100% - 0", a: "100% - 0", bc: "100% - 0", b: 6, c: "100% - 6" }, Fixtures.headerAndTwoSubordinateColumns);
+        }},
+        
+        testRootWithPrependAndAppend: function() { with(this) {
+          assertWidths({ a: "100% - 11" }, Fixtures.rootWithPrependAndAppend);
+        }},
+        
+        testFullHeaderAndRowWithPrepend: function() { with(this) {
+          assertWidths({ ab: "100% - 0", a: "100% - 0", b: "100% - 6" }, Fixtures.fullHeaderAndRowWithPrepend);
+        }},
+        
+        testColumnWithPrependAndAppend: function() { with(this) {
+          assertWidths({ abcde: "100% - 0", a: "100% - 0", bcde: "100% - 0", b: 2, c: "100% - 10", d: 2, e: 2 }, Fixtures.columnWithPrependAndAppend);
+        }},
+        
+        testTwoStretchyColumnsSurroundingFixed: function() { with(this) {
+          assertWidths({ abc: "100% - 0", a: "50% - 2", b: 4, c: "50% - 2" }, Fixtures.twoStretchyColumnsSurroundingFixed);
+        }},
+        
+        testDifferentlySizedStretchyColumns: function() { with(this) {
+          assertWidths({ ab: "100% - 0", a: "33% - 0", b: "66% - 0" }, Fixtures.differentlySizedStretchyColumns);
+        }},
+        
+        testDifferentlySizedStretchyColumnsWithFixedColumns: function() { with(this) {
+          assertWidths({ abcd: "100% - 0", a: "33% - 2", b: 2, c: "66% - 4", d: 4 }, Fixtures.differentlySizedStretchyColumnsWithFixedColumns);
+        }},
+        
+        testDifferentlySizedStretchyColumnsWithSpacing: function() { with(this) {
+          assertWidths({ abcd: "100% - 0", a: "33% - 3", b: "33% - 3", c: "33% - 3", d: 6 }, Fixtures.differentlySizedStretchyColumnsWithSpacing);
+        }}
+      });
+      
+    </script>
+    
+  </body>
+</html>

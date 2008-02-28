@@ -1,0 +1,142 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <script src="lib/prototype.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/letters.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/plumb.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/column.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/creation.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/dragging.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/focus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/handle.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/layout.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/modes.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/output.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/recognition.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/resizing.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/selection.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/shape.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/stretchiness.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/toolbar.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css" media="screen">
+      
+      #toolbar {
+        width: 730px;
+        overflow: auto;
+        background: #ccc;
+        margin: auto;
+      }
+
+      #toolbar .button {
+        float: left;
+        border: 1px outset #eee;
+        background: #fff;
+        padding: 2px;
+        cursor: default;
+      }
+
+      #toolbar .button.set {
+        border: 1px inset #eee;
+      }
+
+      #toolbar .modes {
+        float: left;
+      }
+
+      #toolbar .buttons {
+        float: right;
+      }
+
+      #layout {
+        height: 500px;
+        width: 730px;
+        background: #ddd;
+        overflow: none;
+        margin: auto;
+        position: relative;
+      }
+
+      #layout .column {
+        height: 100%;
+        background: #eee;
+        float: left;
+      }
+
+      #layout.draw {
+        cursor: crosshair;
+      }
+
+      #layout.select {
+        cursor: default;
+      }
+
+      .shape {
+        background: #fff;
+      }
+      
+      .shape.stretchy {
+        background: #fff url(images/spring.gif) center center no-repeat
+      }
+
+      .handle {
+        background: #999;
+      }
+      
+      #recognize {
+        margin: 20px auto;
+        display: block;
+      }
+      
+      #preview {
+        width: 600px;
+        margin: 20px auto;
+        padding: 5px 0 0 0;
+        background: #ddd;
+        overflow: auto;
+      }
+      
+      #preview .column {
+        background: #fff;
+        float: left;
+        margin-bottom: 5px;
+      }
+      
+      #preview .columns {
+        overflow: auto;
+      }
+      
+      #preview .columns > div {
+        float: left;
+      }
+      
+      #preview .rows > div {
+        float: none;
+      }
+      
+    </style>
+  </head>
+  <body>
+    
+    <div id="toolbar">
+      <div class="group modes">
+        <div class="select button"><img src="images/select.gif"></div>
+        <div class="draw button"><img src="images/draw.gif"></div>
+      </div>
+      <div class="group buttons">
+        <div class="stretchy button"><img src="images/spring.gif"></div>
+      </div>
+    </div>
+    <div id="layout">
+    </div>
+    
+    <script type="text/javascript" charset="utf-8">
+      
+      Plumb.setup({
+        layout: { element: "layout" },
+        toolbar: { element: "toolbar" }
+      });
+      
+    </script>
+    
+  </body>
+</html>

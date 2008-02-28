@@ -1,0 +1,207 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="test.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../lib/prototype.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lib/unittest.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/plumb.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/recognition.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/column.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/layout.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body>
+    
+    <div id="testlog">
+    </div>
+    
+    <script type="text/javascript" charset="utf-8">
+    
+      Plumb.setup({
+        layout: { element: new Element('div') }
+      });
+    
+      Object.extend(Test.Unit.Testcase.prototype, {
+        assertStructure: function(expected, shapes) {
+          this.assertContainerStructureEqual(expected, Plumb.Recognition.buildContainer(shapes));
+        },
+        
+        assertUnsupported: function(shapes) {
+          this.assertRaise("UnsupportedLayout", function() {
+            Plumb.Recognition.buildContainer(shapes);
+          });
+        },
+        
+        assertContainerStructureEqual: function(expected, actual) {
+          var message = this.buildMessage('assertContainerStructureEqual', '<?> was not the same as <?>', expected, actual);
+          
+          var block = function() {
+            return (function(pair) {
+              var e = pair[0];
+              var a = pair[1];
+              
+              // comparing a container with no children
+              if (Object.isString(e))
+                return e == a.id;
+              
+              // comparing a container with children
+              if (!Object.isArray(e[a.type]))
+                return false;
+              
+              return e[a.type].zip(a.children).all(arguments.callee);
+            })([expected, actual]);
+          };
+          
+          this.assertBlock(message, block);
+        }
+      });
+      
+      var Fixtures = {
+        // |------a------|
+        //
+        // |--b--| |--c--|
+        headerAndTwoSubordinateColumns: [
+          { id: "a", left: 0, right: 11, top: 10, bottom: 90 },
+          { id: "b", left: 0, right: 5, top: 100, bottom: 190 },
+          { id: "c", left: 6, right: 11, top: 100, bottom: 190 }
+        ],
+        
+        headerAndTwoSubordinateColumnsJumbled: [
+          { id: "b", left: 0, right: 5, top: 100, bottom: 190 },
+          { id: "c", left: 6, right: 11, top: 100, bottom: 190 },
+          { id: "a", left: 0, right: 11, top: 10, bottom: 90 }
+        ],
+        
+        headerAndTwoSubordinateColumnsUneven: [
+          { id: "a", left: 0, right: 11, top: 10, bottom: 90 },
+          { id: "b", left: 0, right: 5, top: 95, bottom: 185 },
+          { id: "c", left: 6, right: 11, top: 105, bottom: 195 }
+        ],
+        
+        // |--a--| |--b--|
+        // |-----| 
+        // |-----| |--c--|
+        columnOnLeftTwoRowsOnRight: [
+          { id: "a", left: 0, right: 5, top: 10, bottom: 100 },
+          { id: "b", left: 6, right: 11, top: 10, bottom: 40 },
+          { id: "c", left: 6, right: 11, top: 50, bottom: 100 }
+        ],
+        
+        columnOnLeftTwoRowsOnRightSquashed: [
+          { id: "a", left: 0, right: 5, top: 10, bottom: 100 },
+          { id: "b", left: 6, right: 11, top: 30, bottom: 40 },
+          { id: "c", left: 6, right: 11, top: 50, bottom: 60 }
+        ],
+        
+        columnOnLeftTwoRowsOnRightJumbled: [
+          { id: "c", left: 6, right: 11, top: 50, bottom: 100 },
+          { id: "a", left: 0, right: 5, top: 10, bottom: 100 },
+          { id: "b", left: 6, right: 11, top: 10, bottom: 40 }
+        ],
+        
+        // |-a-|
+        //
+        // |----b---|
+        //
+        // |------c------|
+        series: [
+          { id: "a", left: 0, right: 1, top: 10, bottom: 20 },
+          { id: "b", left: 0, right: 3, top: 30, bottom: 40 },
+          { id: "c", left: 0, right: 5, top: 50, bottom: 60 }
+        ],
+        
+        seriesJumbled: [
+          { id: "b", left: 0, right: 3, top: 30, bottom: 40 },
+          { id: "c", left: 0, right: 5, top: 50, bottom: 60 },
+          { id: "a", left: 0, right: 1, top: 10, bottom: 20 }
+        ],
+        
+        // |-a-| |-b-| |-c-|
+        // |---| 
+        // |---| |----d----|
+        //
+        // |-------e-------|
+        slightlyMoreComplicated: [
+          { left: 0, right: 0, top: 0, bottom: 30, id: "a"},
+          { left: 1, right: 1, top: 0, bottom: 10, id: "b"},
+          { left: 2, right: 2, top: 0, bottom: 10, id: "c"},
+          { left: 1, right: 2, top: 20, bottom: 30, id: "d"},
+          { left: 0, right: 2, top: 35, bottom: 45, id: "e"}
+        ],
+        
+        slightlyMoreComplicatedJumbled: [
+          { left: 0, right: 2, top: 35, bottom: 45, id: "e"},
+          { left: 1, right: 1, top: 0, bottom: 10, id: "b"},
+          { left: 0, right: 0, top: 0, bottom: 30, id: "a"},
+          { left: 1, right: 2, top: 20, bottom: 30, id: "d"},
+          { left: 2, right: 2, top: 0, bottom: 10, id: "c"}
+        ],
+        
+        // |-a-| |-b-| |-c-| |-e-| |-f-|
+        // |---|             |---| |---|
+        // |---| |----d----| |---| |---|
+        fourMainColumns: [
+          { left: 0, right: 0, top: 0, bottom: 30, id: "a"},
+          { left: 1, right: 1, top: 0, bottom: 10, id: "b"},
+          { left: 2, right: 2, top: 0, bottom: 10, id: "c"},
+          { left: 1, right: 2, top: 20, bottom: 30, id: "d"},
+          { left: 3, right: 3, top: 0, bottom: 30, id: "e"},
+          { left: 4, right: 4, top: 0, bottom: 30, id: "f"}
+        ],
+        
+        // |-a-| |----b----|
+        // |---|     
+        // |---|       |-c-|
+        // |---|       |---|
+        //             |---|
+        // |----d----| |---|
+        unsupported: [
+          { id: "a", left: 0, right: 0, top: 0, bottom: 40 },
+          { id: "b", left: 1, right: 2, top: 0, bottom: 10 },
+          { id: "c", left: 2, right: 2, top: 20, bottom: 50 },
+          { id: "d", left: 0, right: 1, top: 40, bottom: 50 }
+        ]
+      }
+      
+      new Test.Unit.Runner({
+        testAssertContainerStructure: function() { with(this) {
+          assertContainerStructureEqual(
+            { rows: [ "a", { columns: [ "b", "c"] } ] },
+            { type: "rows", children: [ { id: "a" }, { type: "columns", children: [ { id: "b" }, { id: "c" } ] } ] }
+          );
+        }},
+        
+        testHeaderAndTwoSubordinateColumns: function() { with(this) {
+          assertStructure({ rows: [ "a", { columns: [ "b", "c"] } ] }, Fixtures.headerAndTwoSubordinateColumns);
+          assertStructure({ rows: [ "a", { columns: [ "b", "c"] } ] }, Fixtures.headerAndTwoSubordinateColumnsJumbled);
+          assertStructure({ rows: [ "a", { columns: [ "b", "c"] } ] }, Fixtures.headerAndTwoSubordinateColumnsUneven);
+        }},
+        
+        testColumnOnLeftTwoRowsOnRight: function() { with(this) {
+          assertStructure({ columns: [ "a", { rows: [ "b", "c"] } ] }, Fixtures.columnOnLeftTwoRowsOnRight);
+          assertStructure({ columns: [ "a", { rows: [ "b", "c"] } ] }, Fixtures.columnOnLeftTwoRowsOnRightSquashed);
+          assertStructure({ columns: [ "a", { rows: [ "b", "c"] } ] }, Fixtures.columnOnLeftTwoRowsOnRightJumbled);
+        }},
+        
+        testSeries: function() { with(this) {
+          assertStructure({ rows: [ "a", "b", "c"] }, Fixtures.series);
+          assertStructure({ rows: [ "a", "b", "c"] }, Fixtures.seriesJumbled);
+        }},
+        
+        testSlightlyMoreComplicated: function() { with(this) {
+          assertStructure({ rows: [ { columns: [ "a", { rows: [ { columns: [ "b", "c" ] }, "d" ] } ] }, "e"] }, Fixtures.slightlyMoreComplicated);
+          assertStructure({ rows: [ { columns: [ "a", { rows: [ { columns: [ "b", "c" ] }, "d" ] } ] }, "e"] }, Fixtures.slightlyMoreComplicatedJumbled);
+        }},
+        
+        testFourMainColumns: function() { with(this) {
+          assertStructure({ columns: [ "a", { rows: [ { columns: [ "b", "c" ] }, "d" ] }, "e", "f" ] }, Fixtures.fourMainColumns);
+        }},
+        
+        testUnsupported: function() { with(this) {
+          assertUnsupported(Fixtures.unsupported);
+        }}
+      });
+      
+    </script>
+    
+  </body>
+</html>
