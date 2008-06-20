@@ -1,3 +1,0 @@
-* 0.1.1 *
-
-Fixed a typo with Blueprint classy CSS generation (no prepend or append yet)
