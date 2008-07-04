@@ -12,7 +12,7 @@
     <style type="text/css" media="screen">
       
       #arena {
-        color: #f00;
+        background: #f00;
       }
       
       #arena .shape {
@@ -123,50 +123,54 @@
           $("arena").innerHTML = "";
         },
         
-        testTwoPlainColumns: function() { with(this) {
+        testTwoPlainColumns: function() {
           var element = Plumb.Output.elementForContainer(Fixtures.twoPlainColumns);
+          element.select('.shape').invoke("insert", "Lorem ipsum dolor sit amet");
           $("arena").insert(element);
           
-          assertStyles({ 'width': "365px", 'float': 'none' }, 'ab');
+          this.assertStyles({ 'width': "365px", 'float': 'none' }, 'ab');
           
-          assertStyles({ 'marginLeft': "5px", 'width': "55px", 'float': 'left' }, 'a');
-          assertStyles({ 'marginLeft': "5px", 'width': "295px", 'float': 'left' }, 'b');
-        }},
+          this.assertStyles({ 'marginLeft': "5px", 'width': "55px", 'float': 'left' }, 'a');
+          this.assertStyles({ 'marginLeft': "5px", 'width': "295px", 'float': 'left' }, 'b');
+        },
         
-        testNestedRowsAndColumns: function() { with(this) {
+        testNestedRowsAndColumns: function() {
           var element = Plumb.Output.elementForContainer(Fixtures.nestedRowsAndColumns);
+          element.select('.shape').invoke("insert", "Lorem ipsum dolor sit amet");
           $("arena").insert(element);
           
-          assertStyles({ 'width': "365px", 'float': 'none' }, 'abcde');
+          this.assertStyles({ 'width': "365px", 'float': 'none' }, 'abcde');
           
-          assertStyles({ 'width': "365px", 'float': 'none' }, 'abcd');
-          assertStyles({ 'width': "355px", 'marginLeft': "5px", 'float': 'none' }, 'e');
+          this.assertStyles({ 'width': "365px", 'float': 'none' }, 'abcd');
+          this.assertStyles({ 'width': "355px", 'marginLeft': "5px", 'float': 'none' }, 'e');
           
-          assertStyles({ 'width': "55px", 'marginLeft': "5px", 'float': 'left' }, 'a');
-          assertStyles({ 'width': "305px", 'float': 'left' }, 'bcd');
+          this.assertStyles({ 'width': "55px", 'marginLeft': "5px", 'float': 'left' }, 'a');
+          this.assertStyles({ 'width': "305px", 'float': 'left' }, 'bcd');
           
-          assertStyles({ 'width': "295px", 'marginLeft': "5px", 'float': 'none' }, 'b');
-          assertStyles({ 'width': "305px", 'float': 'none' }, 'cd');
+          this.assertStyles({ 'width': "295px", 'marginLeft': "5px", 'float': 'none' }, 'b');
+          this.assertStyles({ 'width': "305px", 'float': 'none' }, 'cd');
           
-          assertStyles({ 'width': "145px", 'marginLeft': "5px", 'float': 'left' }, 'c');
-          assertStyles({ 'width': "145px", 'marginLeft': "5px", 'float': 'left' }, 'd');
-        }},
+          this.assertStyles({ 'width': "145px", 'marginLeft': "5px", 'float': 'left' }, 'c');
+          this.assertStyles({ 'width': "145px", 'marginLeft': "5px", 'float': 'left' }, 'd');
+        },
                         
-        testStretchyColumn: function() { with(this) {
+        testStretchyColumn: function() {
           var element = Plumb.Output.elementForContainer(Fixtures.stretchyColumn);
           $("arena").insert(element);
           
           element.select('.shape').invoke("insert", "Lorem ipsum dolor sit amet");
           
+          console.log($("arena").innerHTML);
+          
           $("arena").setStyle({ 'width': "365px" });
-          assertEqual(295, $("b").offsetWidth);
+          this.assertEqual(295, $("b").offsetWidth);
           
           $("arena").setStyle({ 'width': "375px" });
-          assertEqual(305, $("b").offsetWidth);
+          this.assertEqual(305, $("b").offsetWidth);
           
           $("arena").setStyle({ 'width': "385px" });
-          assertEqual(315, $("b").offsetWidth);
-        }}
+          this.assertEqual(315, $("b").offsetWidth);
+        }
       });
       
     </script>
