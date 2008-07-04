@@ -129,11 +129,26 @@
     <div id="layout">
     </div>
     
+    <p style="text-align: center;"><button id="preview-button">Preview</button></p>
+    
     <script type="text/javascript" charset="utf-8">
       
       Plumb.setup({
         layout: { element: "layout" },
         toolbar: { element: "toolbar" }
+      });
+      
+      $("preview-button").observe("click", function() {
+        var container = Plumb.Recognition.recognize();
+        console.log(container);
+        
+        console.log(Plumb.Output.getMeasurements());
+        
+        var html = Plumb.Output.htmlForContainer(container);
+        console.log(html);
+        
+        var css = Plumb.Output.cssForContainer(container);
+        console.log(css);
       });
       
     </script>

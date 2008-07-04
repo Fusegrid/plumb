@@ -1,38 +1,61 @@
 Plumb.Output = {
-  elementForContainer: function(container) {
-    var O = this.getMeasurements();
+  htmlForContainer: function(container) {
+    var html = "";
     
-    var element = new Element("div", { 'id': container.id });
+    if (!container.id)
+      container.id = "container-" + (Math.random() * 1000000000).round();
     
-    if (container.root) element.addClassName("root");
-    element.addClassName(container.type);
-    
-    element.setStyle({
-      'float': container.type == 'columns' || container.root ? 'none' : 'left',
-      'width': ((O.margin + O.width) * container.width) + O.margin + "px",
-      'overflow': 'auto'
-    });
+    html += "<div id=\"" + container.id + "\">";
     
     container.children.map(function(child) {
       if (child.children) {
-        element.insert(Plumb.Output.elementForContainer(child));
+        html += Plumb.Output.htmlForContainer(child);
       } else {
-        var childElement = new Element("div", { 'className': 'shape', 'id': child.id });
-        
-        
-        
-        childElement.setStyle({
-          'float': container.type == 'rows' ? 'none' : 'left',
-          'marginLeft': O.margin + ((O.margin + O.width) * (child.prepend || 0)) + "px",
-          'marginRight': ((O.margin + O.width) * (child.append || 0)) + "px",
-          'width': ((O.margin + O.width) * child.width) - O.margin + "px"
-        });
-        
-        element.insert(childElement);
+        if (!child.id)
+          child.id = "container-" + (Math.random() * 1000000000).round();
+          
+        html += "<div id=\"" + child.id + "\"></div>"
       }
     });
     
-    return element;
+    html += "</div>"
+    
+    return html;
+  },
+  
+  cssForContainer: function(container) {
+    var O = this.getMeasurements();
+    var css = {};
+    
+    if (!container.id)
+      container.id = "container-" + (Math.random() * 1000000000).round();
+    
+    css[container.id] = {
+      'float': container.type == 'columns' || container.root ? 'none' : 'left',
+      'width': container.stretchy ?
+        container.width.percentage + "% - " + (((O.margin + O.width) * container.width.subtrahend) + O.margin) + "px" :
+        ((O.margin + O.width) * container.width) + O.margin + "px"
+    };
+    
+    container.children.map(function(child) {
+      if (child.children) {
+        Object.extend(css, Plumb.Output.cssForContainer(child));
+      } else {
+        if (!child.id)
+          child.id = "container-" + (Math.random() * 1000000000).round();
+        
+        css[child.id] = {
+          'float': container.type == 'rows' ? 'none' : 'left',
+          'margin-left': O.margin + ((O.margin + O.width) * (child.prepend || 0)) + "px",
+          'margin-right': ((O.margin + O.width) * (child.append || 0)) + "px",
+          'width': child.stretchy ?
+            child.width.percentage + "% - " + (((O.margin + O.width) * child.width.subtrahend) - O.margin) + "px" :
+            ((O.margin + O.width) * child.width) - O.margin + "px"
+        }
+      }
+    });
+    
+    return css;
   },
   
   getMeasurements: function() {
