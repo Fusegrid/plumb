@@ -161,8 +161,10 @@
           }
         }
         
-        $("preview").update();
+        COLUMN = 100;
         
+        $("preview").update();
+        s
         (function(c, p) {
           var li = new Element("li");
           
@@ -170,7 +172,7 @@
           li.insert(dl);
           
           dl.insert(new Element("dt").insert("type"));
-          dl.insert(new Element("dd").insert(c.type ? c.type + " container" : "box"));
+          dl.insert(new Element("dd").insert(c.type ? c.type + " container" + (c.root ? " (root)" : "") : "box"));
           
           dl.insert(new Element("dt").insert("width"));
           dl.insert(new Element("dd").insert(c.stretchy ? c.width.percentage + "% - " + c.width.subtrahend : c.width));
@@ -180,6 +182,27 @@
           
           dl.insert(new Element("dt").insert("append"));
           dl.insert(new Element("dd").insert(c.append));
+          
+          dl.insert(new Element("dt").insert("css"));
+          
+          css = new Element("dd").insert("{ ");
+          dl.insert(css);
+          
+          if (c.stretchy) {
+            if (c.width.subtrahend > 0)
+              css.insert("width: " + c.width.percentage + "% - " + (c.width.subtrahend * COLUMN) + "px" + "; ");
+            else
+              css.insert("width: " + c.width.percentage + "%" + "; ");
+          } else {
+            css.insert("width: " + (c.width * COLUMN) + "px" + "; ");
+          }
+          
+          css.insert("margin-left: " + (c.prepend * COLUMN) + "px" + "; ");
+          css.insert("margin-right: " + (c.append * COLUMN) + "px" + "; ");
+          
+          css.insert("}");
+          
+          
         
           if (!Object.isUndefined(c.children) && c.children.length > 0) {
             var ul = new Element("ul");
