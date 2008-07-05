@@ -152,7 +152,15 @@
       });
       
       $("recognize").observe("click", function() {
-        var container = Plumb.Recognition.recognize();
+        try {
+          var container = Plumb.Recognition.recognize();
+        } catch (e) {
+          if (e == Plumb.UnsupportedLayout) {
+            alert("Sorry, Plumb can't recognize layouts like that.");
+            return;
+          }
+        }
+        
         $("preview").update();
         
         (function(c, p) {
