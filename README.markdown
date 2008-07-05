@@ -1,10 +1,12 @@
 Plumb
 =====
 
-Plumb is a tool for composing web layouts that figures out HTML and CSS from shapes you draw, using a vertical grid system.
+Plumb is a tool for composing web layouts that figures out HTML and CSS from shapes you draw, using a vertical grid system. See example.html for demo.
 
 
 Status
 ------
 
-As a result of some re-writing, Plumb's layout generation is in a half-finished state, but the interface is functional (have a look at the example to see what's what). The aim is to support arbitrary "stretchy" layouts -- without the use of table tags, of course. There are a few experiments with this in the "stretchiness" dir, which involve wrapping and other tricks.
+Plumb is targeting an imaginary version of CSS in which dimensions can be specified by expressions like "50% - 200px". This can be faked in some browsers by using wrapper elements and negative margins (see the "stretchiness" dir for a few experiments) but I don't currently have a complete generalization of this technique ready to handle any layout. I am aware of the technique of using table CSS and IE's support for expressions in CSS, but these solutions aren't ideal. For one thing, table CSS can't represent the full range of layouts Plumb can recognize.
+
+So, for now, Plumb is mainly an experiment and an interface.
