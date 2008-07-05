@@ -11,7 +11,6 @@
     <script src="src/handle.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/layout.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/modes.js" type="text/javascript" charset="utf-8"></script>
-    <script src="src/output.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/recognition.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/resizing.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/selection.js" type="text/javascript" charset="utf-8"></script>
@@ -48,7 +47,7 @@
       }
 
       #layout {
-        height: 500px;
+        height: 400px;
         width: 730px;
         background: #ddd;
         overflow: none;
@@ -90,27 +89,39 @@
       #preview {
         width: 600px;
         margin: 20px auto;
-        padding: 5px 0 0 0;
-        background: #ddd;
+        list-style-type: none;
+        padding: 0;
+      }
+      
+      #preview ul {
+        list-style-type: none;
+      }
+      
+      #preview li {
+        margin: 10px 0;
+      }
+      
+      #preview dl {
         overflow: auto;
       }
       
-      #preview .column {
-        background: #fff;
+      #preview dt {
+        font-weight: bold;
         float: left;
-        margin-bottom: 5px;
+        clear: left;
+        padding-right: 0.5em;
       }
       
-      #preview .columns {
-        overflow: auto;
+      #preview dt:after {
+        content: "=";
+        padding-left: 0.5em;
+        font-weight: normal;
       }
       
-      #preview .columns > div {
+      #preview dd {
+        padding: 0;
         float: left;
-      }
-      
-      #preview .rows > div {
-        float: none;
+        margin: 0;
       }
       
     </style>
@@ -129,7 +140,9 @@
     <div id="layout">
     </div>
     
-    <p style="text-align: center;"><button id="preview-button">Preview</button></p>
+    <button id="recognize">Recognize layout</button>
+    
+    <ul id="preview"></ul>
     
     <script type="text/javascript" charset="utf-8">
       
@@ -138,17 +151,39 @@
         toolbar: { element: "toolbar" }
       });
       
-      $("preview-button").observe("click", function() {
+      $("recognize").observe("click", function() {
         var container = Plumb.Recognition.recognize();
-        console.log(container);
+        $("preview").update();
         
-        console.log(Plumb.Output.getMeasurements());
+        (function(c, p) {
+          var li = new Element("li");
+          
+          var dl = new Element("dl");
+          li.insert(dl);
+          
+          dl.insert(new Element("dt").insert("type"));
+          dl.insert(new Element("dd").insert(c.type ? c.type + " container" : "box"));
+          
+          dl.insert(new Element("dt").insert("width"));
+          dl.insert(new Element("dd").insert(c.stretchy ? c.width.percentage + "% - " + c.width.subtrahend : c.width));
+          
+          dl.insert(new Element("dt").insert("prepend"));
+          dl.insert(new Element("dd").insert(c.prepend));
+          
+          dl.insert(new Element("dt").insert("append"));
+          dl.insert(new Element("dd").insert(c.append));
         
-        var html = Plumb.Output.htmlForContainer(container);
-        console.log(html);
+          if (!Object.isUndefined(c.children) && c.children.length > 0) {
+            var ul = new Element("ul");
+            
+            for (var i = 0; i < c.children.length; i++)
+              arguments.callee(c.children[i], ul);
+              
+            li.insert(ul);
+          }
         
-        var css = Plumb.Output.cssForContainer(container);
-        console.log(css);
+          p.insert(li);
+        })(container, $("preview"));
       });
       
     </script>

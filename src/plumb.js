@@ -11,15 +11,10 @@ var Plumb = {
     
     handle: {
       size: 8
-    },
-    
-    output: {
-      width: 25,
-      margin: 5
     }
   },
   
-  modules: $w("column creation dragging focus handle layout modes output resizing selection shape stretchiness toolbar"),
+  modules: $w("column creation dragging focus handle layout modes resizing selection shape stretchiness toolbar"),
   elements: $w("layout toolbar"),
   
   setup: function(options) {
