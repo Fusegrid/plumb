@@ -2,7 +2,7 @@ Plumb.Output = {
   
   output: function(c, parent) {
     var O = Plumb.Output.options;
-    var element = parent.element();
+    var element = parent.child();
     
     element.id = c.id;
     

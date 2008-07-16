@@ -49,7 +49,7 @@
       }
 
       #layout {
-        height: 400px;
+        height: 300px;
         width: 730px;
         background: #ddd;
         overflow: none;
@@ -83,19 +83,41 @@
         background: #999;
       }
       
-      .handle.focus {
-        background: #777;
-      }
-      
       #recognize {
         margin: 20px auto;
         display: block;
       }
       
       #preview {
-        width: 600px;
         margin: 20px auto;
-        padding: 0;
+        width: 730px;
+      }
+      
+      #preview .root {
+        background: #999;
+        padding-top: 10px;
+      }
+      
+      #preview .rows, #preview .columns {
+        float: left;
+      }
+      
+      #preview .box {
+        float: left;
+        background: #ccc;
+        margin-bottom: 10px;
+        position: relative;
+        height: 50px;
+      }
+      
+      #preview .box .handle {
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        margin-left: -4px;
+        height: 8px;
+        width: 8px;
+        background: #000;
       }
       
     </style>
@@ -114,9 +136,9 @@
     <div id="layout">
     </div>
     
-    <button id="recognize">Recognize layout</button>
+    <button id="recognize">Recognize &amp; test layout</button>
     
-    <pre id="preview"></pre>
+    <div id="preview"></div>
     
     <script type="text/javascript" charset="utf-8">
       
@@ -125,6 +147,45 @@
         toolbar: { element: "toolbar" }
       });
       
+      var LayoutTest = {
+        start: function(event) {
+          this.handle = event.findElement(".handle");
+          
+          if (this.handle) {
+            this.measurements = {
+              pointer: event.pointer(),
+              height: this.handle.up(".box").offsetHeight
+            }
+            this.dragging = true;
+            
+            event.stop();
+          }
+        },
+        
+        drag: function(event) {
+          if (this.dragging) {
+            var offset = this.measurements.pointer.y - event.pointer().y;
+            var height = this.measurements.height - offset;
+            
+            if (height < 25) height = 25;
+            
+            this.handle.up(".box").setStyle({
+              height: height + "px"
+            });
+            
+            event.stop();
+          }
+        },
+        
+        finish: function(event) {
+          this.dragging = false;
+        }
+      }
+      
+      $("preview").observe("mousedown", function(e) { LayoutTest.start(e); });
+      Event.observe(window, "mousemove", function(e) { LayoutTest.drag(e); });
+      Event.observe(window, "mouseup", function(e) { LayoutTest.finish(e); });
+      
       $("recognize").observe("click", function() {
         try {
           var container = Plumb.Recognition.recognize();
@@ -132,28 +193,11 @@
           Plumb.Output.output(container, html);
           
           $("preview").update();
+          html.element($("preview"));
           
-          $("preview").insert("<html>\n  <head>\n    <style>\n\n".escapeHTML());
-          $("preview").insert("      .root {\n");
-          $("preview").insert("        background: #333;\n");
-          $("preview").insert("        padding-top: 10px;\n");
-          $("preview").insert("      }\n");
-          $("preview").insert("      \n");
-          $("preview").insert("      .rows, .columns {\n");
-          $("preview").insert("        float: left;\n");
-          $("preview").insert("      }\n");
-          $("preview").insert("      \n");
-          $("preview").insert("      .box {\n");
-          $("preview").insert("        float: left;\n");
-          $("preview").insert("        background: #ccc;\n");
-          $("preview").insert("        margin-bottom: 10px;\n");
-          $("preview").insert("      }\n");
-          $("preview").insert("      \n");
-          $("preview").insert("      \n");
-          $("preview").insert(html.css(6).escapeHTML());
-          $("preview").insert("    </style>\n  </head>\n  <body>\n\n".escapeHTML());
-          $("preview").insert(html.html(4).escapeHTML());
-          $("preview").insert("\n  </body>\n</html>".escapeHTML());
+          $("preview").select(".box").each(function(box) {
+            box.insert( new Element("div", { className: "handle" }) );
+          });
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
             alert("Sorry, Plumb can't recognize layouts like that.");
