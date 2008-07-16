@@ -101,9 +101,6 @@ Plumb.Resizing = {
     }.bind(this));
     
     Plumb.Selection.set(this.shape);
-    
-    this.handle = handle;
-    this.handle.addClassName("focus");
   },
 
   drag: function(event) {
@@ -125,6 +122,5 @@ Plumb.Resizing = {
 
   finish: function(event) {
     this.resizing = false;
-    this.handle.removeClassName("focus");
   }
 }
