@@ -1,5 +1,7 @@
 Plumb.Recognition = {
   recognize: function() {
+    this.index = 0;
+    
     var shapes = Plumb.Layout.shapes().map(function(shape) {
       return Object.extend(shape.getMeasurements(), { stretchy: shape.hasClassName('stretchy') });
     });
@@ -12,6 +14,8 @@ Plumb.Recognition = {
     container.root = Object.isUndefined(type);
     container.type = type || 'rows';
     container.children = [];
+    
+    container.id = (this.index++).toLetters();
     
     var originalShapesLength = shapes.length;
     var section;
@@ -31,9 +35,10 @@ Plumb.Recognition = {
         container.type = container.type == 'rows' ? 'columns' : 'rows';
       }
       
-      if (section.length == 1)
+      if (section.length == 1) {
+        section[0].id = (this.index++).toLetters();
         container.children.push(section[0]);
-      else
+      } else
         container.children.push(this.buildContainer(section, container.type == 'rows' ? 'columns' : 'rows'));
     }
     

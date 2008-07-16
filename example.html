@@ -9,8 +9,10 @@
     <script src="src/dragging.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/focus.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/handle.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/html.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/layout.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/modes.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/output.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/recognition.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/resizing.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/selection.js" type="text/javascript" charset="utf-8"></script>
@@ -89,39 +91,7 @@
       #preview {
         width: 600px;
         margin: 20px auto;
-        list-style-type: none;
         padding: 0;
-      }
-      
-      #preview ul {
-        list-style-type: none;
-      }
-      
-      #preview li {
-        margin: 10px 0;
-      }
-      
-      #preview dl {
-        overflow: auto;
-      }
-      
-      #preview dt {
-        font-weight: bold;
-        float: left;
-        clear: left;
-        padding-right: 0.5em;
-      }
-      
-      #preview dt:after {
-        content: "=";
-        padding-left: 0.5em;
-        font-weight: normal;
-      }
-      
-      #preview dd {
-        padding: 0;
-        float: left;
-        margin: 0;
       }
       
     </style>
@@ -142,7 +112,7 @@
     
     <button id="recognize">Recognize layout</button>
     
-    <ul id="preview"></ul>
+    <pre id="preview"></pre>
     
     <script type="text/javascript" charset="utf-8">
       
@@ -154,82 +124,39 @@
       $("recognize").observe("click", function() {
         try {
           var container = Plumb.Recognition.recognize();
+          var html = new Plumb.HTML();
+          Plumb.Output.output(container, html);
+          
+          $("preview").update();
+          
+          $("preview").insert("<html>\n  <head>\n    <style>\n\n".escapeHTML());
+          $("preview").insert("      .root {\n");
+          $("preview").insert("        background: #333;\n");
+          $("preview").insert("        padding-top: 10px;\n");
+          $("preview").insert("      }\n");
+          $("preview").insert("      \n");
+          $("preview").insert("      .rows, .columns {\n");
+          $("preview").insert("        float: left;\n");
+          $("preview").insert("      }\n");
+          $("preview").insert("      \n");
+          $("preview").insert("      .box {\n");
+          $("preview").insert("        float: left;\n");
+          $("preview").insert("        background: #ccc;\n");
+          $("preview").insert("        margin-bottom: 10px;\n");
+          $("preview").insert("      }\n");
+          $("preview").insert("      \n");
+          $("preview").insert("      \n");
+          $("preview").insert(html.css(6).escapeHTML());
+          $("preview").insert("    </style>\n  </head>\n  <body>\n\n".escapeHTML());
+          $("preview").insert(html.html(4).escapeHTML());
+          $("preview").insert("\n  </body>\n</html>".escapeHTML());
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
             alert("Sorry, Plumb can't recognize layouts like that.");
-            return;
+          } else {
+            throw e;
           }
         }
-        
-        COLUMN = 100;
-        GUTTER = 10;
-        
-        $("preview").update();
-        
-        (function(c, p) {
-          var li = new Element("li");
-          
-          var dl = new Element("dl");
-          li.insert(dl);
-          
-          dl.insert(new Element("dt").insert("type"));
-          dl.insert(new Element("dd").insert(c.type ? c.type + " container" + (c.root ? " (root)" : "") : "box"));
-          
-          dl.insert(new Element("dt").insert("width"));
-          dl.insert(new Element("dd").insert(c.stretchy ? c.width.percentage + "% - " + c.width.subtrahend : c.width));
-          
-          dl.insert(new Element("dt").insert("prepend"));
-          dl.insert(new Element("dd").insert(c.prepend));
-          
-          dl.insert(new Element("dt").insert("append"));
-          dl.insert(new Element("dd").insert(c.append));
-          
-          dl.insert(new Element("dt").insert("css"));
-          
-          css = new Element("dd").insert("{ ");
-          dl.insert(css);
-          
-          if (c.stretchy) {
-            subtrahend = (c.width.subtrahend * COLUMN) + (c.width.subtrahend * GUTTER);
-            
-            if (!c.type)
-              subtrahend += GUTTER * 2;
-            
-            css.insert("width: " + c.width.percentage + "% - " + subtrahend + "px" + "; ");
-          } else {
-            width = (c.width * COLUMN) + (c.width * GUTTER) + GUTTER;
-            
-            if (!c.type)
-              width -= GUTTER * 2;
-            
-            css.insert("width: " + width + "px" + "; ");
-          }
-          
-          left = (c.prepend * COLUMN) + (c.prepend * GUTTER);
-          
-          if (!c.type)
-            left += GUTTER;
-            
-          right = (c.append * COLUMN) + (c.append * GUTTER);
-          
-          css.insert("margin-left: " + left + "px" + "; ");
-          css.insert("margin-right: " + right + "px" + "; ");
-          
-          css.insert("}");
-          
-          
-        
-          if (!Object.isUndefined(c.children) && c.children.length > 0) {
-            var ul = new Element("ul");
-            
-            for (var i = 0; i < c.children.length; i++)
-              arguments.callee(c.children[i], ul);
-              
-            li.insert(ul);
-          }
-        
-          p.insert(li);
-        })(container, $("preview"));
       });
       
     </script>
