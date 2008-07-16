@@ -162,9 +162,10 @@
         }
         
         COLUMN = 100;
+        GUTTER = 10;
         
         $("preview").update();
-        s
+        
         (function(c, p) {
           var li = new Element("li");
           
@@ -194,11 +195,23 @@
             else
               css.insert("width: " + c.width.percentage + "%" + "; ");
           } else {
-            css.insert("width: " + (c.width * COLUMN) + "px" + "; ");
+            width = (c.width * COLUMN) + (c.width * GUTTER) + GUTTER;
+            
+            if (!c.type)
+              width -= GUTTER * 2;
+            
+            css.insert("width: " + width + "px" + "; ");
           }
           
-          css.insert("margin-left: " + (c.prepend * COLUMN) + "px" + "; ");
-          css.insert("margin-right: " + (c.append * COLUMN) + "px" + "; ");
+          left = (c.prepend * COLUMN) + (c.prepend * GUTTER);
+          
+          if (!c.type)
+            left += GUTTER;
+            
+          right = (c.append * COLUMN) + (c.append * GUTTER);
+          
+          css.insert("margin-left: " + left + "px" + "; ");
+          css.insert("margin-right: " + right + "px" + "; ");
           
           css.insert("}");
           
