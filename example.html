@@ -190,10 +190,12 @@
           dl.insert(css);
           
           if (c.stretchy) {
-            if (c.width.subtrahend > 0)
-              css.insert("width: " + c.width.percentage + "% - " + (c.width.subtrahend * COLUMN) + "px" + "; ");
-            else
-              css.insert("width: " + c.width.percentage + "%" + "; ");
+            subtrahend = (c.width.subtrahend * COLUMN) + (c.width.subtrahend * GUTTER);
+            
+            if (!c.type)
+              subtrahend += GUTTER * 2;
+            
+            css.insert("width: " + c.width.percentage + "% - " + subtrahend + "px" + "; ");
           } else {
             width = (c.width * COLUMN) + (c.width * GUTTER) + GUTTER;
             
