@@ -1,0 +1,227 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>stretchiness</title>
+    <script src="lib/prototype.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css" media="screen">
+      
+      #stage .container {
+        float: left;
+        width: 100%;
+        background: #f00;
+        padding-top: 10px;
+        margin-bottom: 10px;
+      }
+      
+      #stage .box {
+        height: 50px;
+        margin-bottom: 10px;
+        background: #ccc;
+      }
+      
+    </style>
+  </head>
+  <body>
+    
+    <div id="stage">
+      <div class="container">
+        <div style="margin-right: 230px;">
+          <div style="width: 25%; float: left;">
+            <div class="box" style="margin-left: 10px; float: none;">25% - 2</div>
+          </div>
+          <div style="width: 25%; float: left;">
+            <div class="box" style="margin-left: 10px; float: none;">25% - 2</div>
+          </div>
+        </div>
+      
+        <div class="box" style="width: 100px; margin-left: 10px; float: left;">1</div>
+        
+        <div style="margin-left: 115px; margin-right: 115px;">
+          <div style="width: 25%; float: left;">
+            <div class="box" style="margin-left: 10px;float: none;">25% - 2</div>
+          </div>
+          <div style="width: 25%; float: left;">
+            <div class="box" style="margin-left: 10px; float: none;">25% - 2</div>
+          </div>
+        </div>
+        
+        <div class="box" style="width: 100px; margin-left: 10px; float: left;">1</div>
+      </div>
+      
+      
+      <div class="container">
+        <div class="box" style="width: 100px; margin-left: 10px; margin-right: 10px; float: left;">1</div>
+        
+        <div style="margin-left: 120px; margin-right: 130px;">
+          <div class="box" style="width: 25%; float: left;">25% - 2</div>
+        </div>
+      
+        <div class="box" style="width: 100px; margin-left: 10px; margin-right: 10px; float: left;">1</div>
+      
+        <div style="margin-left: 240px; margin-right: 10px;">
+          <div class="box" style="width: 75%; float: left;">75% - 2</div>
+        </div>
+      </div>
+      
+      <div class="container">
+        <div class="box" style="width: 100px; margin-left: 10px; margin-right: 5px; float: left;">1</div>
+        <div class="box" style="width: 100px; margin-left: 5px; margin-right: 10px; float: left;">1</div>
+        
+        <div style="margin-left: 230px; margin-right: 340px;">
+          <div class="box" style="width: 50%; float: left;">50% - 5</div>
+        </div>
+      
+        <div class="box" style="width: 100px; margin-left: 10px; margin-right: 5px; float: left;">1</div>
+        <div class="box" style="width: 100px; margin-left: 5px; margin-right: 10px; float: left;">1</div>
+      
+        <div style="margin-left: 580px; margin-right: 10px;">
+          <div class="box" style="width: 50%; float: left;">50% - 5</div>
+        </div>
+        
+        <div class="box" style="width: 100px; margin-left: 10px; margin-right: 10px; float: left;">1</div>
+      </div>
+      
+      <div class="container">
+        <div class="box" style="width: 100px; margin-left: 10px; margin-right: 5px; float: left;">1</div>
+        <div class="box" style="width: 100px; margin-left: 5px; margin-right: 10px; float: left;">1</div>
+        
+        <div style="margin-left: 230px; margin-right: 240px;">
+          <div class="box" style="width: 50%; float: left;">50% - 4</div>
+        </div>
+      
+        <div class="box" style="width: 100px; margin-left: 10px; margin-right: 5px; float: left;">1</div>
+        <div class="box" style="width: 100px; margin-left: 5px; margin-right: 10px; float: left;">1</div>
+      
+        <div style="margin-left: 460px; margin-right: 10px;">
+          <div class="box" style="width: 50%; float: left;">50% - 4</div>
+        </div>
+      </div>
+      
+      <div class="container">
+        <div class="box" style="width: 100px; margin-left: 10px; margin-right: 5px; float: left;">1</div>
+        <div class="box" style="width: 100px; margin-left: 5px; margin-right: 10px; float: left;">1</div>
+        
+        <div style="margin-left: 230px; margin-right: 130px;">
+          <div class="box" style="width: 50%; float: left;">50% - 3</div>
+        </div>
+      
+        <div class="box" style="width: 100px; margin-left: 10px; margin-right: 10px; float: left;">1</div>
+      
+        <div style="margin-left: 350px; margin-right: 10px;">
+          <div class="box" style="width: 50%; float: left;">50% - 3</div>
+        </div>
+      </div>
+      
+      <div class="container">
+        <div class="box" style="width: 100px; margin-left: 10px; margin-right: 10px; float: left;">1</div>
+        
+        <div style="margin-left: 120px; margin-right: 130px;">
+          <div class="box" style="width: 50%; float: left;">50% - 2</div>
+        </div>
+      
+        <div class="box" style="width: 100px; margin-left: 10px; margin-right: 10px; float: left;">1</div>
+      
+        <div style="margin-left: 240px; margin-right: 10px;">
+          <div class="box" style="width: 50%; float: left;">50% - 2</div>
+        </div>
+      </div>
+      
+      <div class="container">
+        <div class="box" style="margin-left: 10px; width: 100px; float: left;">1</div>
+        <div class="box" style="margin-left: 10px; width: 100px; float: left;">1</div>
+        
+        <div style="margin-left: 220px;">
+          <div style="width: 50%; float: left;">
+            <div class="box" style="margin-left: 10px; margin-right: 5px; float: none;">50% - 2</div>
+          </div>
+          <div style="width: 50%; float: left;">
+            <div class="box" style="margin-left: 5px; margin-right: 10px; float: none;">50% - 2</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="container">
+        <div class="box" style="margin-left: 10px; width: 100px; float: left;">1</div>
+        <div style="margin-left: 110px;">
+          <div style="width: 50%; float: left;">
+            <div class="box" style="margin-left: 10px; margin-right: 5px; float: none;">50% - 1</div>
+          </div>
+          <div style="width: 50%; float: left;">
+            <div class="box" style="margin-left: 5px; margin-right: 10px; float: none;">50% - 1</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="container">
+        <div style="width: 50%; float: left;">
+          <div class="box" style="margin-left: 10px; margin-right: 5px; float: none;">50%</div>
+        </div>
+        <div style="width: 50%; float: left;">
+          <div class="box" style="margin-left: 5px; margin-right: 10px; float: none;">50%</div>
+        </div>
+      </div>
+      
+      <div class="container">
+        <div style="margin-left: 10px; margin-right: 230px;">
+          <div class="box" style="width: 100%; float: left;">100% - 2</div>
+        </div>
+        <div class="box" style="margin-left: 10px; width: 100px; float: left;">1</div>
+        <div class="box" style="margin-left: 10px; width: 100px; float: left;">1</div>
+      </div>
+      
+      <div class="container">
+        <div class="box" style="margin-left: 10px; width: 100px; float: left;">1</div>
+        <div style="margin-left: 120px; margin-right: 120px;">
+          <div class="box" style="width: 100%; float: left;">100% - 2</div>
+        </div>
+        <div class="box" style="margin-left: 10px; width: 100px; float: left;">1</div>
+      </div>
+      
+      <div class="container">
+        <div class="box" style="margin-left: 10px; width: 100px; float: left;">1</div>
+        <div class="box" style="margin-left: 10px; width: 100px; float: left;">1</div>
+        <div style="margin-left: 230px; margin-right: 10px;">
+          <div class="box" style="width: 100%; float: left;">100% - 2</div>
+        </div>
+      </div>
+      
+      <div class="container">
+        <div class="box" style="margin-left: 10px; width: 100px; float: left;">1</div>
+        <div style="margin-left: 120px; margin-right: 10px;">
+          <div class="box" style="width: 100%; float: left;">100% - 1</div>
+        </div>
+      </div>
+      
+      <div class="container">
+        <div style="margin-left: 10px; margin-right: 120px;">
+          <div class="box" style="width: 100%; float: left;">100% - 1</div>
+        </div>
+        <div class="box" style="margin-left: 10px; width: 100px; float: left;">1</div>
+      </div>
+      
+      <div class="container">
+        <div style="margin-left: 10px; margin-right: 10px;">
+          <div class="box" style="width: 100%; float: left;">100%</div>
+        </div>
+      </div>
+    </div>
+    
+    <script type="text/javascript" charset="utf-8">
+      
+      var sss = function(spec) {
+        
+      }
+      
+      sss([
+        { width: { percentage: 100, subtrahend: 0 } }
+      ]);
+      
+      sss([
+        { width: { percentage: 100, subtrahend: 1 } },
+        { width: 1 }
+      ]);
+      
+    </script>
+    
+  </body>
+</html>

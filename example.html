@@ -9,7 +9,6 @@
     <script src="src/dragging.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/focus.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/handle.js" type="text/javascript" charset="utf-8"></script>
-    <script src="src/html.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/layout.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/modes.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/output.js" type="text/javascript" charset="utf-8"></script>
@@ -189,11 +188,12 @@
       $("recognize").observe("click", function() {
         try {
           var container = Plumb.Recognition.recognize();
-          var html = new Plumb.HTML();
-          Plumb.Output.output(container, html);
+          
+          var root = new Element("div");
+          Plumb.Output.elementOutput(container, root);
           
           $("preview").update();
-          html.element($("preview"));
+          $("preview").insert(root);
           
           $("preview").select(".box").each(function(box) {
             box.insert( new Element("div", { className: "handle" }) );
