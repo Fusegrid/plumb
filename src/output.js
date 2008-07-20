@@ -1,5 +1,5 @@
 Plumb.Output = {
-  htmlOptions: function(c) {
+  classAndStyles: function(c) {
     var O = Plumb.Output.options;
     var options = {};
     
@@ -24,7 +24,7 @@ Plumb.Output = {
   },
   
   elementOutput: function(c, parent) {
-    var options = Plumb.Output.htmlOptions(c);
+    var options = Plumb.Output.classAndStyles(c);
     
     parent.className = options.className;
       

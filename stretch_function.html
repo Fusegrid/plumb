@@ -19,12 +19,6 @@
         background: #ccc;
       }
       
-      #stage .space {
-        height: 50px;
-        margin-bottom: 10px;
-        background: #f33;
-      }
-      
     </style>
   </head>
   <body>
@@ -44,7 +38,7 @@
         var lastWasStretchy = false;
         var stretchySegments = 0
         
-        spec.each(function(box) {
+        spec.each(function(box, index) {
           if (Object.isNumber(box.width)) {
             fixedSpace += (COLUMN * box.width) + (MARGIN * box.width);
             lastWasStretchy = false;
@@ -55,12 +49,21 @@
             }
             lastWasStretchy = true;
           }
+          
+          if (Object.isNumber(box.prepend)) {
+            fixedSpace += (COLUMN * box.prepend) + (MARGIN * box.prepend);
+            lastWasStretchy = false;
+          }
+          
+          if (Object.isNumber(box.append) && index == spec.length - 1) {
+            fixedSpace += (COLUMN * box.append) + (MARGIN * box.append);
+          }
         });
         
         fixedSpace -= (stretchySegments - 1) * MARGIN;
         
         var usedFixedSpace = 0;
-        var stretchy = []
+        var stretchy = [];
         
         var emitStretchy = function() {
           var outer = new Element("div");
@@ -69,7 +72,15 @@
             "marginLeft": usedFixedSpace + "px"
           });
           
-          stretchy.each(function(box) {
+          if (Object.isNumber(stretchy[0].prepend)) {
+            var prependSpace = (COLUMN * stretchy[0].prepend) + (MARGIN * stretchy[0].prepend);
+            outer.setStyle({
+              "marginLeft": (usedFixedSpace + prependSpace) + "px"
+            });
+            usedFixedSpace += prependSpace;
+          }
+          
+          stretchy.each(function(box, index) {
             var inner = new Element("div");
             var element = new Element("div", { "class": "box" });
           
@@ -77,11 +88,17 @@
               "float": "left",
               "width": box.width.percentage + "%"
             });
-          
+            
             element.setStyle({
               "marginLeft": MARGIN + "px",
             });
-          
+            
+            if (Object.isNumber(box.prepend) && index == 0 && lastWasStretchy) {
+              inner.setStyle({
+                "marginLeft": (COLUMN * box.prepend) + (MARGIN * box.prepend)
+              });
+            }
+            
             inner.insert(element);
             outer.insert(inner);
           });
@@ -96,6 +113,8 @@
           
           stretchy = [];
         }
+        
+        lastWasStretchy = false;
         
         spec.each(function(box) {
           if (Object.isNumber(box.width)) {
@@ -112,10 +131,25 @@
               "marginLeft": MARGIN + "px"
             });
             
+            if (Object.isNumber(box.prepend)) {
+              element.setStyle({
+                "marginLeft": MARGIN + (COLUMN * box.prepend) + (MARGIN * box.prepend) + "px"
+              });
+              
+              usedFixedSpace += (COLUMN * box.prepend) + (MARGIN * box.prepend);
+            }
+            
             container.insert(element);
             
             usedFixedSpace += width + MARGIN;
+            
+            lastWasStretchy = false;
           } else {
+            if (Object.isNumber(box.prepend) && stretchy.length > 0) {
+              emitStretchy();
+              lastWasStretchy = true;
+            }
+            
             stretchy.push(box);
           }
         });
@@ -128,135 +162,198 @@
       
       sss([
         { width: 1 },
-        { width: { percentage: 33.33, subtrahend: 2 } },
-        { width: { percentage: 33.33, subtrahend: 2 } },
-        { width: { percentage: 33.34, subtrahend: 2 } },
+        // blank space
+        { width: 1, prepend: 1 },
+        { width: { percentage: 100 } }
+      ]);
+      
+      sss([
+        // blank space
+        { width: { percentage: 33.33 }, prepend: 1 },
+        // blank space
+        { width: { percentage: 33.33 }, prepend: 1 },
+        // blank space
+        { width: { percentage: 33.34 }, prepend: 1, append: 1 },
+        // blank space
+      ]);
+      
+      sss([
+        // blank space
+        { width: { percentage: 33.33 }, prepend: 1 },
+        // blank space
+        { width: { percentage: 33.33 }, prepend: 1 },
+        // blank space
+        { width: { percentage: 33.34 }, prepend: 1 },
+        // blank space
+        { width: 1, prepend: 1 }
+      ]);
+      
+      sss([
+        // blank space
+        { width: { percentage: 33.33 }, prepend: 1 },
+        // blank space
+        { width: { percentage: 33.33 }, prepend: 1 },
+        // blank space
+        { width: { percentage: 33.34 }, prepend: 1 },
+        { width: 1 }
+      ]);
+      
+      sss([
+        // blank space
+        { width: { percentage: 33.33 }, prepend: 1 },
+        // blank space
+        { width: { percentage: 33.33 }, prepend: 1 },
+        { width: { percentage: 33.34 } },
+        { width: 1 }
+      ]);
+      
+      sss([
+        // blank space
+        { width: { percentage: 33.33 }, prepend: 1 },
+        { width: { percentage: 33.33 } },
+        { width: { percentage: 33.34 } },
         { width: 1 }
       ]);
       
       sss([
         { width: 1 },
-        { width: { percentage: 25, subtrahend: 3 } },
-        { width: { percentage: 25, subtrahend: 3 } },
-        { width: 1 },
-        { width: { percentage: 25, subtrahend: 3 } },
-        { width: { percentage: 25, subtrahend: 3 } },
+        { width: { percentage: 50 } },
+        // blank space
+        { width: { percentage: 50 }, prepend: 1 },
         { width: 1 }
       ]);
       
       sss([
         { width: 1 },
-        { width: { percentage: 50, subtrahend: 5 } },
-        { width: 1 },
-        { width: 1 },
-        { width: 1 },
-        { width: { percentage: 50, subtrahend: 5 } },
-        { width: 1 }
-      ]);
-      
-      sss([
-        { width: { percentage: 25, subtrahend: 2 } },
-        { width: { percentage: 25, subtrahend: 2 } },
-        { width: 1 },
-        { width: { percentage: 25, subtrahend: 2 } },
-        { width: { percentage: 25, subtrahend: 2 } },
+        { width: { percentage: 33.33 } },
+        { width: { percentage: 33.33 } },
+        { width: { percentage: 33.34 } },
         { width: 1 }
       ]);
       
       sss([
         { width: 1 },
-        { width: { percentage: 25, subtrahend: 2 } },
+        { width: { percentage: 25 } },
+        { width: { percentage: 25 } },
         { width: 1 },
-        { width: { percentage: 75, subtrahend: 2 } }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: 1 },
-        { width: { percentage: 50, subtrahend: 5 } },
-        { width: 1 },
-        { width: 1 },
-        { width: { percentage: 50, subtrahend: 5 } },
+        { width: { percentage: 25 } },
+        { width: { percentage: 25 } },
         { width: 1 }
       ]);
       
       sss([
         { width: 1 },
+        { width: { percentage: 50 } },
         { width: 1 },
-        { width: { percentage: 50, subtrahend: 4 } },
         { width: 1 },
         { width: 1 },
-        { width: { percentage: 50, subtrahend: 4 } }
+        { width: { percentage: 50 } },
+        { width: 1 }
       ]);
       
       sss([
+        { width: { percentage: 25 } },
+        { width: { percentage: 25 } },
         { width: 1 },
-        { width: 1 },
-        { width: { percentage: 50, subtrahend: 3 } },
-        { width: 1 },
-        { width: { percentage: 50, subtrahend: 3 } }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: { percentage: 50, subtrahend: 2 } },
-        { width: 1 },
-        { width: { percentage: 50, subtrahend: 2 } }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: 1 },
-        { width: { percentage: 50, subtrahend: 2 } },
-        { width: { percentage: 50, subtrahend: 2 } }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: { percentage: 50, subtrahend: 1 } },
-        { width: { percentage: 50, subtrahend: 1 } }
-      ]);
-      
-      sss([
-        { width: { percentage: 50, subtrahend: 0 } },
-        { width: { percentage: 50, subtrahend: 0 } }
-      ]);
-      
-      sss([
-        { width: { percentage: 100, subtrahend: 2 } },
-        { width: 1 },
+        { width: { percentage: 25 } },
+        { width: { percentage: 25 } },
         { width: 1 }
       ]);
       
       sss([
         { width: 1 },
-        { width: { percentage: 100, subtrahend: 2 } },
+        { width: { percentage: 25 } },
+        { width: 1 },
+        { width: { percentage: 75 } }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: 1 },
+        { width: { percentage: 50 } },
+        { width: 1 },
+        { width: 1 },
+        { width: { percentage: 50 } },
         { width: 1 }
       ]);
       
       sss([
         { width: 1 },
         { width: 1 },
-        { width: { percentage: 100, subtrahend: 2 } }
+        { width: { percentage: 50 } },
+        { width: 1 },
+        { width: 1 },
+        { width: { percentage: 50 } }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: 1 },
+        { width: { percentage: 50 } },
+        { width: 1 },
+        { width: { percentage: 50 } }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: { percentage: 50 } },
+        { width: 1 },
+        { width: { percentage: 50 } }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: 1 },
+        { width: { percentage: 50 } },
+        { width: { percentage: 50 } }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: { percentage: 50 } },
+        { width: { percentage: 50 } }
+      ]);
+      
+      sss([
+        { width: { percentage: 50 } },
+        { width: { percentage: 50 } }
+      ]);
+      
+      sss([
+        { width: { percentage: 100 } },
+        { width: 1 },
+        { width: 1 }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: { percentage: 100 } },
+        { width: 1 }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: 1 },
+        { width: { percentage: 100 } }
       ]);
       
       sss([
         { width: 2 },
-        { width: { percentage: 100, subtrahend: 2 } }
+        { width: { percentage: 100 } }
       ]);
       
       sss([
         { width: 1 },
-        { width: { percentage: 100, subtrahend: 1 } }
+        { width: { percentage: 100 } }
       ]);
       
       sss([
-        { width: { percentage: 100, subtrahend: 1 } },
+        { width: { percentage: 100 } },
         { width: 1 }
       ]);
       
       sss([
-        { width: { percentage: 100, subtrahend: 0 } }
+        { width: { percentage: 100 } }
       ]);
       
       
