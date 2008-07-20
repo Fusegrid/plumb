@@ -31,8 +31,13 @@
     
     <div id="stage">
       <div class="container">
-        <div class="box" style="width: 100px; margin-left: 10px; float: left;">1</div>
+        <!-- total fixed space = 240 -->
         
+        <div class="box" style="width: 100px; margin-left: 10px; float: left;">1</div>
+        <!-- used fixed space = 110 -->
+        
+        <!-- margin-left = used fixed space = 110 -->
+        <!-- margin-right = fixed space - (used fixed space + margin) = 120 -->
         <div style="margin-left: 110px; margin-right: 120px;">
           <div style="width: 33.3%; float: left;">
             <div class="box" style="margin-left: 10px;">33% - 2</div>
@@ -49,8 +54,13 @@
       </div>
       
       <div class="container">
-        <div class="box" style="width: 100px; margin-left: 10px; float: left;">1</div>
+        <!-- total fixed space = 350 -->
         
+        <div class="box" style="width: 100px; margin-left: 10px; float: left;">1</div>
+        <!-- used fixed space = 110 -->
+        
+        <!-- margin-left = used fixed space = 110 -->
+        <!-- margin-right = fixed space - (used fixed space + margin) = 230?? -->
         <div style="margin-left: 110px; margin-right: 230px;">
           <div style="width: 25%; float: left;">
             <div class="box" style="margin-left: 10px;">25% - 3</div>
@@ -101,7 +111,7 @@
             <div class="box" style="margin-left: 10px;">25% - 2</div>
           </div>
         </div>
-      
+        
         <div class="box" style="width: 100px; margin-left: 10px; float: left;">1</div>
         
         <div style="margin-left: 120px; margin-right: 110px;">
@@ -182,14 +192,18 @@
       <div class="container">
         <div class="box" style="width: 100px; margin-left: 10px; float: left;">1</div>
         
-        <div style="margin-left: 120px; margin-right: 130px;">
-          <div class="box" style="width: 50%; float: left;">50% - 2</div>
+        <div style="margin-left: 100px; margin-right: 130px;">
+          <div style="width: 50%; float: left;">
+            <div class="box" style="margin-left: 10px;">50% - 2</div>
+          </div>
         </div>
       
         <div class="box" style="width: 100px; margin-left: 10px; float: left;">1</div>
       
-        <div style="margin-left: 240px; margin-right: 10px;">
-          <div class="box" style="width: 50%; margin-left: 10px; float: left;">50% - 2</div>
+        <div style="margin-left: 220px; margin-right: 10px;">
+          <div style="width: 50%; float: left;">
+            <div class="box" style="margin-left: 10px;">50% - 2</div>
+          </div>
         </div>
       </div>
       

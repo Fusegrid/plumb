@@ -40,34 +40,59 @@
       var sss = function(spec) {
         var container = new Element("div", { "class": "container" });
         
-        var fixedSpace = spec.inject(0, function(s, b) {
-          s += Object.isNumber(b.width) ? (COLUMN * b.width) + (MARGIN * (b.width - 1)) : 0;
-          return s;
-        }) + ((spec.length + 1) * MARGIN);
+        var fixedSpace = MARGIN;
+        var lastWasStretchy = false;
+        var stretchySegments = 0
+        
+        spec.each(function(box) {
+          if (Object.isNumber(box.width)) {
+            fixedSpace += (COLUMN * box.width) + (MARGIN * box.width);
+            lastWasStretchy = false;
+          } else {
+            if (!lastWasStretchy) {
+              fixedSpace += MARGIN;
+              stretchySegments += 1;
+            }
+            lastWasStretchy = true;
+          }
+        });
+        
+        fixedSpace -= (stretchySegments - 1) * MARGIN;
         
         var usedFixedSpace = 0;
         var stretchy = []
         
         var emitStretchy = function() {
-          stretchy.each(function(box) {
-            var element = new Element("div", { "class": "box" });
-            var wrap = new Element("div");
+          var outer = new Element("div");
           
-            element.setStyle({
+          outer.setStyle({
+            "marginLeft": usedFixedSpace + "px"
+          });
+          
+          stretchy.each(function(box) {
+            var inner = new Element("div");
+            var element = new Element("div", { "class": "box" });
+          
+            inner.setStyle({
               "float": "left",
               "width": box.width.percentage + "%"
             });
           
-            wrap.setStyle({
-              "marginLeft": (usedFixedSpace + MARGIN) + "px",
-              "marginRight": (fixedSpace - (usedFixedSpace + MARGIN)) + "px"
+            element.setStyle({
+              "marginLeft": MARGIN + "px",
             });
           
-            wrap.insert(element);
-            container.insert(wrap);
-          
-            usedFixedSpace += MARGIN;
+            inner.insert(element);
+            outer.insert(inner);
           });
+          
+          outer.setStyle({
+            "marginRight": (fixedSpace - (usedFixedSpace + MARGIN)) + "px"
+          });
+          
+          usedFixedSpace += MARGIN;
+          
+          container.insert(outer);
           
           stretchy = [];
         }
@@ -101,89 +126,96 @@
         $("stage").insert(container);
       }
       
+      sss([
+        { width: 1 },
+        { width: { percentage: 33.33, subtrahend: 2 } },
+        { width: { percentage: 33.33, subtrahend: 2 } },
+        { width: { percentage: 33.34, subtrahend: 2 } },
+        { width: 1 }
+      ]);
       
-      // sss([
-      //   { width: 1 },
-      //   { width: { percentage: 25, subtrahend: 3 } },
-      //   { width: { percentage: 25, subtrahend: 3 } },
-      //   { width: 1 },
-      //   { width: { percentage: 25, subtrahend: 3 } },
-      //   { width: { percentage: 25, subtrahend: 3 } },
-      //   { width: 1 }
-      // ]);
-      // 
-      // sss([
-      //   { width: 1 },
-      //   { width: { percentage: 50, subtrahend: 5 } },
-      //   { width: 1 },
-      //   { width: 1 },
-      //   { width: 1 },
-      //   { width: { percentage: 50, subtrahend: 5 } },
-      //   { width: 1 }
-      // ]);
-      // 
-      // sss([
-      //   { width: { percentage: 25, subtrahend: 2 } },
-      //   { width: { percentage: 25, subtrahend: 2 } },
-      //   { width: 1 },
-      //   { width: { percentage: 25, subtrahend: 2 } },
-      //   { width: { percentage: 25, subtrahend: 2 } },
-      //   { width: 1 }
-      // ]);
-      // 
-      // sss([
-      //   { width: 1 },
-      //   { width: { percentage: 25, subtrahend: 2 } },
-      //   { width: 1 },
-      //   { width: { percentage: 75, subtrahend: 2 } }
-      // ]);
-      // 
-      // sss([
-      //   { width: 1 },
-      //   { width: 1 },
-      //   { width: { percentage: 50, subtrahend: 5 } },
-      //   { width: 1 },
-      //   { width: 1 },
-      //   { width: { percentage: 50, subtrahend: 5 } },
-      //   { width: 1 }
-      // ]);
-      // 
-      // sss([
-      //   { width: 1 },
-      //   { width: 1 },
-      //   { width: { percentage: 50, subtrahend: 4 } },
-      //   { width: 1 },
-      //   { width: 1 },
-      //   { width: { percentage: 50, subtrahend: 4 } }
-      // ]);
-      // 
-      // sss([
-      //   { width: 1 },
-      //   { width: 1 },
-      //   { width: { percentage: 50, subtrahend: 3 } },
-      //   { width: 1 },
-      //   { width: { percentage: 50, subtrahend: 3 } }
-      // ]);
-      // 
-      // sss([
-      //   { width: 1 },
-      //   { width: { percentage: 50, subtrahend: 2 } },
-      //   { width: 1 },
-      //   { width: { percentage: 50, subtrahend: 2 } }
-      // ]);
-      // 
-      // sss([
-      //   { width: 1 },
-      //   { width: 1 },
-      //   { width: { percentage: 50, subtrahend: 2 } },
-      //   { width: { percentage: 50, subtrahend: 2 } }
-      // ]);
-      // 
-      // sss([
-      //   { width: 1 },
-      //   { width: { percentage: 50, subtrahend: 1 } },
-      //   { width: { percentage: 50, subtrahend: 1 } }
-      // ]);
+      sss([
+        { width: 1 },
+        { width: { percentage: 25, subtrahend: 3 } },
+        { width: { percentage: 25, subtrahend: 3 } },
+        { width: 1 },
+        { width: { percentage: 25, subtrahend: 3 } },
+        { width: { percentage: 25, subtrahend: 3 } },
+        { width: 1 }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: { percentage: 50, subtrahend: 5 } },
+        { width: 1 },
+        { width: 1 },
+        { width: 1 },
+        { width: { percentage: 50, subtrahend: 5 } },
+        { width: 1 }
+      ]);
+      
+      sss([
+        { width: { percentage: 25, subtrahend: 2 } },
+        { width: { percentage: 25, subtrahend: 2 } },
+        { width: 1 },
+        { width: { percentage: 25, subtrahend: 2 } },
+        { width: { percentage: 25, subtrahend: 2 } },
+        { width: 1 }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: { percentage: 25, subtrahend: 2 } },
+        { width: 1 },
+        { width: { percentage: 75, subtrahend: 2 } }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: 1 },
+        { width: { percentage: 50, subtrahend: 5 } },
+        { width: 1 },
+        { width: 1 },
+        { width: { percentage: 50, subtrahend: 5 } },
+        { width: 1 }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: 1 },
+        { width: { percentage: 50, subtrahend: 4 } },
+        { width: 1 },
+        { width: 1 },
+        { width: { percentage: 50, subtrahend: 4 } }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: 1 },
+        { width: { percentage: 50, subtrahend: 3 } },
+        { width: 1 },
+        { width: { percentage: 50, subtrahend: 3 } }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: { percentage: 50, subtrahend: 2 } },
+        { width: 1 },
+        { width: { percentage: 50, subtrahend: 2 } }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: 1 },
+        { width: { percentage: 50, subtrahend: 2 } },
+        { width: { percentage: 50, subtrahend: 2 } }
+      ]);
+      
+      sss([
+        { width: 1 },
+        { width: { percentage: 50, subtrahend: 1 } },
+        { width: { percentage: 50, subtrahend: 1 } }
+      ]);
       
       sss([
         { width: { percentage: 50, subtrahend: 0 } },
@@ -226,6 +258,20 @@
       sss([
         { width: { percentage: 100, subtrahend: 0 } }
       ]);
+      
+      
+      var boxes = $$(".box");
+      
+      boxes.each(function(box) {
+        box.insert(new Element("div", { className: "w" }));
+        box.down(".w").innerHTML = box.offsetWidth;
+      });
+      
+      Event.observe(window, "resize", function() {
+        boxes.each(function(box) {
+          box.down(".w").innerHTML = box.offsetWidth;
+        });
+      });
       
     </script>
     
