@@ -31,14 +31,12 @@
       COLUMN = 100;
       MARGIN = 10;
       
-      var sss = function(spec) {
-        var container = new Element("div", { "class": "container" });
-        
+      var sss = function(boxes, container) {
         var fixedSpace = MARGIN;
         var lastWasStretchy = false;
         var stretchySegments = 0
         
-        spec.each(function(box, index) {
+        boxes.each(function(box, index) {
           if (Object.isNumber(box.width)) {
             fixedSpace += (COLUMN * box.width) + (MARGIN * box.width);
             lastWasStretchy = false;
@@ -116,7 +114,7 @@
         
         lastWasStretchy = false;
         
-        spec.each(function(box) {
+        boxes.each(function(box) {
           if (Object.isNumber(box.width)) {
             if (stretchy.length > 0)
               emitStretchy();
@@ -156,8 +154,6 @@
         
         if (stretchy.length > 0)
           emitStretchy();
-        
-        $("stage").insert(container);
       }
       
       sss([
@@ -167,194 +163,194 @@
         { width: { percentage: 100 } }
       ]);
       
-      sss([
-        // blank space
-        { width: { percentage: 33.33 }, prepend: 1 },
-        // blank space
-        { width: { percentage: 33.33 }, prepend: 1 },
-        // blank space
-        { width: { percentage: 33.34 }, prepend: 1, append: 1 },
-        // blank space
-      ]);
-      
-      sss([
-        // blank space
-        { width: { percentage: 33.33 }, prepend: 1 },
-        // blank space
-        { width: { percentage: 33.33 }, prepend: 1 },
-        // blank space
-        { width: { percentage: 33.34 }, prepend: 1 },
-        // blank space
-        { width: 1, prepend: 1 }
-      ]);
-      
-      sss([
-        // blank space
-        { width: { percentage: 33.33 }, prepend: 1 },
-        // blank space
-        { width: { percentage: 33.33 }, prepend: 1 },
-        // blank space
-        { width: { percentage: 33.34 }, prepend: 1 },
-        { width: 1 }
-      ]);
-      
-      sss([
-        // blank space
-        { width: { percentage: 33.33 }, prepend: 1 },
-        // blank space
-        { width: { percentage: 33.33 }, prepend: 1 },
-        { width: { percentage: 33.34 } },
-        { width: 1 }
-      ]);
-      
-      sss([
-        // blank space
-        { width: { percentage: 33.33 }, prepend: 1 },
-        { width: { percentage: 33.33 } },
-        { width: { percentage: 33.34 } },
-        { width: 1 }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: { percentage: 50 } },
-        // blank space
-        { width: { percentage: 50 }, prepend: 1 },
-        { width: 1 }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: { percentage: 33.33 } },
-        { width: { percentage: 33.33 } },
-        { width: { percentage: 33.34 } },
-        { width: 1 }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: { percentage: 25 } },
-        { width: { percentage: 25 } },
-        { width: 1 },
-        { width: { percentage: 25 } },
-        { width: { percentage: 25 } },
-        { width: 1 }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: { percentage: 50 } },
-        { width: 1 },
-        { width: 1 },
-        { width: 1 },
-        { width: { percentage: 50 } },
-        { width: 1 }
-      ]);
-      
-      sss([
-        { width: { percentage: 25 } },
-        { width: { percentage: 25 } },
-        { width: 1 },
-        { width: { percentage: 25 } },
-        { width: { percentage: 25 } },
-        { width: 1 }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: { percentage: 25 } },
-        { width: 1 },
-        { width: { percentage: 75 } }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: 1 },
-        { width: { percentage: 50 } },
-        { width: 1 },
-        { width: 1 },
-        { width: { percentage: 50 } },
-        { width: 1 }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: 1 },
-        { width: { percentage: 50 } },
-        { width: 1 },
-        { width: 1 },
-        { width: { percentage: 50 } }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: 1 },
-        { width: { percentage: 50 } },
-        { width: 1 },
-        { width: { percentage: 50 } }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: { percentage: 50 } },
-        { width: 1 },
-        { width: { percentage: 50 } }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: 1 },
-        { width: { percentage: 50 } },
-        { width: { percentage: 50 } }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: { percentage: 50 } },
-        { width: { percentage: 50 } }
-      ]);
-      
-      sss([
-        { width: { percentage: 50 } },
-        { width: { percentage: 50 } }
-      ]);
-      
-      sss([
-        { width: { percentage: 100 } },
-        { width: 1 },
-        { width: 1 }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: { percentage: 100 } },
-        { width: 1 }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: 1 },
-        { width: { percentage: 100 } }
-      ]);
-      
-      sss([
-        { width: 2 },
-        { width: { percentage: 100 } }
-      ]);
-      
-      sss([
-        { width: 1 },
-        { width: { percentage: 100 } }
-      ]);
-      
-      sss([
-        { width: { percentage: 100 } },
-        { width: 1 }
-      ]);
-      
-      sss([
-        { width: { percentage: 100 } }
-      ]);
+      // sss([
+      //   // blank space
+      //   { width: { percentage: 33.33 }, prepend: 1 },
+      //   // blank space
+      //   { width: { percentage: 33.33 }, prepend: 1 },
+      //   // blank space
+      //   { width: { percentage: 33.34 }, prepend: 1, append: 1 },
+      //   // blank space
+      // ]);
+      // 
+      // sss([
+      //   // blank space
+      //   { width: { percentage: 33.33 }, prepend: 1 },
+      //   // blank space
+      //   { width: { percentage: 33.33 }, prepend: 1 },
+      //   // blank space
+      //   { width: { percentage: 33.34 }, prepend: 1 },
+      //   // blank space
+      //   { width: 1, prepend: 1 }
+      // ]);
+      // 
+      // sss([
+      //   // blank space
+      //   { width: { percentage: 33.33 }, prepend: 1 },
+      //   // blank space
+      //   { width: { percentage: 33.33 }, prepend: 1 },
+      //   // blank space
+      //   { width: { percentage: 33.34 }, prepend: 1 },
+      //   { width: 1 }
+      // ]);
+      // 
+      // sss([
+      //   // blank space
+      //   { width: { percentage: 33.33 }, prepend: 1 },
+      //   // blank space
+      //   { width: { percentage: 33.33 }, prepend: 1 },
+      //   { width: { percentage: 33.34 } },
+      //   { width: 1 }
+      // ]);
+      // 
+      // sss([
+      //   // blank space
+      //   { width: { percentage: 33.33 }, prepend: 1 },
+      //   { width: { percentage: 33.33 } },
+      //   { width: { percentage: 33.34 } },
+      //   { width: 1 }
+      // ]);
+      // 
+      // sss([
+      //   { width: 1 },
+      //   { width: { percentage: 50 } },
+      //   // blank space
+      //   { width: { percentage: 50 }, prepend: 1 },
+      //   { width: 1 }
+      // ]);
+      // 
+      // sss([
+      //   { width: 1 },
+      //   { width: { percentage: 33.33 } },
+      //   { width: { percentage: 33.33 } },
+      //   { width: { percentage: 33.34 } },
+      //   { width: 1 }
+      // ]);
+      // 
+      // sss([
+      //   { width: 1 },
+      //   { width: { percentage: 25 } },
+      //   { width: { percentage: 25 } },
+      //   { width: 1 },
+      //   { width: { percentage: 25 } },
+      //   { width: { percentage: 25 } },
+      //   { width: 1 }
+      // ]);
+      // 
+      // sss([
+      //   { width: 1 },
+      //   { width: { percentage: 50 } },
+      //   { width: 1 },
+      //   { width: 1 },
+      //   { width: 1 },
+      //   { width: { percentage: 50 } },
+      //   { width: 1 }
+      // ]);
+      // 
+      // sss([
+      //   { width: { percentage: 25 } },
+      //   { width: { percentage: 25 } },
+      //   { width: 1 },
+      //   { width: { percentage: 25 } },
+      //   { width: { percentage: 25 } },
+      //   { width: 1 }
+      // ]);
+      // 
+      // sss([
+      //   { width: 1 },
+      //   { width: { percentage: 25 } },
+      //   { width: 1 },
+      //   { width: { percentage: 75 } }
+      // ]);
+      // 
+      // sss([
+      //   { width: 1 },
+      //   { width: 1 },
+      //   { width: { percentage: 50 } },
+      //   { width: 1 },
+      //   { width: 1 },
+      //   { width: { percentage: 50 } },
+      //   { width: 1 }
+      // ]);
+      // 
+      // sss([
+      //   { width: 1 },
+      //   { width: 1 },
+      //   { width: { percentage: 50 } },
+      //   { width: 1 },
+      //   { width: 1 },
+      //   { width: { percentage: 50 } }
+      // ]);
+      // 
+      // sss([
+      //   { width: 1 },
+      //   { width: 1 },
+      //   { width: { percentage: 50 } },
+      //   { width: 1 },
+      //   { width: { percentage: 50 } }
+      // ]);
+      // 
+      // sss([
+      //   { width: 1 },
+      //   { width: { percentage: 50 } },
+      //   { width: 1 },
+      //   { width: { percentage: 50 } }
+      // ]);
+      // 
+      // sss([
+      //   { width: 1 },
+      //   { width: 1 },
+      //   { width: { percentage: 50 } },
+      //   { width: { percentage: 50 } }
+      // ]);
+      // 
+      // sss([
+      //   { width: 1 },
+      //   { width: { percentage: 50 } },
+      //   { width: { percentage: 50 } }
+      // ]);
+      // 
+      // sss([
+      //   { width: { percentage: 50 } },
+      //   { width: { percentage: 50 } }
+      // ]);
+      // 
+      // sss([
+      //   { width: { percentage: 100 } },
+      //   { width: 1 },
+      //   { width: 1 }
+      // ]);
+      // 
+      // sss([
+      //   { width: 1 },
+      //   { width: { percentage: 100 } },
+      //   { width: 1 }
+      // ]);
+      // 
+      // sss([
+      //   { width: 1 },
+      //   { width: 1 },
+      //   { width: { percentage: 100 } }
+      // ]);
+      // 
+      // sss([
+      //   { width: 2 },
+      //   { width: { percentage: 100 } }
+      // ]);
+      // 
+      // sss([
+      //   { width: 1 },
+      //   { width: { percentage: 100 } }
+      // ]);
+      // 
+      // sss([
+      //   { width: { percentage: 100 } },
+      //   { width: 1 }
+      // ]);
+      // 
+      // sss([
+      //   { width: { percentage: 100 } }
+      // ]);
       
       
       var boxes = $$(".box");

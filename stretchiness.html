@@ -9,20 +9,19 @@
         float: left;
         width: 100%;
         background: #f00;
-        padding-top: 10px;
         margin-bottom: 10px;
+      }
+      
+      #stage .container .container {
+        background: #c33;
+        margin-bottom: -10px;
       }
       
       #stage .box {
         height: 50px;
+        margin-top: 10px;
         margin-bottom: 10px;
         background: #ccc;
-      }
-      
-      #stage .space {
-        height: 50px;
-        margin-bottom: 10px;
-        background: #f33;
       }
       
     </style>
@@ -34,9 +33,22 @@
         <div class="box" style="width: 100px; margin-left: 10px; float: left;">1</div>
         <div class="box" style="width: 100px; margin-left: 120px; float: left;">1</div>
         
-        <div style="margin-left: 330px; margin-right: 10px;">
+        <div style="margin-left: 330px; margin-right: 110px;">
           <div style="width: 100%; float: left;">
-            <div class="box" style="margin-left: 10px;">50% - 3</div>
+            <div class="container" style="margin-left: 0;">
+              
+              <div class="box" style="width: 100px; margin-left: 10px; float: left;">1</div>
+              
+              <div style="margin-left: 110px; margin-right: 10px;">
+                <div style="width: 50%; float: left;">
+                  <div class="box" style="margin-left: 10px;">50% - 1</div>
+                </div>
+                <div style="width: 50%; float: left;">
+                  <div class="box" style="margin-left: 10px;">50% - 1</div>
+                </div>
+              </div>
+              
+            </div>
           </div>
         </div>
       </div>
@@ -130,8 +142,6 @@
       </div>
       
       <div class="container">
-        <!-- if a blank space comes at the beginning of a container or after a fixed-width
-             box, the margins of the outer wrap are adjusted. -->
         
         <div style="margin-left: 110px; margin-right: 120px;">
           <div style="width: 33.3%; float: left;">
