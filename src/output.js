@@ -88,12 +88,43 @@ Plumb.Output = {
   // Keep in mind when calculating fixed space that a box with children
   // should have no margins of its own.
   
+  totalFixedSpace: function(boxes, isParent) {
+    var O = this.options;
+    
+    var space = 0;
+    var lastWasStretchy = false;
+    
+    boxes.each(function(box, index) {
+      if (box.stretchy) {
+        space += O.margin;
+        lastWasStretchy = true;
+      } else {
+        space += (O.width * box.width) + (O.margin * box.width);
+        lastWasStretchy = false;
+      }
+      
+      if (Object.isNumber(box.prepend)) {
+        space += (O.width * box.prepend) + (O.margin * box.prepend);
+        lastWasStretchy = false;
+      }
+      
+      if (Object.isNumber(box.append) && index == boxes.length - 1) {
+        space += (O.width * box.append) + (O.margin * box.append);
+      }
+    });
+    
+    if (!isParent)
+      space += O.margin;
+    
+    return space;
+  },
+  
   stretchyOutput: function(boxes, container) {
     var O = this.options;
     
     var fixedSpace = O.margin;
     var lastWasStretchy = false;
-    var stretchySegments = 0
+    var stretchySegments = 0;
     
     boxes.each(function(box, index) {
       if (Object.isNumber(box.width)) {

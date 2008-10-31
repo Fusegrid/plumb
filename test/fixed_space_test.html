@@ -1,0 +1,216 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="test.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../lib/prototype.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lib/unittest.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/plumb.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/output.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body>
+    
+    <div id="testlog">
+    </div>
+    
+    <script type="text/javascript" charset="utf-8">
+    
+      Plumb.setup({
+        layout: { element: new Element('div'), width: 12 }
+      });
+      
+      Cases = [
+        [ 280,
+          { stretchy: true, width: 0.33, prepend: 1 },
+          { stretchy: true, width: 0.33, prepend: 1 },
+          { stretchy: true, width: 0.33, prepend: 1, append: 1 }
+        ],
+        
+        [ 400,
+          { stretchy: true, width: 0.33, prepend: 1 },
+          { stretchy: true, width: 0.33, prepend: 1 },
+          { stretchy: true, width: 0.33, prepend: 1 },
+          { stretchy: false, width: 1, prepend: 1, append: 1 }
+        ],
+        
+        [ 280,
+          { stretchy: true, width: 0.33, prepend: 1 },
+          { stretchy: true, width: 0.33, prepend: 1 },
+          { stretchy: true, width: 0.33, prepend: 1 },
+          { stretchy: false, width: 1 }
+        ],
+        
+        [ 220,
+          { stretchy: true, width: 0.33, prepend: 1 },
+          { stretchy: true, width: 0.33, prepend: 1 },
+          { stretchy: true, width: 0.33 },
+          { stretchy: false, width: 1 }
+        ],
+        
+        [ 280,
+          { stretchy: true, width: 0.33, prepend: 1 },
+          { stretchy: true, width: 0.33, prepend: 2 },
+          { stretchy: true, width: 0.33 },
+          { stretchy: false, width: 1 }
+        ],
+        
+        [ 160,
+          { stretchy: true, width: 0.33, prepend: 1 },
+          { stretchy: true, width: 0.33 },
+          { stretchy: true, width: 0.33 },
+          { stretchy: false, width: 1 }
+        ],
+        
+        [ 210,
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.5 },
+          { stretchy: true, width: 0.5, prepend: 1 },
+          { stretchy: false, width: 1 }
+        ],
+        
+        [ 160,
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.33 },
+          { stretchy: true, width: 0.33 },
+          { stretchy: true, width: 0.33 },
+          { stretchy: false, width: 1 }
+        ],
+        
+        [ 230,
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.25 },
+          { stretchy: true, width: 0.25 },
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.25 },
+          { stretchy: true, width: 0.25 },
+          { stretchy: false, width: 1 }
+        ],
+
+        [ 330,
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.5 },
+          { stretchy: false, width: 1 },
+          { stretchy: false, width: 1 },
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.5 },
+          { stretchy: false, width: 1 }
+        ],
+
+        [ 170,
+          { stretchy: true, width: 0.25 },
+          { stretchy: true, width: 0.25 },
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.25 },
+          { stretchy: true, width: 0.25 },
+          { stretchy: false, width: 1 }
+        ],
+
+        [ 150,
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.25 },
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.75 }
+        ],
+
+        [ 330,
+          { stretchy: false, width: 1 },
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.5 },
+          { stretchy: false, width: 1 },
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.5 },
+          { stretchy: false, width: 1 }
+        ],
+
+        [ 270,
+          { stretchy: false, width: 1 },
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.5 },
+          { stretchy: false, width: 1 },
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.5 }
+        ],
+
+        [ 210,
+          { stretchy: false, width: 1 },
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.5 },
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.5 }
+        ],
+
+        [ 150,
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.5 },
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.5 }
+        ],
+
+        [ 150,
+          { stretchy: false, width: 1 },
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.5 },
+          { stretchy: true, width: 0.5 }
+        ],
+
+        [ 90,
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 0.5 },
+          { stretchy: true, width: 0.5 }
+        ],
+
+        [ 30,
+          { stretchy: true, width: 0.5 },
+          { stretchy: true, width: 0.5 }
+        ],
+
+        [ 140,
+          { stretchy: true, width: 1 },
+          { stretchy: false, width: 1 },
+          { stretchy: false, width: 1 }
+        ],
+
+        [ 140,
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 1 },
+          { stretchy: false, width: 1 }
+        ],
+
+        [ 140,
+          { stretchy: false, width: 1 },
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 1 }
+        ],
+
+        [ 140,
+          { stretchy: false, width: 2 },
+          { stretchy: true, width: 1 }
+        ],
+
+        [ 80,
+          { stretchy: false, width: 1 },
+          { stretchy: true, width: 1 }
+        ],
+
+        [ 80,
+          { stretchy: true, width: 1 },
+          { stretchy: false, width: 1 }
+        ],
+
+        [ 20,
+          { stretchy: true, width: 1 }
+        ]
+      ];
+      
+      new Test.Unit.Runner({
+        testTotalFixedSpace: function() {
+          Cases.each(function(c, i) {;
+            var expected = c.shift();
+            this.assertEqual(expected, Plumb.Output.totalFixedSpace(c, false), "i = " + i);
+          }.bind(this));
+        }
+      });
+      
+    </script>
+    
+  </body>
+</html>
