@@ -1,36 +1,35 @@
 Plumb.Output = {
   
   stretchyOutput: function(boxes, container) {
-    var MARGIN = 10;
-    var COLUMN = 50;
+    var O = this.options;
     
-    var fixedSpace = MARGIN;
+    var fixedSpace = O.margin;
     var lastWasStretchy = false;
     var stretchySegments = 0
     
     boxes.each(function(box, index) {
       if (Object.isNumber(box.width)) {
-        fixedSpace += (COLUMN * box.width) + (MARGIN * box.width);
+        fixedSpace += (O.width * box.width) + (O.margin * box.width);
         lastWasStretchy = false;
       } else {
         if (!lastWasStretchy) {
-          fixedSpace += MARGIN;
+          fixedSpace += O.margin;
           stretchySegments += 1;
         }
         lastWasStretchy = true;
       }
       
       if (Object.isNumber(box.prepend)) {
-        fixedSpace += (COLUMN * box.prepend) + (MARGIN * box.prepend);
+        fixedSpace += (O.width * box.prepend) + (O.margin * box.prepend);
         lastWasStretchy = false;
       }
       
       if (Object.isNumber(box.append) && index == boxes.length - 1) {
-        fixedSpace += (COLUMN * box.append) + (MARGIN * box.append);
+        fixedSpace += (O.width * box.append) + (O.margin * box.append);
       }
     });
     
-    fixedSpace -= (stretchySegments - 1) * MARGIN;
+    fixedSpace -= (stretchySegments - 1) * O.margin;
     
     var usedFixedSpace = 0;
     var stretchy = [];
@@ -43,7 +42,7 @@ Plumb.Output = {
       });
       
       if (Object.isNumber(stretchy[0].prepend)) {
-        var prependSpace = (COLUMN * stretchy[0].prepend) + (MARGIN * stretchy[0].prepend);
+        var prependSpace = (O.width * stretchy[0].prepend) + (O.margin * stretchy[0].prepend);
         outer.setStyle({
           "marginLeft": (usedFixedSpace + prependSpace) + "px"
         });
@@ -60,12 +59,12 @@ Plumb.Output = {
         });
         
         element.setStyle({
-          "marginLeft": MARGIN + "px",
+          "marginLeft": O.margin + "px",
         });
         
         if (Object.isNumber(box.prepend) && index == 0 && lastWasStretchy) {
           inner.setStyle({
-            "marginLeft": (COLUMN * box.prepend) + (MARGIN * box.prepend)
+            "marginLeft": (O.width * box.prepend) + (O.margin * box.prepend)
           });
         }
         
@@ -75,7 +74,7 @@ Plumb.Output = {
           });
           
           // FIXME: cargo culting, here
-          usedFixedSpace += MARGIN;
+          usedFixedSpace += O.margin;
           
           element.className = "container";
           Plumb.Output.stretchyOutput(box.children, element);
@@ -86,10 +85,10 @@ Plumb.Output = {
       });
       
       outer.setStyle({
-        "marginRight": (fixedSpace - (usedFixedSpace + MARGIN)) + "px"
+        "marginRight": (fixedSpace - (usedFixedSpace + O.margin)) + "px"
       });
       
-      usedFixedSpace += MARGIN;
+      usedFixedSpace += O.margin;
       
       container.insert(outer);
       
@@ -105,17 +104,17 @@ Plumb.Output = {
         
         var element = new Element("div", { className: "box" });
         
-        width = (COLUMN * box.width) + (MARGIN * (box.width - 1));
-        left = MARGIN;
+        width = (O.width * box.width) + (O.margin * (box.width - 1));
+        left = O.margin;
         
         if (Object.isNumber(box.prepend)) {
-          left = MARGIN + (COLUMN * box.prepend) + (MARGIN * box.prepend);
+          left = O.margin + (O.width * box.prepend) + (O.margin * box.prepend);
         }
         
         if (!Object.isUndefined(box.children) && box.children.length > 0) {
           element.className = "container";
-          left -= MARGIN;
-          width += MARGIN;
+          left -= O.margin;
+          width += O.margin;
         }
         
         element.setStyle({
