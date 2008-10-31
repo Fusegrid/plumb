@@ -93,49 +93,31 @@ Plumb.Recognition = {
     // This container is stretchy if any of its children are.
     container.stretchy = container.children.any(function(c) { return c.stretchy; });
     
-    // If the root container is stretchy, it has a width of 100% minus
-    // the prepend and append spacing
+    // If the root container is stretchy, it has a width of 100%.
     if (container.stretchy && container.root)
-      container.width = { percentage: 100, subtrahend: container.prepend + container.append };
+      container.width = 1;
     
     // If this container contains columns and any of its children are
-    // stretchy, the stretchy childrens' widths are measured by taking
-    // subtracting some amount from some percentage of the container's
-    // width.
+    // stretchy, the stretchy childrens' widths are equal to the
+    // percentage of stretchy width they occupy:
     //
-    //   percentage: (child width / total stretchy width)
-    //   subtrahend:
-    //     (total fixed width + total spacing width) *
-    //     (child width / total stretchy width)
+    //   child width / total stretchy width
     //
-    // Here, the fixed values use the column as a unit. (Rather than,
-    // say, pixels.) In this part of the program, we're assuming a
-    // browser that can specify box widths by using an expression like
-    // this. I read somewhere that something like that might be part of
-    // CSS3 at some point, but for now it's faked w/ trickery later on.
     if (container.stretchy && container.type == 'columns') {
       var stretchyWidth = container.children.inject(0, function(sum, c) { return sum + (c.stretchy ? c.width : 0); });
-      var fixedWidth = container.children.inject(0, function(sum, c) { return sum + (c.stretchy ? 0 : c.width); });
-      var spacingWidth = container.children.inject(0, function(sum, c) { return sum + c.prepend + c.append; });
       
       container.children = container.children.each(function(c) {
         if (c.stretchy)
-          c.width = {
-            'percentage': Math.floor((c.width / stretchyWidth) * 100),
-            'subtrahend': (fixedWidth + spacingWidth) * (c.width / stretchyWidth)
-          };
+          c.width = Math.floor((c.width / stretchyWidth) * 100);
       });
     }
     
     // If this container contains rows and any of its children are
-    // stretchy, the stretchy children have a width of 100% minus their
-    // prepend and append spacing.
+    // stretchy, the stretchy children have a width of 100%.
     if (container.stretchy && container.type == 'rows') {
       container.children = container.children.each(function(c) {
-        if (c.stretchy) c.width = {
-          percentage: 100,
-          subtrahend: c.prepend + c.append
-        }
+        if (c.stretchy)
+          c.width = 1;
       });
     }
     
