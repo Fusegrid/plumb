@@ -84,11 +84,8 @@ Plumb.Output = {
   // - Create the appropriate wrapping, and for each box
   //   - Create the box and insert into the container
   //   - If it has children, recurse
-  //
-  // Keep in mind when calculating fixed space that a box with children
-  // should have no margins of its own.
   
-  totalFixedSpace: function(boxes, isParent) {
+  totalFixedSpace: function(boxes) {
     var O = this.options;
     
     var space = 0;
@@ -113,8 +110,7 @@ Plumb.Output = {
       }
     });
     
-    if (!isParent)
-      space += O.margin;
+    space += O.margin;
     
     return space;
   },
