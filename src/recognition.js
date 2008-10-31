@@ -108,7 +108,7 @@ Plumb.Recognition = {
       
       container.children = container.children.each(function(c) {
         if (c.stretchy)
-          c.width = Math.floor((c.width / stretchyWidth) * 100);
+          c.width = c.width / stretchyWidth;
       });
     }
     
