@@ -1,0 +1,106 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="test.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../lib/prototype.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lib/unittest.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/plumb.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/output.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body>
+    
+    <div id="testlog">
+    </div>
+    
+    <div id="stage">
+    </div>
+    
+    <script type="text/javascript" charset="utf-8">
+    
+      Plumb.setup({
+        layout: { element: new Element('div'), width: 4 },
+        output: { width: 100, margin: 10 }
+      });
+      
+      Cases = [
+        [
+          [
+            { a: 100, b: 320 },
+            { a: 100, b: 220 },
+            { a: 100, b: 120 } ],
+          { stretchy: true, width: 1, type: "columns", children: [
+            { id: "a", stretchy: false, width: 1 },
+            { id: "b", stretchy: true, width: 1 } ] }
+        ],
+        
+        [
+          [
+            { a: 100, b: 100, c: 100, d: 100 },
+            { a: 100, b: 50, c: 50, d: 100 },
+            { a: 100, b: 0, c: 0, d: 100 } ],
+          { stretchy: true, width: 1, type: "columns", children: [
+            { id: "a", stretchy: false, width: 1 },
+            { id: "b", stretchy: true, width: 0.5 },
+            { id: "c", stretchy: true, width: 0.5 },
+            { id: "d", stretchy: false, width: 1 } ] }
+        ],
+        
+        [
+          [
+            { a: 100, b: 320, c: 320 },
+            { a: 100, b: 220, c: 220 },
+            { a: 100, b: 120, c: 120 } ],
+          { stretchy: true, width: 1, type: "columns", children: [
+            { id: "a", stretchy: false, width: 1 },
+            { stretchy: true, width: 1, type: "rows", children: [
+              { id: "b", stretchy: true, width: 1 },
+              { id: "c", stretchy: true, width: 1 } ] } ] }
+        ],
+        
+        [
+          [
+            { a: 430, b: 210, c: 210 },
+            { a: 330, b: 160, c: 160 },
+            { a: 230, b: 110, b: 110 } ],
+          { stretchy: true, width: 1, type: "rows", children: [
+            { id: "a", stretchy: true, width: 1 },
+            { stretchy: true, width: 1, type: "columns", children: [
+              { id: "b", stretchy: true, width: 0.5 },
+              { id: "c", stretchy: true, width: 0.5 } ] } ] }
+        ]
+      ]
+      
+      new Test.Unit.Runner({
+        testCases: function() {
+          Cases.each(function(c, i) {
+            var expected = c.shift();
+            var root = c.shift();
+            
+            $("stage").immediateDescendants().invoke("remove");
+            Plumb.Output.output(root, $("stage"));
+          
+            $("stage").setStyle({ width: "450px" });
+          
+            $H(expected[0]).each(function(p) {
+              this.assertEqual(p[1], $(p[0]).offsetWidth, "i = " + i);
+            }.bind(this));
+          
+            $("stage").setStyle({ width: "350px" });
+          
+            $H(expected[1]).each(function(p) {
+              this.assertEqual(p[1], $(p[0]).offsetWidth, "i = " + i);
+            }.bind(this));
+          
+            $("stage").setStyle({ width: "250px" });
+          
+            $H(expected[2]).each(function(p) {
+              this.assertEqual(p[1], $(p[0]).offsetWidth, "i = " + i);
+            }.bind(this));
+          }.bind(this));
+        }
+      });
+      
+    </script>
+    
+  </body>
+</html>

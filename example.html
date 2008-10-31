@@ -109,7 +109,8 @@
       
       #preview {
         position: relative;
-        margin: 20px auto;
+        padding-top: 10px;
+        margin: 0 auto;
         width: 730px;
         background: #ddd;
       }
@@ -219,7 +220,7 @@
           var spec = Plumb.Recognition.recognize();
           
           $("preview").immediateDescendants().invoke("remove");
-          Plumb.Output.stretchyOutput([spec], $("preview"));
+          Plumb.Output.output(spec, $("preview"));
           
           $("preview").insert( new Element("div", { className: "handle-h" }) );
           

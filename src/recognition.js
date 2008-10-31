@@ -93,10 +93,6 @@ Plumb.Recognition = {
     // This container is stretchy if any of its children are.
     container.stretchy = container.children.any(function(c) { return c.stretchy; });
     
-    // If the root container is stretchy, it has a width of 100%.
-    if (container.stretchy && container.root)
-      container.width = 1;
-    
     // If this container contains columns and any of its children are
     // stretchy, the stretchy childrens' widths are equal to the
     // percentage of stretchy width they occupy:
@@ -112,14 +108,22 @@ Plumb.Recognition = {
       });
     }
     
-    // If this container contains rows and any of its children are
-    // stretchy, the stretchy children have a width of 100%.
+    // If this container contains rows, its stretchy children's
+    // widths are equal to the percentage of the parent's width
+    // they occupy:
+    //
+    //   child width / parent's width
+    //
     if (container.stretchy && container.type == 'rows') {
       container.children = container.children.each(function(c) {
         if (c.stretchy)
-          c.width = 1;
+          c.width = c.width / container.width;
       });
     }
+    
+    // If the root container is stretchy, it has a width of 100%.
+    if (container.stretchy && container.root)
+      container.width = 1;
     
     return container;
   },

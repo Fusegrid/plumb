@@ -85,7 +85,7 @@ Plumb.Output = {
   //   - Create the box and insert into the container
   //   - If it has children, recurse
   
-  totalFixedSpace: function(boxes) {
+  calculateFixedSpace: function(boxes) {
     var O = this.options;
     
     var space = 0;
@@ -99,15 +99,6 @@ Plumb.Output = {
         space += (O.width * box.width) + (O.margin * box.width);
         lastWasStretchy = false;
       }
-      
-      if (Object.isNumber(box.prepend)) {
-        space += (O.width * box.prepend) + (O.margin * box.prepend);
-        lastWasStretchy = false;
-      }
-      
-      if (Object.isNumber(box.append) && index == boxes.length - 1) {
-        space += (O.width * box.append) + (O.margin * box.append);
-      }
     });
     
     space += O.margin;
@@ -115,118 +106,164 @@ Plumb.Output = {
     return space;
   },
   
-  stretchyOutput: function(boxes, container) {
+  output: function(box, container) {
+    if (box.type == "columns")
+      this.outputColumns(box, container);
+    else
+      this.outputRows(box, container);
+  },
+  
+  outputRows: function(box, container) {
     var O = this.options;
+    var boxes = box.children;
     
-    var fixedSpace = O.margin;
-    var lastWasStretchy = false;
-    var stretchySegments = 0;
+    boxes.each(function(box) {
+      if (box.stretchy) {
+        var left = 0;
+        var right = O.margin;
+      
+        // assemble elements
+        var outer = new Element("div");
+      
+        if (box.children && box.children.length > 0)
+          right -= O.margin;
+      
+        outer.setStyle({
+          "marginLeft": left + "px",
+          "marginRight": right + "px"
+        });
+      
+        var inner = new Element("div");
+        var element = new Element("div", { "class": "box" });
+      
+        if (box.id) element.id = box.id;
     
-    boxes.each(function(box, index) {
-      if (Object.isNumber(box.width)) {
-        fixedSpace += (O.width * box.width) + (O.margin * box.width);
-        lastWasStretchy = false;
-      } else {
-        if (!lastWasStretchy) {
-          fixedSpace += O.margin;
-          stretchySegments += 1;
+        inner.setStyle({
+          "float": "left",
+          "width": (box.width * 100) + "%"
+        });
+      
+        if (box.children && box.children.length > 0) {
+          element.className = "container";
+          Plumb.Output.output(box, element);
+        } else {
+          element.setStyle({
+            "marginLeft": O.margin + "px",
+          });
         }
-        lastWasStretchy = true;
+      
+        inner.insert(element);
+        outer.insert(inner);
+        container.insert(outer);
+        
+      } else {
+        // calculate measurements
+        width = (O.width * box.width) + (O.margin * (box.width - 1));
+        left = O.margin;
+      
+        // create and insert element
+        var element = new Element("div", { className: "box" });
+        if (box.id) element.id = box.id;
+      
+        if (box.children && box.children.length > 0) {
+          element.className = "container";
+          width += O.margin;
+          left -= O.margin;
+        }
+      
+        element.setStyle({
+          "float": "left",
+          "width": width + "px",
+          "marginLeft": left + "px"
+        });
+        
+        if (box.children && box.children.length > 0)
+          Plumb.Output.output(box, element);
+      
+        container.insert(element);
       }
       
-      if (Object.isNumber(box.prepend)) {
-        fixedSpace += (O.width * box.prepend) + (O.margin * box.prepend);
-        lastWasStretchy = false;
-      }
-      
-      if (Object.isNumber(box.append) && index == boxes.length - 1) {
-        fixedSpace += (O.width * box.append) + (O.margin * box.append);
-      }
     });
+  },
+  
+  outputColumns: function(box, container) {
+    var O = this.options;
+    var boxes = box.children;
     
-    fixedSpace -= (stretchySegments - 1) * O.margin;
-    
+    var totalFixedSpace = this.calculateFixedSpace(boxes);
     var usedFixedSpace = 0;
     var stretchy = [];
     
     var emitStretchy = function() {
+      // calculate widths and margins
+      var left = usedFixedSpace;
+      var margins = O.margin * stretchy.length;
+      var right = totalFixedSpace - (left + margins);
+      
+      usedFixedSpace += left + margins;
+      
+      // assemble elements
       var outer = new Element("div");
       
-      outer.setStyle({
-        "marginLeft": usedFixedSpace + "px"
-      });
+      if (stretchy.last().children && stretchy.last().children.length > 0)
+        right -= O.margin;
       
-      if (Object.isNumber(stretchy[0].prepend)) {
-        var prependSpace = (O.width * stretchy[0].prepend) + (O.margin * stretchy[0].prepend);
-        outer.setStyle({
-          "marginLeft": (usedFixedSpace + prependSpace) + "px"
-        });
-        usedFixedSpace += prependSpace;
-      }
+      outer.setStyle({
+        "marginLeft": left + "px",
+        "marginRight": right + "px"
+      });
       
       stretchy.each(function(box, index) {
         var inner = new Element("div");
         var element = new Element("div", { "class": "box" });
+        
+        if (box.id) element.id = box.id;
       
         inner.setStyle({
           "float": "left",
-          "width": box.width.percentage + "%"
+          "width": (box.width * 100) + "%"
         });
         
-        element.setStyle({
-          "marginLeft": O.margin + "px",
-        });
-        
-        if (Object.isNumber(box.prepend) && index == 0 && lastWasStretchy) {
-          inner.setStyle({
-            "marginLeft": (O.width * box.prepend) + (O.margin * box.prepend)
-          });
-        }
-        
-        if (!Object.isUndefined(box.children) && box.children.length > 0) {
-          element.setStyle({
-            "marginLeft": 0,
-          });
-          
+        if (box.children && box.children.length > 0) {
           element.className = "container";
-          Plumb.Output.stretchyOutput(box.children, element);
+          Plumb.Output.output(box, element);
+        } else {
+          element.setStyle({
+            "marginLeft": O.margin + "px",
+          });
         }
         
         inner.insert(element);
         outer.insert(inner);
       });
       
-      outer.setStyle({
-        "marginRight": (fixedSpace - (usedFixedSpace + O.margin)) + "px"
-      });
-      
-      usedFixedSpace += O.margin;
-      
       container.insert(outer);
       
       stretchy = [];
     }
     
-    lastWasStretchy = false;
-    
     boxes.each(function(box) {
-      if (Object.isNumber(box.width)) {
+      if (box.stretchy) {
+        stretchy.push(box);
+        
+      } else {
         if (stretchy.length > 0)
           emitStretchy();
         
-        var element = new Element("div", { className: "box" });
-        
+        // calculate width and left margin, adjust used fixed space
         width = (O.width * box.width) + (O.margin * (box.width - 1));
         left = O.margin;
         
-        if (Object.isNumber(box.prepend)) {
-          left = O.margin + (O.width * box.prepend) + (O.margin * box.prepend);
-        }
+        usedFixedSpace += width + left;
         
-        if (!Object.isUndefined(box.children) && box.children.length > 0) {
+        // create and insert element
+        var element = new Element("div", { className: "box" });
+        if (box.id) element.id = box.id;
+        
+        if (box.children && box.children.length > 0) {
           element.className = "container";
-          left -= O.margin;
           width += O.margin;
+          left -= O.margin;
         }
         
         element.setStyle({
@@ -235,22 +272,10 @@ Plumb.Output = {
           "marginLeft": left + "px"
         });
         
-        if (!Object.isUndefined(box.children) && box.children.length > 0) {
-          Plumb.Output.stretchyOutput(box.children, element);
-        }
+        if (box.children && box.children.length > 0)
+          Plumb.Output.output(box, element);
         
         container.insert(element);
-        
-        usedFixedSpace += width + left;
-        
-        lastWasStretchy = false;
-      } else {
-        if (Object.isNumber(box.prepend) && stretchy.length > 0) {
-          emitStretchy();
-          lastWasStretchy = true;
-        }
-        
-        stretchy.push(box);
       }
     });
     

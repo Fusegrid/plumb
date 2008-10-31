@@ -15,7 +15,8 @@
     <script type="text/javascript" charset="utf-8">
     
       Plumb.setup({
-        layout: { element: new Element('div'), width: 12 }
+        layout: { element: new Element('div'), width: 12 },
+        output: { width: 50, margin: 10 }
       });
       
       Cases = [
@@ -205,7 +206,7 @@
         testTotalFixedSpace: function() {
           Cases.each(function(c, i) {;
             var expected = c.shift();
-            this.assertEqual(expected, Plumb.Output.totalFixedSpace(c, false), "i = " + i);
+            this.assertEqual(expected, Plumb.Output.calculateFixedSpace(c, false), "i = " + i);
           }.bind(this));
         }
       });
