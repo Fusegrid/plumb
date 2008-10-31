@@ -194,13 +194,16 @@ Plumb.Output = {
     var usedFixedSpace = 0;
     var stretchy = [];
     
+    var numberOfStretchyBoxes = boxes.select(function(b) { return b.stretchy }).length;
+    var stretchyRightMarginAdjustment = (numberOfStretchyBoxes - 1 ) * O.margin;
+    
     var emitStretchy = function() {
       // calculate widths and margins
       var left = usedFixedSpace;
       var margins = O.margin * stretchy.length;
-      var right = totalFixedSpace - (left + margins);
+      var right = (totalFixedSpace - (left + margins)) - stretchyRightMarginAdjustment;
       
-      usedFixedSpace += left + margins;
+      usedFixedSpace += margins;
       
       // assemble elements
       var outer = new Element("div");
@@ -251,7 +254,7 @@ Plumb.Output = {
           emitStretchy();
         
         // calculate width and left margin, adjust used fixed space
-        width = (O.width * box.width) + (O.margin * (box.width - 1));
+        width = (box.width * (O.width + O.margin)) - O.margin;
         left = O.margin;
         
         usedFixedSpace += width + left;
