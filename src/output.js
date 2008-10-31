@@ -1,56 +1,10 @@
 Plumb.Output = {
-  classAndStyles: function(c) {
-    var O = Plumb.Output.options;
-    var options = {};
-    
-    options.id = c.id;
-    
-    options.className = c.type ? c.type : "box";
-    if (c.root) options.className += " root"
-    
-    if (!c.stretchy) {
-      var width = (c.width * O.width) + (c.width * O.margin);
-      if (!c.type) width -= O.margin;
-      if (c.root) width += O.margin;
-      options.width = width + "px";
-    }
-    
-    var left = (c.prepend * O.width) + (c.prepend * O.margin);
-    if (!c.type) left += O.margin;
-    options.marginLeft = left + "px";
-      
-    var right = (c.append * O.width) + (c.append * O.margin);
-    options.marginRight = right + "px";
-    
-    return options;
-  },
   
-  elementOutput: function(c, parent) {
-    var options = Plumb.Output.classAndStyles(c);
+  stretchyOutput: function(boxes, container) {
+    var MARGIN = 10;
+    var COLUMN = 50;
     
-    parent.className = options.className;
-      
-    parent.setStyle({
-      width: options.width,
-      marginLeft: options.marginLeft,
-      marginRight: options.marginRight
-    });
-    
-    if (!c.type) parent.setStyle({ height: c.height + "px" });
-    
-    if (!Object.isUndefined(c.children) && c.children.length > 0) {
-      for (var i = 0; i < c.children.length; i++) {
-        var child = new Element("div");
-        Plumb.Output.elementOutput(c.children[i], child)
-        parent.insert(child);
-      }
-    }
-  }
-  
-  stretchyOutput: function(boxes, parent) {
-    var O = Plumb.Output.options;
-    
-    var fixedSpace = O.margin;
+    var fixedSpace = MARGIN;
     var lastWasStretchy = false;
     var stretchySegments = 0
     
@@ -71,7 +25,7 @@ Plumb.Output = {
         lastWasStretchy = false;
       }
       
-      if (Object.isNumber(box.append) && index == spec.length - 1) {
+      if (Object.isNumber(box.append) && index == boxes.length - 1) {
         fixedSpace += (COLUMN * box.append) + (MARGIN * box.append);
       }
     });
@@ -115,6 +69,18 @@ Plumb.Output = {
           });
         }
         
+        if (!Object.isUndefined(box.children) && box.children.length > 0) {
+          element.setStyle({
+            "marginLeft": 0,
+          });
+          
+          // FIXME: cargo culting, here
+          usedFixedSpace += MARGIN;
+          
+          element.className = "container";
+          Plumb.Output.stretchyOutput(box.children, element);
+        }
+        
         inner.insert(element);
         outer.insert(inner);
       });
@@ -125,7 +91,7 @@ Plumb.Output = {
       
       usedFixedSpace += MARGIN;
       
-      parent.insert(outer);
+      container.insert(outer);
       
       stretchy = [];
     }
@@ -137,27 +103,34 @@ Plumb.Output = {
         if (stretchy.length > 0)
           emitStretchy();
         
-        var element = new Element("div", { "class": "box" });
+        var element = new Element("div", { className: "box" });
         
-        width = (COLUMN * box.width) + (MARGIN * (box.width - 1))
+        width = (COLUMN * box.width) + (MARGIN * (box.width - 1));
+        left = MARGIN;
+        
+        if (Object.isNumber(box.prepend)) {
+          left = MARGIN + (COLUMN * box.prepend) + (MARGIN * box.prepend);
+        }
+        
+        if (!Object.isUndefined(box.children) && box.children.length > 0) {
+          element.className = "container";
+          left -= MARGIN;
+          width += MARGIN;
+        }
         
         element.setStyle({
           "float": "left",
           "width": width + "px",
-          "marginLeft": MARGIN + "px"
+          "marginLeft": left + "px"
         });
         
-        if (Object.isNumber(box.prepend)) {
-          element.setStyle({
-            "marginLeft": MARGIN + (COLUMN * box.prepend) + (MARGIN * box.prepend) + "px"
-          });
-          
-          usedFixedSpace += (COLUMN * box.prepend) + (MARGIN * box.prepend);
+        if (!Object.isUndefined(box.children) && box.children.length > 0) {
+          Plumb.Output.stretchyOutput(box.children, element);
         }
         
-        parent.insert(element);
+        container.insert(element);
         
-        usedFixedSpace += width + MARGIN;
+        usedFixedSpace += width + left;
         
         lastWasStretchy = false;
       } else {

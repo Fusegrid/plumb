@@ -19,12 +19,33 @@
     <script src="src/stretchiness.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/toolbar.js" type="text/javascript" charset="utf-8"></script>
     <style type="text/css" media="screen">
+    
+      .clearfix:after {
+        content: ".";
+        display: block;
+        clear: both;
+        visibility: hidden;
+        line-height: 0;
+        height: 0;
+      }
+
+      .clearfix {
+        display: inline-block;
+      }
+
+      html[xmlns] .clearfix {
+        display: block;
+      }
+
+      * html .clearfix {
+        height: 1%;
+      }
+    
       
       #toolbar {
         width: 730px;
         overflow: auto;
         background: #ccc;
-        margin: auto;
       }
 
       #toolbar .button {
@@ -48,11 +69,10 @@
       }
 
       #layout {
-        height: 300px;
+        height: 150px;
         width: 730px;
         background: #ddd;
         overflow: none;
-        margin: auto;
         position: relative;
       }
 
@@ -83,33 +103,36 @@
       }
       
       #recognize {
-        margin: 20px auto;
+        margin: 20px 0;
         display: block;
       }
       
       #preview {
+        position: relative;
         margin: 20px auto;
         width: 730px;
+        background: #ddd;
       }
       
-      #preview .root {
-        background: #999;
-        padding-top: 10px;
-      }
-      
-      #preview .rows, #preview .columns {
-        float: left;
+      #preview .handle-h {
+        position: absolute;
+        right: -4px;
+        top: 50%;
+        margin-top: -4px;
+        height: 8px;
+        width: 8px;
+        background: #000;
+        clear: both;
       }
       
       #preview .box {
-        float: left;
-        background: #ccc;
-        margin-bottom: 10px;
         position: relative;
         height: 50px;
+        margin-bottom: 10px;
+        background: #ccc;
       }
       
-      #preview .box .handle {
+      #preview .box .handle-v {
         position: absolute;
         bottom: -4px;
         left: 50%;
@@ -137,7 +160,8 @@
     
     <button id="recognize">Recognize &amp; test layout</button>
     
-    <div id="preview"></div>
+    <div id="preview" class="clearfix">
+    </div>
     
     <script type="text/javascript" charset="utf-8">
       
@@ -148,12 +172,14 @@
       
       var LayoutTest = {
         start: function(event) {
-          this.handle = event.findElement(".handle");
+          this.handleH = event.findElement(".handle-h");
+          this.handleV = event.findElement(".handle-v");
           
-          if (this.handle) {
+          if (this.handleH || this.handleV) {
             this.measurements = {
               pointer: event.pointer(),
-              height: this.handle.up(".box").offsetHeight
+              width: this.handleH ? this.handleH.up("#preview").offsetWidth : null,
+              height: this.handleV ? this.handleV.up(".box").offsetHeight : null
             }
             this.dragging = true;
             
@@ -163,14 +189,17 @@
         
         drag: function(event) {
           if (this.dragging) {
-            var offset = this.measurements.pointer.y - event.pointer().y;
-            var height = this.measurements.height - offset;
+            if (this.handleH)
+              var dim = this.measurements.width - (this.measurements.pointer.x - event.pointer().x);
+            else
+              var dim = this.measurements.height - (this.measurements.pointer.y - event.pointer().y);
             
-            if (height < 25) height = 25;
+            if (dim < 25) dim = 25;
             
-            this.handle.up(".box").setStyle({
-              height: height + "px"
-            });
+            if (this.handleH)
+              this.handleH.up("#preview").setStyle({ width: dim + "px" });
+            else
+              this.handleV.up(".box").setStyle({ height: dim + "px" });
             
             event.stop();
           }
@@ -187,16 +216,15 @@
       
       $("recognize").observe("click", function() {
         try {
-          var container = Plumb.Recognition.recognize();
+          var spec = Plumb.Recognition.recognize();
           
-          var root = new Element("div");
-          Plumb.Output.elementOutput(container, root);
+          $("preview").immediateDescendants().invoke("remove");
+          Plumb.Output.stretchyOutput([spec], $("preview"));
           
-          $("preview").update();
-          $("preview").insert(root);
+          $("preview").insert( new Element("div", { className: "handle-h" }) );
           
           $("preview").select(".box").each(function(box) {
-            box.insert( new Element("div", { className: "handle" }) );
+            box.insert( new Element("div", { className: "handle-v" }) );
           });
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
