@@ -102,7 +102,7 @@
         background: #999;
       }
       
-      #recognize {
+      button {
         margin: 20px 0;
         display: block;
       }
@@ -143,6 +143,10 @@
         background: #000;
       }
       
+      #debug-output {
+        font: 80% courier, monospace;
+      }
+      
     </style>
   </head>
   <body>
@@ -162,6 +166,11 @@
     <button id="recognize">Recognize &amp; test layout</button>
     
     <div id="preview" class="clearfix">
+    </div>
+    
+    <button id="debug">Get debugging info for layout</button>
+    
+    <div id="debug-output">
     </div>
     
     <script type="text/javascript" charset="utf-8">
@@ -227,6 +236,18 @@
           $("preview").select(".box").each(function(box) {
             box.insert( new Element("div", { className: "handle-v" }) );
           });
+        } catch (e) {
+          if (e == Plumb.UnsupportedLayout) {
+            alert("Sorry, Plumb can't recognize layouts like that.");
+          } else {
+            throw e;
+          }
+        }
+      });
+      
+      $("debug").observe("click", function() {
+        try {
+          $("debug-output").innerHTML = Object.toJSON(Plumb.Recognition.recognize()).escapeHTML();
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
             alert("Sorry, Plumb can't recognize layouts like that.");
