@@ -124,6 +124,8 @@ Plumb.Output = {
       
         // assemble elements
         var outer = new Element("div");
+        
+        if (box.id) outer.id = box.id + "-outer";
       
         if (box.children && box.children.length > 0)
           right -= O.margin;
@@ -139,6 +141,7 @@ Plumb.Output = {
         var inner = new Element("div");
         var element = new Element("div", { "class": "box" });
       
+        if (box.id) inner.id = box.id + "-inner";
         if (box.id) element.id = box.id;
     
         inner.setStyle({
