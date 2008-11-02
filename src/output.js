@@ -221,6 +221,7 @@ Plumb.Output = {
       
       // assemble elements
       var outer = new Element("div");
+      outer.id = stretchy.map(function(s) { return s.id; }).compact().join("") + "-outer";
       
       outer.setStyle({
         "marginLeft": left + "px",
@@ -231,6 +232,7 @@ Plumb.Output = {
         var inner = new Element("div");
         var element = new Element("div", { "class": "box" });
         
+        if (box.id) inner.id = box.id + "-inner";
         if (box.id) element.id = box.id;
       
         inner.setStyle({
