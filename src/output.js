@@ -8,10 +8,22 @@ Plumb.Output = {
     
     boxes.each(function(box, index) {
       if (box.stretchy) {
-        if (!lastWasStretchy) space += O.margin;
+        if (!lastWasStretchy || box.prepend > 0) {
+          space += O.margin;
+          if (box.prepend > 0)
+            space += (box.prepend * (O.width + O.margin));
+          if (box.append > 0)
+            space += (box.append * (O.width + O.margin));
+        }
+          
         lastWasStretchy = true;
       } else {
-        space += (O.width * box.width) + (O.margin * box.width);
+        space += box.width * (O.width + O.margin);
+        if (box.prepend > 0)
+          space += (box.prepend * (O.width + O.margin)) + O.margin;
+        if (box.append > 0)
+          space += (box.append * (O.width + O.margin)) + O.margin;
+          
         lastWasStretchy = false;
       }
     });

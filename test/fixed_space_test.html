@@ -20,212 +20,236 @@
       });
       
       Cases = [
-        // [ 280,
-        //   { stretchy: true, width: 0.33, prepend: 1 },
-        //   { stretchy: true, width: 0.33, prepend: 1 },
-        //   { stretchy: true, width: 0.33, prepend: 1, append: 1 }
-        // ],
-        // 
-        // [ 400,
-        //   { stretchy: true, width: 0.33, prepend: 1 },
-        //   { stretchy: true, width: 0.33, prepend: 1 },
-        //   { stretchy: true, width: 0.33, prepend: 1 },
-        //   { stretchy: false, width: 1, prepend: 1, append: 1 }
-        // ],
-        // 
-        // [ 280,
-        //   { stretchy: true, width: 0.33, prepend: 1 },
-        //   { stretchy: true, width: 0.33, prepend: 1 },
-        //   { stretchy: true, width: 0.33, prepend: 1 },
-        //   { stretchy: false, width: 1 }
-        // ],
-        // 
-        // [ 220,
-        //   { stretchy: true, width: 0.33, prepend: 1 },
-        //   { stretchy: true, width: 0.33, prepend: 1 },
-        //   { stretchy: true, width: 0.33 },
-        //   { stretchy: false, width: 1 }
-        // ],
-        // 
-        // [ 280,
-        //   { stretchy: true, width: 0.33, prepend: 1 },
-        //   { stretchy: true, width: 0.33, prepend: 2 },
-        //   { stretchy: true, width: 0.33 },
-        //   { stretchy: false, width: 1 }
-        // ],
-        // 
-        // [ 160,
-        //   { stretchy: true, width: 0.33, prepend: 1 },
-        //   { stretchy: true, width: 0.33 },
-        //   { stretchy: true, width: 0.33 },
-        //   { stretchy: false, width: 1 }
-        // ],
-        // 
-        // [ 210,
-        //   { stretchy: false, width: 1 },
-        //   { stretchy: true, width: 0.5 },
-        //   { stretchy: true, width: 0.5, prepend: 1 },
-        //   { stretchy: false, width: 1 }
-        // ],
-        
-        [ 160,
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.33 },
-          { stretchy: true, width: 0.33 },
-          { stretchy: true, width: 0.33 },
-          { stretchy: false, width: 1 }
+        [ 280,
+          // 50 + 10 + 10
+          { stretchy: true, width: 0.33, prepend: 1, append: 0 },
+          // 50 + 10 + 10
+          { stretchy: true, width: 0.33, prepend: 1, append: 0 },
+          // 50 + 10 + 10
+          { stretchy: true, width: 0.33, prepend: 1, append: 1 }
+          // 50 + 10 + 10
         ],
         
-        [ 230,
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.25 },
-          { stretchy: true, width: 0.25 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.25 },
-          { stretchy: true, width: 0.25 },
-          { stretchy: false, width: 1 }
+        [ 420,
+          // 50 + 10 + 10
+          { stretchy: true, width: 0.33, prepend: 1, append: 0 },
+          // 50 + 10 + 10
+          { stretchy: true, width: 0.33, prepend: 1, append: 0 },
+          // 50 + 10 + 10
+          { stretchy: true, width: 0.33, prepend: 1, append: 0 },
+          // 50 + 10 + 10
+          { stretchy: false, width: 1, prepend: 1, append: 1 } // 50
+          // 50 + 10 + 10
         ],
-
-        [ 330,
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.5 },
-          { stretchy: false, width: 1 },
-          { stretchy: false, width: 1 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.5 },
-          { stretchy: false, width: 1 }
+        
+        [ 280,
+          { stretchy: true, width: 0.33, prepend: 1, append: 0 },
+          { stretchy: true, width: 0.33, prepend: 1, append: 0 },
+          { stretchy: true, width: 0.33, prepend: 1, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 }
         ],
-
-        [ 170,
-          { stretchy: true, width: 0.25 },
-          { stretchy: true, width: 0.25 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.25 },
-          { stretchy: true, width: 0.25 },
-          { stretchy: false, width: 1 }
-        ],
-
-        [ 150,
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.25 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.75 }
-        ],
-
-        [ 330,
-          { stretchy: false, width: 1 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.5 },
-          { stretchy: false, width: 1 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.5 },
-          { stretchy: false, width: 1 }
-        ],
-
-        [ 270,
-          { stretchy: false, width: 1 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.5 },
-          { stretchy: false, width: 1 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.5 }
-        ],
-
+        
         [ 210,
-          { stretchy: false, width: 1 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.5 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.5 }
+          // 50 + 10 + 10
+          { stretchy: true, width: 0.33, prepend: 1, append: 0 },
+          // 50 + 10 + 10
+          { stretchy: true, width: 0.33, prepend: 1, append: 0 },
+          { stretchy: true, width: 0.33, prepend: 0, append: 0 },
+          // 10
+          { stretchy: false, width: 1, prepend: 0, append: 0 } // 50
+          // 10
         ],
-
-        [ 150,
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.5 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.5 }
+        
+        [ 270,
+          // 50 + 10 + 10
+          { stretchy: true, width: 0.33, prepend: 1, append: 0 },
+          // 110 + 10 + 10
+          { stretchy: true, width: 0.33, prepend: 2, append: 0 },
+          { stretchy: true, width: 0.33, prepend: 0, append: 0 },
+          // 10
+          { stretchy: false, width: 1, prepend: 0, append: 0 } // 50
+          // 10
         ],
-
-        [ 150,
-          { stretchy: false, width: 1 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.5 },
-          { stretchy: true, width: 0.5 }
-        ],
-
-        [ 90,
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.5 },
-          { stretchy: true, width: 0.5 }
-        ],
-
-        [ 30,
-          { stretchy: true, width: 0.5 },
-          { stretchy: true, width: 0.5 }
-        ],
-
+        
         [ 140,
-          { stretchy: true, width: 1 },
-          { stretchy: false, width: 1 },
-          { stretchy: false, width: 1 }
+          // 50 + 10 + 10
+          { stretchy: true, width: 0.33, prepend: 1, append: 0 },
+          { stretchy: true, width: 0.33, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.33, prepend: 0, append: 0 },
+          // 10
+          { stretchy: false, width: 1, prepend: 0, append: 0 } // 50
+          // 10
         ],
-
+        
+        [ 210,
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 1, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 }
+        ],
+        
         [ 140,
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 1 },
-          { stretchy: false, width: 1 }
+          // 10
+          { stretchy: false, width: 1, prepend: 0, append: 0 }, // 50
+          // 10
+          { stretchy: true, width: 0.33, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.33, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.33, prepend: 0, append: 0 },
+          // 10
+          { stretchy: false, width: 1, prepend: 0, append: 0 } // 50
+          // 10
         ],
-
-        [ 140,
-          { stretchy: false, width: 1 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 1 }
+        
+        [ 210,
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.25, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.25, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.25, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.25, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 }
         ],
-
-        [ 140,
-          { stretchy: false, width: 2 },
-          { stretchy: true, width: 1 }
-        ],
-
-        [ 80,
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 1 }
-        ],
-
-        [ 80,
-          { stretchy: true, width: 1 },
-          { stretchy: false, width: 1 }
-        ],
-
-        [ 20,
-          { stretchy: true, width: 1 }
+        
+        [ 330,
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 }
         ],
         
         [ 150,
-          { stretchy: true, width: 0.5 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.5 },
-          { stretchy: false, width: 1 }
+          { stretchy: true, width: 0.25, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.25, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.25, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.25, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 }
+        ],
+        
+        [ 150,
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.25, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.75, prepend: 0, append: 0 }
+        ],
+        
+        [ 330,
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 }
+        ],
+        
+        [ 270,
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 }
+        ],
+        
+        [ 210,
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 }
+        ],
+        
+        [ 150,
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 }
+        ],
+        
+        [ 140,
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 }
+        ],
+        
+        [ 80,
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 }
+        ],
+        
+        [ 20,
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 }
+        ],
+        
+        [ 140,
+          { stretchy: true, width: 1, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 }
+        ],
+        
+        [ 140,
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 1, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 }
+        ],
+        
+        [ 140,
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 1, prepend: 0, append: 0 }
+        ],
+        
+        [ 140,
+          { stretchy: false, width: 2, prepend: 0, append: 0 },
+          { stretchy: true, width: 1, prepend: 0, append: 0 }
+        ],
+        
+        [ 80,
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 1, prepend: 0, append: 0 }
+        ],
+        
+        [ 80,
+          { stretchy: true, width: 1, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 }
+        ],
+        
+        [ 20,
+          { stretchy: true, width: 1, prepend: 0, append: 0 }
+        ],
+        
+        [ 150,
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.5, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 }
         ],
         
         [ 220,
-          { stretchy: true, width: 0.33333 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.33333 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.33333 },
-          { stretchy: false, width: 1 }
+          { stretchy: true, width: 0.33333, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.33333, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.33333, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 }
         ],
         
         [ 290,
-          { stretchy: true, width: 0.25 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.25 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.25 },
-          { stretchy: false, width: 1 },
-          { stretchy: true, width: 0.25 },
-          { stretchy: false, width: 1 }
+          { stretchy: true, width: 0.25, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.25, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.25, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 },
+          { stretchy: true, width: 0.25, prepend: 0, append: 0 },
+          { stretchy: false, width: 1, prepend: 0, append: 0 }
         ]
       ];
       
