@@ -148,7 +148,7 @@
         background: #000;
       }
       
-      #debug-output {
+      #debug-output, #code-output {
         font: 80% courier, monospace;
       }
       
@@ -171,6 +171,11 @@
     <button id="recognize">Recognize &amp; test layout</button>
     
     <div id="preview" class="clearfix">
+    </div>
+    
+    <button id="code">Get HTML &amp; CSS for layout</button>
+    
+    <div id="code-output">
     </div>
     
     <button id="debug">Get debugging info for layout</button>
@@ -253,6 +258,22 @@
       $("debug").observe("click", function() {
         try {
           $("debug-output").innerHTML = Object.toJSON(Plumb.Recognition.recognize()).escapeHTML();
+        } catch (e) {
+          if (e == Plumb.UnsupportedLayout) {
+            alert("Sorry, Plumb can't recognize layouts like that.");
+          } else {
+            throw e;
+          }
+        }
+      });
+      
+      $("code").observe("click", function() {
+        try {
+          var container = new Element("div");
+          Plumb.Output.output(Plumb.Recognition.recognize(), container);
+          
+          $("code-output").innerHTML = container.innerHTML.escapeHTML();
+          
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
             alert("Sorry, Plumb can't recognize layouts like that.");
