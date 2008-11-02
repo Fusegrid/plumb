@@ -4,8 +4,8 @@ Plumb.Focus = {
     
     this.element.setStyle({
       "position": "fixed",
-      "left": "-1px",
-      "top": "-1px",
+      "left": "-100px",
+      "top": "0px",
       "width": "1px",
       "height": "1px",
       "margin": 0,
