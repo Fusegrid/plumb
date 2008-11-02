@@ -31,12 +31,11 @@ Plumb.Output = {
   
   outputRows: function(parent, container) {
     var O = this.options;
-    var boxes = parent.children;
     
-    boxes.each(function(box) {
+    parent.children.each(function(box) {
       if (box.stretchy) {
         var left = 0;
-        var right = 0;
+        var right = O.margin;
       
         // assemble elements
         var outer = new Element("div");
@@ -45,9 +44,6 @@ Plumb.Output = {
       
         if (box.children && box.children.length > 0)
           right -= O.margin;
-          
-        if (parent.root)
-          right += O.margin;
       
         outer.setStyle({
           "marginLeft": left + "px",
@@ -55,7 +51,7 @@ Plumb.Output = {
         });
       
         var inner = new Element("div");
-        var element = new Element("div", { "class": "box" });
+        var element = new Element("div", { "class": "box stretchy" });
       
         if (box.id) inner.id = box.id + "-inner";
         if (box.id) element.id = box.id;
@@ -149,7 +145,7 @@ Plumb.Output = {
       
       stretchy.each(function(box, index) {
         var inner = new Element("div");
-        var element = new Element("div", { "class": "box" });
+        var element = new Element("div", { "class": "box stretchy" });
         
         if (box.id) inner.id = box.id + "-inner";
         if (box.id) element.id = box.id;

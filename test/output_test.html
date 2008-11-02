@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <script src="../lib/prototype.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/plumb.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/output.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css" media="screen">
+      
+      .output {
+        position: relative;
+        padding-top: 10px;
+        margin: 0 0 10px 0;
+        width: 730px;
+        background: #ddd;
+      }
+      
+      .input {
+        position: relative;
+        width: 730px;
+        background: #999;
+        margin: 0 0 10px 0;
+      }
+      
+      .output:after {
+        content: ".";
+        display: block;
+        clear: both;
+        visibility: hidden;
+        line-height: 0;
+        height: 0;
+      }
+
+      .output {
+        display: inline-block;
+      }
+
+      html[xmlns] .output {
+        display: block;
+      }
+
+      * html .output {
+        height: 1%;
+      }
+      
+      .output .box {
+        position: relative;
+        height: 40px;
+        margin-bottom: 10px;
+        background: #000;
+      }
+      
+      .input .box {
+        position: absolute;
+        background: #000;
+      }
+      
+      .output .box.stretchy, .input .box.stretchy {
+        background: #f00;
+      }
+      
+    </style>
+  </head>
+  <body>
+    
+    <div id="output">
+    </div>
+    
+    <script type="text/javascript" charset="utf-8">
+    
+      Plumb.setup({
+        layout: { element: new Element('div'), width: 12 },
+        output: { width: 50, margin: 10 }
+      });
+      
+      var Cases = [
+        {"root": true, "type": "rows", "children": [{"left": 0, "top": 16, "height": 54, "width": 1, "right": 11, "bottom": 70, "stretchy": true, "id": "b", "prepend": 0, "append": 0}, {"root": false, "type": "columns", "children": [{"left": 0, "top": 85, "height": 47, "width": 0.5, "right": 5, "bottom": 132, "stretchy": true, "id": "d", "prepend": 0, "append": 0}, {"left": 6, "top": 86, "height": 45, "width": 0.5, "right": 11, "bottom": 131, "stretchy": true, "id": "e", "prepend": 0, "append": 0}], "id": "c", "left": 0, "top": 85, "right": 11, "bottom": 132, "height": 47, "width": 1, "stretchy": true, "prepend": 0, "append": 0}], "id": "a", "left": 0, "top": 16, "right": 11, "bottom": 132, "height": 116, "width": 1, "prepend": 0, "append": 0, "stretchy": true},
+        
+        {"root": true, "type": "columns", "children": [{"root": false, "type": "rows", "children": [{"left": 0, "top": 16, "height": 35, "width": 1, "right": 5, "bottom": 51, "stretchy": true, "id": "c", "prepend": 0, "append": 0}, {"left": 0, "top": 60, "height": 33, "width": 1, "right": 5, "bottom": 93, "stretchy": true, "id": "d", "prepend": 0, "append": 0}], "id": "b", "left": 0, "top": 16, "right": 5, "bottom": 93, "height": 77, "width": 0.5, "stretchy": true, "prepend": 0, "append": 0}, {"left": 6, "top": 21, "height": 73, "width": 0.5, "right": 11, "bottom": 94, "stretchy": true, "id": "e", "prepend": 0, "append": 0}], "id": "a", "left": 0, "top": 16, "right": 11, "bottom": 94, "height": 78, "width": 1, "prepend": 0, "append": 0, "stretchy": true},
+        
+        {"root": true, "type": "rows", "children": [{"left": 3, "top": 16, "height": 35, "width": 0.5, "right": 5, "bottom": 51, "stretchy": true, "id": "b", "prepend": 3, "append": 0}, {"left": 0, "top": 60, "height": 33, "width": 1, "right": 5, "bottom": 93, "stretchy": true, "id": "c", "prepend": 0, "append": 0}], "id": "a", "left": 0, "top": 16, "right": 5, "bottom": 93, "height": 77, "width": 1, "prepend": 0, "append": 6, "stretchy": true},
+        
+        {"root": true, "type": "columns", "children": [{"left": 1, "top": 10, "height": 30, "width": 3, "right": 3, "bottom": 65, "stretchy": false, "id": "d", "prepend": 0, "append": 0}, {"left": 5, "top": 10, "height": 30, "width": 3, "right": 7, "bottom": 64, "stretchy": false, "id": "c", "prepend": 1, "append": 0}, {"left": 9, "top": 10, "height": 30, "width": 3, "right": 11, "bottom": 61, "stretchy": false, "id": "b", "prepend": 1, "append": 0}], "id": "a", "left": 1, "top": 13, "right": 11, "bottom": 65, "height": 52, "width": 11, "prepend": 1, "append": 0, "stretchy": false},
+        
+        {"root": true, "type": "rows", "children": [{"root": false, "type": "columns", "children": [{"left": 0, "top": 12, "height": 48, "width": 1, "right": 8, "bottom": 60, "stretchy": true, "id": "c", "prepend": 0, "append": 0}, {"left": 9, "top": 13, "height": 45, "width": 3, "right": 11, "bottom": 58, "stretchy": false, "id": "d", "prepend": 0, "append": 0}], "id": "b", "left": 0, "top": 12, "right": 11, "bottom": 60, "height": 48, "width": 1, "stretchy": true, "prepend": 0, "append": 0}, {"left": 0, "top": 71, "height": 38, "width": 1, "right": 11, "bottom": 109, "stretchy": true, "id": "e", "prepend": 0, "append": 0}], "id": "a", "left": 0, "top": 12, "right": 11, "bottom": 109, "height": 97, "width": 1, "prepend": 0, "append": 0, "stretchy": true}
+      ];
+      
+      function generateInput(spec, container) {
+        var O = Plumb.Output.options;
+        
+        spec.children.each(function(child) {
+          if (child.children) {
+            generateInput(child, container);
+          } else {
+            var box = new Element("div", { className: "box" });
+            
+            if (child.stretchy)
+              box.addClassName("stretchy");
+            
+            box.setStyle({
+              top: child.top + "px",
+              left: ((child.left * (O.width + O.margin)) + O.margin) + "px",
+              width: ((((child.right - child.left) + 1) * (O.width + O.margin)) - O.margin) + "px",
+              height: child.height + "px"
+            });
+            
+            container.insert(box);
+          }
+        });
+      }
+      
+      Cases.each(function(c) {
+        var pair = new Element("div", { className: "pair" });
+        var input = new Element("div", { className: "input" });
+        
+        generateInput(c, input);
+        
+        input.setStyle({
+          height: input.select(".box").max(function(b) {
+            return parseInt(Element.getStyle(b, "top")) + parseInt(Element.getStyle(b, "height")) + 10;
+          }) + "px"
+        });
+        
+        pair.insert(input);
+        
+        var e = new Element("div", { className: "output" });
+        Plumb.Output.output({ children: [c] }, e);
+        pair.insert(e);
+        
+        $("output").insert(pair);
+      });
+      
+    </script>
+    
+  </body>
+</html>

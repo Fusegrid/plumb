@@ -239,7 +239,7 @@
           var spec = Plumb.Recognition.recognize();
           
           $("preview").immediateDescendants().invoke("remove");
-          Plumb.Output.output(spec, $("preview"));
+          Plumb.Output.output({ children: [spec] }, $("preview"));
           
           $("preview").insert( new Element("div", { className: "handle-h" }) );
           
@@ -270,7 +270,7 @@
       $("code").observe("click", function() {
         try {
           var container = new Element("div");
-          Plumb.Output.output(Plumb.Recognition.recognize(), container);
+          Plumb.Output.output({ children: [ Plumb.Recognition.recognize() ] }, container);
           
           $("code-output").innerHTML = container.innerHTML.escapeHTML();
           
