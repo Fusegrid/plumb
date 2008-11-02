@@ -93,7 +93,7 @@ Plumb.Output = {
     
     boxes.each(function(box, index) {
       if (box.stretchy) {
-        space += O.margin;
+        if (!lastWasStretchy) space += O.margin;
         lastWasStretchy = true;
       } else {
         space += (O.width * box.width) + (O.margin * box.width);
@@ -113,20 +113,23 @@ Plumb.Output = {
       this.outputRows(box, container);
   },
   
-  outputRows: function(box, container) {
+  outputRows: function(parent, container) {
     var O = this.options;
-    var boxes = box.children;
+    var boxes = parent.children;
     
     boxes.each(function(box) {
       if (box.stretchy) {
         var left = 0;
-        var right = O.margin;
+        var right = 0;
       
         // assemble elements
         var outer = new Element("div");
       
         if (box.children && box.children.length > 0)
           right -= O.margin;
+          
+        if (parent.root)
+          right += O.margin;
       
         outer.setStyle({
           "marginLeft": left + "px",
@@ -145,7 +148,7 @@ Plumb.Output = {
       
         if (box.children && box.children.length > 0) {
           element.className = "container";
-          Plumb.Output.output(box, element);
+          Plumb.Output.outputColumns(box, element);
         } else {
           element.setStyle({
             "marginLeft": O.margin + "px",
@@ -178,7 +181,7 @@ Plumb.Output = {
         });
         
         if (box.children && box.children.length > 0)
-          Plumb.Output.output(box, element);
+          Plumb.Output.outputColumns(box, element);
       
         container.insert(element);
       }
@@ -186,30 +189,38 @@ Plumb.Output = {
     });
   },
   
-  outputColumns: function(box, container) {
+  outputColumns: function(parent, container) {
     var O = this.options;
-    var boxes = box.children;
+    var boxes = parent.children;
     
     var totalFixedSpace = this.calculateFixedSpace(boxes);
     var usedFixedSpace = 0;
     var stretchy = [];
     
-    var numberOfStretchyBoxes = boxes.select(function(b) { return b.stretchy }).length;
-    var stretchyRightMarginAdjustment = (numberOfStretchyBoxes - 1 ) * O.margin;
+    var lastWasStretchy = false;
+    var numberOfStretchyGroups = 0;
+    
+    boxes.each(function(box) {
+      if (box.stretchy && !lastWasStretchy) {
+        numberOfStretchyGroups += 1;
+        lastWasStretchy = true;
+      }
+      
+      if (!box.stretchy)
+        lastWasStretchy = false;
+    });
+    
+    var stretchyRightMarginAdjustment = (numberOfStretchyGroups - 1 ) * O.margin;
     
     var emitStretchy = function() {
       // calculate widths and margins
       var left = usedFixedSpace;
-      var margins = O.margin * stretchy.length;
-      var right = (totalFixedSpace - (left + margins)) - stretchyRightMarginAdjustment;
+      var right = (totalFixedSpace - (left + O.margin)) - stretchyRightMarginAdjustment;
       
-      usedFixedSpace += margins;
+      usedFixedSpace += O.margin;
       
       // assemble elements
       var outer = new Element("div");
-      
-      if (stretchy.last().children && stretchy.last().children.length > 0)
-        right -= O.margin;
       
       outer.setStyle({
         "marginLeft": left + "px",
@@ -229,7 +240,7 @@ Plumb.Output = {
         
         if (box.children && box.children.length > 0) {
           element.className = "container";
-          Plumb.Output.output(box, element);
+          Plumb.Output.outputRows(box, element);
         } else {
           element.setStyle({
             "marginLeft": O.margin + "px",
@@ -276,7 +287,7 @@ Plumb.Output = {
         });
         
         if (box.children && box.children.length > 0)
-          Plumb.Output.output(box, element);
+          Plumb.Output.outputRows(box, element);
         
         container.insert(element);
       }
