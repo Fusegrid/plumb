@@ -38,7 +38,11 @@ Plumb.Output = {
     boxes.each(function(box) {
       if (box.stretchy) {
         var left = 0;
-        var right = 0;
+        
+        if (box.children && box.children.length > 0)
+          var right = 0;
+        else
+          var right = O.margin;
       
         // assemble elements
         var outer = new Element("div");
@@ -142,6 +146,9 @@ Plumb.Output = {
       // assemble elements
       var outer = new Element("div");
       outer.id = stretchy.map(function(s) { return s.id; }).compact().join("") + "-outer";
+      
+      if (stretchy.any(function(s) { return s.children && s.children.length > 0; }))
+        right -= O.margin;
       
       outer.setStyle({
         "marginLeft": left + "px",
