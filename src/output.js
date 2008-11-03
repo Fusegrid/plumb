@@ -22,6 +22,9 @@ Plumb.Output = {
   },
   
   output: function(box, container) {
+    if (box.root)
+      box = { children: [box], type: box.type == "rows" ? "columns" : "rows" };
+    
     if (box.type == "columns")
       this.outputColumns(box, container);
     else
