@@ -8,11 +8,10 @@ Plumb.Output = {
     
     boxes.each(function(box, index) {
       if (box.stretchy) {
-        if (!lastWasStretchy)
-          space += O.margin;
+        if (!lastWasStretchy) space += O.margin;
         lastWasStretchy = true;
       } else {
-        space += box.width * (O.width + O.margin);
+        space += (O.width * box.width) + (O.margin * box.width);
         lastWasStretchy = false;
       }
     });
@@ -31,19 +30,17 @@ Plumb.Output = {
   
   outputRows: function(parent, container) {
     var O = this.options;
+    var boxes = parent.children;
     
-    parent.children.each(function(box) {
+    boxes.each(function(box) {
       if (box.stretchy) {
         var left = 0;
-        var right = O.margin;
+        var right = 0;
       
         // assemble elements
         var outer = new Element("div");
         
         if (box.id) outer.id = box.id + "-outer";
-      
-        if (box.children && box.children.length > 0)
-          right -= O.margin;
       
         outer.setStyle({
           "marginLeft": left + "px",
@@ -59,6 +56,10 @@ Plumb.Output = {
         inner.setStyle({
           "float": "left",
           "width": (box.width * 100) + "%"
+        });
+        
+        element.setStyle({
+          "height": box.height + "px"
         });
       
         if (box.children && box.children.length > 0) {
@@ -92,6 +93,7 @@ Plumb.Output = {
         element.setStyle({
           "float": "left",
           "width": width + "px",
+          "height": box.height + "px",
           "marginLeft": left + "px"
         });
         
@@ -155,6 +157,10 @@ Plumb.Output = {
           "width": (box.width * 100) + "%"
         });
         
+        element.setStyle({
+          "height": box.height + "px"
+        });
+        
         if (box.children && box.children.length > 0) {
           element.className = "container";
           Plumb.Output.outputRows(box, element);
@@ -200,6 +206,7 @@ Plumb.Output = {
         element.setStyle({
           "float": "left",
           "width": width + "px",
+          "height": box.height + "px",
           "marginLeft": left + "px"
         });
         
