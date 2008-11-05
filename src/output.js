@@ -50,6 +50,8 @@ Plumb.Output = {
         
         if (box.root)
           right = O.margin;
+          
+        var prepend = box.prepend * (O.margin + O.width);
       
         // assemble elements
         var outer = new Element("div");
@@ -69,7 +71,8 @@ Plumb.Output = {
     
         inner.setStyle({
           "float": "left",
-          "width": (box.width * 100) + "%"
+          "width": (box.width * 100) + "%",
+          "marginLeft": prepend + "px"
         });
         
         element.setStyle({
@@ -203,6 +206,9 @@ Plumb.Output = {
     
     boxes.each(function(box) {
       if (box.stretchy) {
+        if (box.prepend > 0 && stretchy.length > 0)
+          emitStretchy();
+        
         stretchy.push(box);
         
       } else {
