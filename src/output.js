@@ -35,14 +35,13 @@ Plumb.Output = {
     var O = this.options;
     var boxes = parent.children;
     
-    boxes.each(function(box) {
+    boxes.each(function(box, i) {
       if (box.stretchy) {
         var left = 0;
+        var right = 0;
         
-        if (box.children && box.children.length > 0)
-          var right = 0;
-        else
-          var right = O.margin;
+        if (box.root)
+          right = O.margin;
       
         // assemble elements
         var outer = new Element("div");
@@ -55,7 +54,7 @@ Plumb.Output = {
         });
       
         var inner = new Element("div");
-        var element = new Element("div", { "class": "box stretchy" });
+        var element = new Element("div", { "class": "box stretchy row" });
       
         if (box.id) inner.id = box.id + "-inner";
         if (box.id) element.id = box.id;
@@ -70,7 +69,7 @@ Plumb.Output = {
         });
       
         if (box.children && box.children.length > 0) {
-          element.className = "container";
+          element.className = "container stretchy row";
           Plumb.Output.outputColumns(box, element);
         } else {
           element.setStyle({
@@ -88,11 +87,11 @@ Plumb.Output = {
         left = O.margin;
       
         // create and insert element
-        var element = new Element("div", { className: "box" });
+        var element = new Element("div", { className: "box row" });
         if (box.id) element.id = box.id;
       
         if (box.children && box.children.length > 0) {
-          element.className = "container";
+          element.className = "container row";
           width += O.margin;
           left -= O.margin;
         }
@@ -133,22 +132,21 @@ Plumb.Output = {
       if (!box.stretchy)
         lastWasStretchy = false;
     });
-    
-    var stretchyRightMarginAdjustment = (numberOfStretchyGroups - 1 ) * O.margin;
+    var stretchyRightMarginAdjustment = numberOfStretchyGroups * O.margin;
     
     var emitStretchy = function() {
       // calculate widths and margins
       var left = usedFixedSpace;
       var right = (totalFixedSpace - (left + O.margin)) - stretchyRightMarginAdjustment;
+        
+      if (stretchy[0].root)
+        right += O.margin;
       
       usedFixedSpace += O.margin;
       
       // assemble elements
       var outer = new Element("div");
       outer.id = stretchy.map(function(s) { return s.id; }).compact().join("") + "-outer";
-      
-      if (stretchy.any(function(s) { return s.children && s.children.length > 0; }))
-        right -= O.margin;
       
       outer.setStyle({
         "marginLeft": left + "px",
@@ -157,7 +155,7 @@ Plumb.Output = {
       
       stretchy.each(function(box, index) {
         var inner = new Element("div");
-        var element = new Element("div", { "class": "box stretchy" });
+        var element = new Element("div", { "class": "box stretchy column" });
         
         if (box.id) inner.id = box.id + "-inner";
         if (box.id) element.id = box.id;
@@ -172,7 +170,7 @@ Plumb.Output = {
         });
         
         if (box.children && box.children.length > 0) {
-          element.className = "container";
+          element.className = "container stretchy column";
           Plumb.Output.outputRows(box, element);
         } else {
           element.setStyle({
@@ -204,11 +202,11 @@ Plumb.Output = {
         usedFixedSpace += width + left;
         
         // create and insert element
-        var element = new Element("div", { className: "box" });
+        var element = new Element("div", { className: "box column" });
         if (box.id) element.id = box.id;
         
         if (box.children && box.children.length > 0) {
-          element.className = "container";
+          element.className = "container column";
           width += O.margin;
           left -= O.margin;
         }

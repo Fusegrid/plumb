@@ -4,7 +4,11 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <script src="../lib/prototype.js" type="text/javascript" charset="utf-8"></script>
     <script src="../src/plumb.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/column.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/letters.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/layout.js" type="text/javascript" charset="utf-8"></script>
     <script src="../src/output.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/recognition.js" type="text/javascript" charset="utf-8"></script>
     <style type="text/css" media="screen">
       
       .output {
@@ -63,9 +67,26 @@
         background: #333;
       }
       
+      #results {
+        font-size: 150%;
+        margin-bottom: 10px;
+        width: 730px;
+      }
+      
+      .fail {
+        background: #f99;
+      }
+      
+      .pass {
+        background: #9f9;
+      }
+      
     </style>
   </head>
   <body>
+    
+    <div id="results">
+    </div>
     
     <div id="output">
     </div>
@@ -78,15 +99,124 @@
       });
       
       var Cases = [
-        {"root": true, "type": "rows", "children": [{"left": 0, "top": 10, "height": 40, "width": 1, "right": 11, "bottom": 50, "stretchy": true, "id": "b", "prepend": 0, "append": 0}, {"root": false, "type": "columns", "children": [{"left": 0, "top": 60, "height": 40, "width": 0.5, "right": 5, "bottom": 110, "stretchy": true, "id": "d", "prepend": 0, "append": 0}, {"left": 6, "top": 60, "height": 40, "width": 0.5, "right": 11, "bottom": 100, "stretchy": true, "id": "e", "prepend": 0, "append": 0}], "id": "c", "left": 0, "top": 60, "right": 11, "bottom": 100, "height": 40, "width": 1, "stretchy": true, "prepend": 0, "append": 0}], "id": "a", "left": 0, "top": 10, "right": 11, "bottom": 100, "height": 90, "width": 1, "prepend": 0, "append": 0, "stretchy": true},
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 12, "right": 11, "bottom": 50, "stretchy": true},
+          {"left": 0, "top": 60, "height": 40, "width": 6, "right": 5, "bottom": 100, "stretchy": true},
+          {"left": 6, "top": 60, "height": 40, "width": 6, "right": 11, "bottom": 100, "stretchy": true}
+        ],
         
-        {"root": true, "type": "columns", "children": [{"root": false, "type": "rows", "children": [{"left": 0, "top": 10, "height": 40, "width": 1, "right": 5, "bottom": 50, "stretchy": true, "id": "c", "prepend": 0, "append": 0}, {"left": 0, "top": 60, "height": 40, "width": 1, "right": 5, "bottom": 100, "stretchy": true, "id": "d", "prepend": 0, "append": 0}], "id": "b", "left": 0, "top": 10, "right": 5, "bottom": 100, "height": 90, "width": 0.5, "stretchy": true, "prepend": 0, "append": 0}, {"left": 6, "top": 10, "height": 90, "width": 0.5, "right": 11, "bottom": 100, "stretchy": true, "id": "e", "prepend": 0, "append": 0}], "id": "a", "left": 0, "top": 10, "right": 11, "bottom": 100, "height": 90, "width": 1, "prepend": 0, "append": 0, "stretchy": true},
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 6, "right": 5, "bottom": 50, "stretchy": true},
+          {"left": 0, "top": 60, "height": 40, "width": 6, "right": 5, "bottom": 100, "stretchy": true},
+          {"left": 6, "top": 10, "height": 90, "width": 6, "right": 11, "bottom": 100, "stretchy": true}
+        ],
         
-        {"root": true, "type": "rows", "children": [{"left": 3, "top": 10, "height": 40, "width": 0.5, "right": 5, "bottom": 50, "stretchy": true, "id": "b", "prepend": 3, "append": 0}, {"left": 0, "top": 60, "height": 40, "width": 1, "right": 5, "bottom": 100, "stretchy": true, "id": "c", "prepend": 0, "append": 0}], "id": "a", "left": 0, "top": 10, "right": 5, "bottom": 100, "height": 90, "width": 1, "prepend": 0, "append": 6, "stretchy": true},
+        [
+          {"left": 0, "top": 10, "height": 90, "width": 6, "right": 5, "bottom": 100, "stretchy": true},
+          {"left": 6, "top": 10, "height": 40, "width": 6, "right": 11, "bottom": 50, "stretchy": true},
+          {"left": 6, "top": 60, "height": 40, "width": 6, "right": 11, "bottom": 100, "stretchy": true}
+        ],
         
-        {"root": true, "type": "columns", "children": [{"left": 1, "top": 10, "height": 40, "width": 3, "right": 3, "bottom": 50, "stretchy": false, "id": "d", "prepend": 0, "append": 0}, {"left": 5, "top": 10, "height": 40, "width": 3, "right": 7, "bottom": 50, "stretchy": false, "id": "c", "prepend": 1, "append": 0}, {"left": 9, "top": 10, "height": 40, "width": 3, "right": 11, "bottom": 50, "stretchy": false, "id": "b", "prepend": 1, "append": 0}], "id": "a", "left": 1, "top": 10, "right": 11, "bottom": 50, "height": 40, "width": 11, "prepend": 1, "append": 0, "stretchy": false},
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 9, "right": 8, "bottom": 50, "stretchy": true},
+          {"left": 9, "top": 10, "height": 40, "width": 3, "right": 11, "bottom": 50, "stretchy": false},
+          {"left": 0, "top": 60, "height": 40, "width": 12, "right": 11, "bottom": 100, "stretchy": true}
+        ],
         
-        {"root": true, "type": "rows", "children": [{"root": false, "type": "columns", "children": [{"left": 0, "top": 10, "height": 40, "width": 1, "right": 8, "bottom": 50, "stretchy": true, "id": "c", "prepend": 0, "append": 0}, {"left": 9, "top": 10, "height": 40, "width": 3, "right": 11, "bottom": 50, "stretchy": false, "id": "d", "prepend": 0, "append": 0}], "id": "b", "left": 0, "top": 10, "right": 11, "bottom": 50, "height": 40, "width": 1, "stretchy": true, "prepend": 0, "append": 0}, {"left": 0, "top": 60, "height": 40, "width": 1, "right": 11, "bottom": 90, "stretchy": true, "id": "e", "prepend": 0, "append": 0}], "id": "a", "left": 0, "top": 10, "right": 11, "bottom": 90, "height": 90, "width": 1, "prepend": 0, "append": 0, "stretchy": true}
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 6, "right": 5, "bottom": 50, "stretchy": true},
+          {"left": 6, "top": 10, "height": 90, "width": 6, "right": 11, "bottom": 100, "stretchy": false},
+          {"left": 0, "top": 60, "height": 40, "width": 6, "right": 5, "bottom": 100, "stretchy": true}
+        ],
+        
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 12, "right": 11, "bottom": 50, "stretchy": true},
+          {"left": 0, "top": 60, "height": 90, "width": 6, "right": 5, "bottom": 150, "stretchy": true},
+          {"left": 6, "top": 60, "height": 40, "width": 6, "right": 11, "bottom": 100, "stretchy": true},
+          {"left": 6, "top": 110, "height": 40, "width": 3, "right": 8, "bottom": 150, "stretchy": true},
+          {"left": 9, "top": 110, "height": 40, "width": 3, "right": 11, "bottom": 150, "stretchy": true}
+        ],
+        
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 12, "right": 11, "bottom": 50, "stretchy": true},
+          {"left": 0, "top": 60, "height": 40, "width": 6, "right": 5, "bottom": 100, "stretchy": true},
+          {"left": 0, "top": 110, "height": 40, "width": 3, "right": 2, "bottom": 150, "stretchy": true},
+          {"left": 3, "top": 110, "height": 40, "width": 3, "right": 5, "bottom": 150, "stretchy": true},
+          {"left": 6, "top": 60, "height": 90, "width": 6, "right": 11, "bottom": 150, "stretchy": true}
+        ],
+        
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 12, "right": 11, "bottom": 50, "stretchy": true},
+          {"left": 0, "top": 60, "height": 140, "width": 6, "right": 5, "bottom": 200, "stretchy": true},
+          {"left": 6, "top": 60, "height": 40, "width": 6, "right": 11, "bottom": 100, "stretchy": true},
+          {"left": 6, "top": 110, "height": 90, "width": 2, "right": 7, "bottom": 200, "stretchy": true},
+          {"left": 8, "top": 110, "height": 40, "width": 4, "right": 11, "bottom": 150, "stretchy": true},
+          {"left": 8, "top": 160, "height": 40, "width": 2, "right": 9, "bottom": 200, "stretchy": true},
+          {"left": 10, "top": 160, "height": 40, "width": 2, "right": 11, "bottom": 200, "stretchy": true}
+        ],
+        
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 12, "right": 11, "bottom": 50, "stretchy": true},
+          {"left": 0, "top": 60, "height": 40, "width": 6, "right": 5, "bottom": 100, "stretchy": true},
+          {"left": 0, "top": 110, "height": 90, "width": 2, "right": 1, "bottom": 200, "stretchy": true},
+          {"left": 2, "top": 110, "height": 40, "width": 4, "right": 5, "bottom": 150, "stretchy": true},
+          {"left": 2, "top": 160, "height": 40, "width": 2, "right": 3, "bottom": 200, "stretchy": true},
+          {"left": 4, "top": 160, "height": 40, "width": 2, "right": 5, "bottom": 200, "stretchy": true},
+          {"left": 6, "top": 60, "height": 140, "width": 6, "right": 11, "bottom": 200, "stretchy": true}
+        ],
+        
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 4, "right": 3, "bottom": 50, "stretchy": true},
+          {"left": 4, "top": 10, "height": 40, "width": 4, "right": 7, "bottom": 50, "stretchy": true},
+          {"left": 8, "top": 10, "height": 40, "width": 4, "right": 11, "bottom": 50, "stretchy": true}
+        ],
+        
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 2, "right": 1, "bottom": 50, "stretchy": true},
+          {"left": 2, "top": 10, "height": 40, "width": 2, "right": 3, "bottom": 50, "stretchy": false},
+          {"left": 4, "top": 10, "height": 40, "width": 2, "right": 5, "bottom": 50, "stretchy": true},
+          {"left": 6, "top": 10, "height": 40, "width": 2, "right": 7, "bottom": 50, "stretchy": false},
+          {"left": 8, "top": 10, "height": 40, "width": 2, "right": 9, "bottom": 50, "stretchy": true},
+          {"left": 10, "top": 10, "height": 40, "width": 2, "right": 11, "bottom": 50, "stretchy": false}
+        ],
+        
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 4, "right": 3, "bottom": 50, "stretchy": true},
+          {"left": 4, "top": 10, "height": 40, "width": 4, "right": 7, "bottom": 50, "stretchy": true},
+          {"left": 8, "top": 10, "height": 40, "width": 4, "right": 11, "bottom": 50, "stretchy": true},
+          
+          {"left": 0, "top": 60, "height": 40, "width": 6, "right": 5, "bottom": 100, "stretchy": true},
+          {"left": 6, "top": 60, "height": 40, "width": 6, "right": 11, "bottom": 100, "stretchy": true},
+          
+          {"left": 0, "top": 110, "height": 40, "width": 12, "right": 11, "bottom": 150, "stretchy": true}
+        ],
+        
+        [
+          {"left": 3, "top": 10, "height": 40, "width": 3, "right": 5, "bottom": 50, "stretchy": false},
+          {"left": 0, "top": 60, "height": 40, "width": 6, "right": 5, "bottom": 100, "stretchy": false}
+        ],
+        
+        [
+          {"left": 4, "top": 10, "height": 40, "width": 3, "right": 6, "bottom": 50, "stretchy": false},
+          {"left": 1, "top": 60, "height": 40, "width": 6, "right": 6, "bottom": 100, "stretchy": false}
+        ],
+        
+        [
+          {"left": 9, "top": 10, "height": 40, "width": 3, "right": 11, "bottom": 50, "stretchy": false},
+          {"left": 6, "top": 60, "height": 40, "width": 6, "right": 11, "bottom": 100, "stretchy": false}
+        ],
+        
+        [
+          {"left": 1, "top": 10, "height": 40, "width": 3, "right": 3, "bottom": 50, "stretchy": false},
+          {"left": 5, "top": 10, "height": 40, "width": 3, "right": 7, "bottom": 50, "stretchy": false},
+          {"left": 9, "top": 10, "height": 40, "width": 3, "right": 11, "bottom": 50, "stretchy": false}
+        ],
+        
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 3, "right": 2, "bottom": 50, "stretchy": false},
+          {"left": 4, "top": 10, "height": 40, "width": 3, "right": 6, "bottom": 50, "stretchy": false},
+          {"left": 8, "top": 10, "height": 40, "width": 3, "right": 10, "bottom": 50, "stretchy": false}
+        ]
       ];
       
       function generateInput(spec, container) {
@@ -113,11 +243,15 @@
         });
       }
       
+      var passes = 0;
+      
       Cases.each(function(c) {
+        var spec = Plumb.Recognition.recognize(c);
+        
         var pair = new Element("div", { className: "pair" });
         var input = new Element("div", { className: "input" });
         
-        generateInput(c, input);
+        generateInput(spec, input);
         
         input.setStyle({
           height: input.select(".box").max(function(b) {
@@ -126,13 +260,54 @@
         });
         
         var out = new Element("div", { className: "output" });
-        Plumb.Output.output(c, out);
+        Plumb.Output.output(spec, out);
         
         pair.insert(input);
         pair.insert(out);
         
         $("output").insert(pair);
+        
+        var outOffset = out.cumulativeOffset();
+        
+        var measurements = $H();
+        out.select(".box").each(function(b) {
+          measurements.set(b.id, {
+            left: b.cumulativeOffset().left - outOffset.left,
+            width: b.getWidth()
+          });
+        });
+        
+        var pass = true;
+        
+        var inputOffset = input.cumulativeOffset();
+        input.select(".box").each(function(b) {
+          if (measurements.get(b.id).left != b.cumulativeOffset().left - inputOffset.left) {
+            pass = false;
+            throw $break;
+          }
+          
+          if (measurements.get(b.id).width != b.getWidth()) {
+            pass = false;
+            throw $break;
+          }
+        });
+      
+        // only show failing tests
+        if (pass) {
+          out.addClassName("pass");
+          passes += 1;
+        } else {
+          out.addClassName("fail");
+        }
       });
+      
+      
+      $("results").innerHTML = passes + " / " + Cases.length;
+      
+      if (passes == Cases.length)
+        $("results").addClassName("pass");
+      else
+        $("results").addClassName("fail");
       
     </script>
     

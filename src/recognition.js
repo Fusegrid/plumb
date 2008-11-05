@@ -1,12 +1,13 @@
 Plumb.Recognition = {
-  recognize: function() {
-    this.index = 0;
-    
-    var shapes = Plumb.Layout.shapes().map(function(shape) {
+  getShapes: function() {
+    return Plumb.Layout.shapes().map(function(shape) {
       return Object.extend(shape.getMeasurements(), { stretchy: shape.hasClassName('stretchy') });
     });
-    
-    return this.buildContainer(shapes);
+  },
+  
+  recognize: function(shapes) {
+    this.index = 0;
+    return this.buildContainer(shapes || this.getShapes());
   },
   
   buildContainer: function(shapes, type) {
@@ -209,5 +210,5 @@ Plumb.Recognition = {
   }
 }
 
-Plumb.UnsupportedLayout = new Error();
+Plumb.UnsupportedLayout = new Error("Couldn't subdivide rows and columns (layout is unsupported)");
 Plumb.UnsupportedLayout.name = "UnsupportedLayout";
