@@ -257,7 +257,7 @@
       
       $("debug").observe("click", function() {
         try {
-          $("debug-output").innerHTML = Object.toJSON(Plumb.Recognition.recognize()).escapeHTML();
+          $("debug-output").innerHTML = Object.toJSON(Plumb.Recognition.getShapes()).escapeHTML();
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
             alert("Sorry, Plumb can't recognize layouts like that.");
