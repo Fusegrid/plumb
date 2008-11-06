@@ -60,14 +60,13 @@ Plumb.Output = {
       
         outer.setStyle({
           "marginLeft": left + "px",
-          "marginRight": right + "px"
+          "marginRight": right + prepend + "px"
         });
       
-        var inner = new Element("div");
-        var element = new Element("div", { "class": "box stretchy row" });
       
+        var inner = new Element("div");
+        
         if (box.id) inner.id = box.id + "-inner";
-        if (box.id) element.id = box.id;
     
         inner.setStyle({
           "float": "left",
@@ -75,9 +74,10 @@ Plumb.Output = {
           "marginLeft": prepend + "px"
         });
         
-        element.setStyle({
-          "height": box.height + "px"
-        });
+        
+        var element = new Element("div", { "class": "box stretchy row" });
+      
+        if (box.id) element.id = box.id;
       
         if (box.children && box.children.length > 0) {
           element.className = "container stretchy row";
@@ -85,6 +85,7 @@ Plumb.Output = {
         } else {
           element.setStyle({
             "marginLeft": O.margin + "px",
+            "height": box.height + "px"
           });
         }
       
@@ -116,12 +117,16 @@ Plumb.Output = {
         element.setStyle({
           "float": "left",
           "width": width + "px",
-          "height": box.height + "px",
           "marginLeft": left + "px"
         });
         
-        if (box.children && box.children.length > 0)
+        if (box.children && box.children.length > 0) {
           Plumb.Output.outputColumns(box, element);
+        } else {
+          element.setStyle({
+            "height": box.height + "px"
+          });
+        }
       
         container.insert(element);
       }
@@ -182,16 +187,13 @@ Plumb.Output = {
           "width": (box.width * 100) + "%"
         });
         
-        element.setStyle({
-          "height": box.height + "px"
-        });
-        
         if (box.children && box.children.length > 0) {
           element.className = "container stretchy column";
           Plumb.Output.outputRows(box, element);
         } else {
           element.setStyle({
             "marginLeft": O.margin + "px",
+            "height": box.height + "px"
           });
         }
         
@@ -240,12 +242,17 @@ Plumb.Output = {
         element.setStyle({
           "float": "left",
           "width": width + "px",
-          "height": box.height + "px",
-          "marginLeft": left + "px"
+          "marginLeft": left + "px",
+          "marginRight": right + "px"
         });
         
-        if (box.children && box.children.length > 0)
+        if (box.children && box.children.length > 0) {
           Plumb.Output.outputRows(box, element);
+        } else {
+          element.setStyle({
+            "height": box.height + "px"
+          });
+        }
         
         container.insert(element);
       }

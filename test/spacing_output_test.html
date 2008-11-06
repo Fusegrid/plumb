@@ -15,13 +15,13 @@
         position: relative;
         padding-top: 10px;
         margin: 0 0 10px 0;
-        width: 730px;
+        width: 850px;
         background: #ddd;
       }
       
       .input {
         position: relative;
-        width: 730px;
+        width: 850px;
         background: #999;
         margin: 0 0 10px 0;
       }
@@ -70,7 +70,7 @@
       #results {
         font-size: 150%;
         margin-bottom: 10px;
-        width: 730px;
+        width: 850px;
       }
       
       .fail {
@@ -95,7 +95,7 @@
     
       Plumb.setup({
         layout: { element: new Element('div'), width: 12 },
-        output: { width: 50, margin: 10 }
+        output: { width: 60, margin: 10 }
       });
       
       var Cases = [
@@ -125,6 +125,7 @@
           {"left": 4, "top": 10, "height": 40, "width": 3, "right": 6, "bottom": 50, "stretchy": false},
           {"left": 8, "top": 10, "height": 40, "width": 3, "right": 10, "bottom": 50, "stretchy": false}
         ],
+        
         [
           {"left": 0, "top": 10, "height": 40, "width": 12, "right": 11, "bottom": 50, "stretchy": true},
           {"left": 6, "top": 60, "height": 40, "width": 6, "right": 11, "bottom": 100, "stretchy": true}
@@ -313,6 +314,8 @@
       
       Cases.each(function(c) {
         var spec = Plumb.Recognition.recognize(c);
+        
+        console.log(Object.toJSON(spec));
         
         var pair = new Element("div", { className: "pair" });
         var input = new Element("div", { className: "input" });

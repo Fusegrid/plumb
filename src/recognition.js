@@ -94,31 +94,26 @@ Plumb.Recognition = {
     // This container is stretchy if any of its children are.
     container.stretchy = container.children.any(function(c) { return c.stretchy; });
     
-    // If this container contains columns and any of its children are
-    // stretchy, the stretchy childrens' widths are equal to the
-    // percentage of stretchy width they occupy:
+    // If this container contains columns, the stretchy children's
+    // widths are equal to the percentage of stretchy width
+    // they occupy:
     //
     //   child width / total stretchy width
     //
     if (container.stretchy && container.type == 'columns') {
       var stretchyWidth = container.children.inject(0, function(sum, c) { return sum + (c.stretchy ? c.width : 0); });
       
-      container.children = container.children.each(function(c) {
+      container.children.each(function(c) {
         if (c.stretchy)
           c.width = c.width / stretchyWidth;
       });
     }
     
     // If this container contains rows, its stretchy children's
-    // widths are equal to the percentage of the parent's width
-    // they occupy:
-    //
-    //   child width / parent's width
-    //
+    // widths are 100%.
     if (container.stretchy && container.type == 'rows') {
-      container.children = container.children.each(function(c) {
-        if (c.stretchy)
-          c.width = c.width / container.width;
+      container.children.each(function(c) {
+        c.width = 1;
       });
     }
     
