@@ -238,6 +238,8 @@
         try {
           var spec = Plumb.Recognition.recognize();
           
+          console.log(Object.toJSON(spec));
+          
           $("preview").immediateDescendants().invoke("remove");
           Plumb.Output.output(spec, $("preview"));
           
