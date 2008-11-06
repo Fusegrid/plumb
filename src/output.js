@@ -21,6 +21,22 @@ Plumb.Output = {
     return space;
   },
   
+  addSpacing: function(boxes) {
+    result = [];
+    
+    boxes.each(function(box) {
+      if (box.prepend > 0)
+        result.push({ width: box.prepend, stretchy: false });
+      
+      result.push(box);
+      
+      if (box.append > 0)
+        result.push({ width: box.append, stretchy: false });
+    });
+    
+    return result;
+  },
+  
   output: function(box, container) {
     if (box.root)
       box = { children: [box], type: box.type == "rows" ? "columns" : "rows" };
@@ -33,7 +49,7 @@ Plumb.Output = {
   
   outputRows: function(parent, container) {
     var O = this.options;
-    var boxes = parent.children;
+    var boxes = this.addSpacing(parent.children);
     
     boxes.each(function(box, i) {
       if (box.stretchy) {
@@ -117,7 +133,7 @@ Plumb.Output = {
   
   outputColumns: function(parent, container) {
     var O = this.options;
-    var boxes = parent.children;
+    var boxes = this.addSpacing(parent.children);
     
     var totalFixedSpace = this.calculateFixedSpace(boxes);
     var usedFixedSpace = 0;
