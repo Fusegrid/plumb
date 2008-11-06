@@ -22,8 +22,14 @@ Plumb.Output = {
   },
   
   output: function(box, container) {
-    if (box.root)
-      box = { children: [box], type: box.type == "rows" ? "columns" : "rows" };
+    if (box.root) {
+      if (box.prepend > 0 || box.append > 0)
+        box = { children: [box], type: "rows" };
+      else if (box.type == "rows")
+        box = { children: [box], type: "columns" };
+      else
+        box = { children: [box], type: "rows" };
+    }
     
     if (box.type == "columns")
       this.outputColumns(box, container);
@@ -38,13 +44,13 @@ Plumb.Output = {
     boxes.each(function(box) {
       if (box.children) {
         if (box.prepend > 0) {
-          box.children.unshift({ width: box.prepend, stretchy: false, id: box.id + "-prepend" });
+          box.children.unshift({ width: box.prepend, stretchy: false, id: box.id + "-prepend", spacing: true });
           if (!box.stretchy)
             box.width += box.prepend;
         }
         
         if (box.append > 0) {
-          box.children.push({ width: box.append, stretchy: false, id: box.id + "-append" });
+          box.children.push({ width: box.append, stretchy: false, id: box.id + "-append", spacing: true });
           if (!box.stretchy)
             box.width += box.append;
         }
@@ -53,7 +59,7 @@ Plumb.Output = {
         box.children = [];
         
         if (box.prepend > 0) {
-          box.children.push({ width: box.prepend, stretchy: false, id: box.id + "-prepend" });
+          box.children.push({ width: box.prepend, stretchy: false, id: box.id + "-prepend", spacing: true });
           box.children.push({ width: box.width, stretchy: box.stretchy, height: box.height, id: box.id });
           if (!box.stretchy)
             box.width += box.prepend;
@@ -62,7 +68,7 @@ Plumb.Output = {
         if (box.append > 0) {
           if (box.children.length == 0)
             box.children.push({ width: box.width, stretchy: box.stretchy, height: box.height, id: box.id });
-          box.children.push({ width: box.append, stretchy: false, id: box.id + "-append" });
+          box.children.push({ width: box.append, stretchy: false, id: box.id + "-append", spacing: true });
           if (!box.stretchy)
             box.width += box.append;
         }
@@ -70,8 +76,6 @@ Plumb.Output = {
       }
       
     });
-    
-    console.log("outputting rows: ", Object.toJSON(boxes));
     
     boxes.each(function(box, i) {
       if (box.stretchy) {
@@ -93,6 +97,9 @@ Plumb.Output = {
       
         var inner = new Element("div");
         var element = new Element("div", { "class": "box stretchy row" });
+        
+        if (box.spacing)
+          element.addClassName("spacing");
       
         if (box.id) inner.id = box.id + "-inner";
         if (box.id) element.id = box.id;
@@ -125,6 +132,10 @@ Plumb.Output = {
       
         // create and insert element
         var element = new Element("div", { className: "box row" });
+        
+        if (box.spacing)
+          element.addClassName("spacing");
+          
         if (box.id) element.id = box.id;
       
         if (box.children && box.children.length > 0) {
@@ -159,15 +170,13 @@ Plumb.Output = {
     var boxes = [];
     parent.children.each(function(box) {
       if (box.prepend > 0)
-        boxes.push({ width: box.prepend, stretchy: false });
+        boxes.push({ width: box.prepend, stretchy: false, spacing: true });
         
       boxes.push(box);
       
       if (box.append > 0)
-        boxes.push({ width: box.append, stretchy: false });
+        boxes.push({ width: box.append, stretchy: false, spacing: true });
     });
-    
-    console.log("outputting columns: ", Object.toJSON(boxes));
     
     var totalFixedSpace = this.calculateFixedSpace(boxes);
     var usedFixedSpace = 0;
@@ -209,6 +218,9 @@ Plumb.Output = {
       stretchy.each(function(box, index) {
         var inner = new Element("div");
         var element = new Element("div", { "class": "box stretchy column" });
+        
+        if (box.spacing)
+          element.addClassName("spacing");
         
         if (box.id) inner.id = box.id + "-inner";
         if (box.id) element.id = box.id;
@@ -255,6 +267,10 @@ Plumb.Output = {
         
         // create and insert element
         var element = new Element("div", { className: "box column" });
+        
+        if (box.spacing)
+          element.addClassName("spacing");
+          
         if (box.id) element.id = box.id;
         
         if (box.children && box.children.length > 0) {
