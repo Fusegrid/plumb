@@ -35,13 +35,45 @@ Plumb.Output = {
     var O = this.options;
     var boxes = parent.children;
     
-    boxes.each(function(box, i) {
-      if (box.prepend > 0)
-        box.children.unshift({ width: box.prepend, stretchy: false });
+    boxes.each(function(box) {
+      if (box.children) {
+        if (box.prepend > 0) {
+          box.children.unshift({ width: box.prepend, stretchy: false, id: box.id + "-prepend" });
+          if (!box.stretchy)
+            box.width += box.prepend;
+        }
         
-      if (box.append > 0)
-        box.children.push({ width: box.append, stretchy: false });
+        if (box.append > 0) {
+          box.children.push({ width: box.append, stretchy: false, id: box.id + "-append" });
+          if (!box.stretchy)
+            box.width += box.append;
+        }
+        
+      } else {
+        box.children = [];
+        
+        if (box.prepend > 0) {
+          box.children.push({ width: box.prepend, stretchy: false, id: box.id + "-prepend" });
+          box.children.push({ width: box.width, stretchy: box.stretchy, height: box.height, id: box.id });
+          if (!box.stretchy)
+            box.width += box.prepend;
+        }
+        
+        if (box.append > 0) {
+          if (box.children.length == 0)
+            box.children.push({ width: box.width, stretchy: box.stretchy, height: box.height, id: box.id });
+          box.children.push({ width: box.append, stretchy: false, id: box.id + "-append" });
+          if (!box.stretchy)
+            box.width += box.append;
+        }
+        
+      }
       
+    });
+    
+    console.log("outputting rows: ", Object.toJSON(boxes));
+    
+    boxes.each(function(box, i) {
       if (box.stretchy) {
         var left = 0;
         var right = 0;
