@@ -85,12 +85,8 @@ Plumb.Output = {
         // calculate measurements
         width = (O.width * box.width) + (O.margin * (box.width - 1));
         
-        left = O.margin + (box.prepend * (O.width + O.margin));
-        
-        if (box.append > 0)
-          right = O.margin + (box.append * (O.width + O.margin));
-        else
-          right = 0;
+        left = O.margin;
+        right = 0;
       
         // create and insert element
         var element = new Element("div", { className: "box row" });
@@ -204,12 +200,8 @@ Plumb.Output = {
         // calculate width and left margin, adjust used fixed space
         width = (box.width * (O.width + O.margin)) - O.margin;
         
-        left = O.margin + (box.prepend * (O.width + O.margin));
-        
-        if (box.append > 0)
-          right = O.margin + (box.append * (O.width + O.margin));
-        else
-          right = 0;
+        left = O.margin;
+        right = 0;
         
         usedFixedSpace += width + left;
         
