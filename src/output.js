@@ -52,6 +52,7 @@ Plumb.Output = {
           right = O.margin;
           
         var prepend = box.prepend * (O.margin + O.width);
+        var append = box.append * (O.margin + O.width);
       
         // assemble elements
         var outer = new Element("div");
@@ -60,7 +61,7 @@ Plumb.Output = {
       
         outer.setStyle({
           "marginLeft": left + "px",
-          "marginRight": right + prepend + "px"
+          "marginRight": right + prepend + append + "px"
         });
       
       
