@@ -166,6 +166,16 @@
         ],
         
         [
+          {"left": 0, "top": 10, "height": 40, "width": 12, "right": 11, "bottom": 50, "stretchy": true},
+          {"left": 0, "top": 60, "height": 40, "width": 6, "right": 5, "bottom": 100, "stretchy": true},
+          {"left": 0, "top": 110, "height": 90, "width": 2, "right": 1, "bottom": 200, "stretchy": true},
+          {"left": 2, "top": 110, "height": 40, "width": 4, "right": 5, "bottom": 150, "stretchy": true},
+          {"left": 2, "top": 160, "height": 40, "width": 2, "right": 3, "bottom": 200, "stretchy": false},
+          {"left": 4, "top": 160, "height": 40, "width": 2, "right": 5, "bottom": 200, "stretchy": true},
+          {"left": 6, "top": 60, "height": 140, "width": 6, "right": 11, "bottom": 200, "stretchy": true}
+        ],
+        
+        [
           {"left": 0, "top": 10, "height": 40, "width": 4, "right": 3, "bottom": 50, "stretchy": true},
           {"left": 4, "top": 10, "height": 40, "width": 4, "right": 7, "bottom": 50, "stretchy": true},
           {"left": 8, "top": 10, "height": 40, "width": 4, "right": 11, "bottom": 50, "stretchy": true}
@@ -184,10 +194,8 @@
           {"left": 0, "top": 10, "height": 40, "width": 4, "right": 3, "bottom": 50, "stretchy": true},
           {"left": 4, "top": 10, "height": 40, "width": 4, "right": 7, "bottom": 50, "stretchy": true},
           {"left": 8, "top": 10, "height": 40, "width": 4, "right": 11, "bottom": 50, "stretchy": true},
-          
           {"left": 0, "top": 60, "height": 40, "width": 6, "right": 5, "bottom": 100, "stretchy": true},
           {"left": 6, "top": 60, "height": 40, "width": 6, "right": 11, "bottom": 100, "stretchy": true},
-          
           {"left": 0, "top": 110, "height": 40, "width": 12, "right": 11, "bottom": 150, "stretchy": true}
         ],
         
@@ -196,6 +204,37 @@
           {"left": 6, "top": 10, "height": 40, "width": 6, "right": 11, "bottom": 50, "stretchy": false},
           {"left": 0, "top": 60, "height": 40, "width": 6, "right": 5, "bottom": 100, "stretchy": false},
           {"left": 6, "top": 60, "height": 40, "width": 6, "right": 11, "bottom": 100, "stretchy": true}
+        ],
+        
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 6, "right": 5, "bottom": 50, "stretchy": false},
+          {"left": 6, "top": 10, "height": 40, "width": 6, "right": 11, "bottom": 50, "stretchy": true},
+          {"left": 0, "top": 60, "height": 40, "width": 6, "right": 5, "bottom": 100, "stretchy": true},
+          {"left": 6, "top": 60, "height": 40, "width": 6, "right": 11, "bottom": 100, "stretchy": false}
+        ],
+        
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 5, "right": 4, "bottom": 50, "stretchy": true},
+          {"left": 5, "top": 10, "height": 40, "width": 7, "right": 11, "bottom": 50, "stretchy": false},
+          {"left": 0, "top": 60, "height": 40, "width": 7, "right": 6, "bottom": 100, "stretchy": false},
+          {"left": 7, "top": 60, "height": 40, "width": 5, "right": 11, "bottom": 100, "stretchy": true}
+        ],
+        
+        [
+          {"left": 0, "top": 10, "height": 40, "width": 5, "right": 4, "bottom": 50, "stretchy": false},
+          {"left": 5, "top": 10, "height": 40, "width": 7, "right": 11, "bottom": 50, "stretchy": true},
+          {"left": 0, "top": 60, "height": 40, "width": 7, "right": 6, "bottom": 100, "stretchy": true},
+          {"left": 7, "top": 60, "height": 40, "width": 5, "right": 11, "bottom": 100, "stretchy": false}
+        ],
+        
+        [
+          {"left": 0, "top": 10, "height": 90, "width": 1, "right": 0, "bottom": 100, "stretchy": true},
+          {"left": 11, "top": 10, "height": 90, "width": 1, "right": 11, "bottom": 100, "stretchy": true},
+          
+          {"left": 1, "top": 10, "height": 40, "width": 5, "right": 5, "bottom": 50, "stretchy": false},
+          {"left": 6, "top": 10, "height": 40, "width": 5, "right": 10, "bottom": 50, "stretchy": false},
+          
+          {"left": 1, "top": 60, "height": 40, "width": 10, "right": 10, "bottom": 100, "stretchy": false}
         ]
       ];
       
@@ -288,6 +327,8 @@
         $("results").addClassName("pass");
       else
         $("results").addClassName("fail");
+        
+      $$(".output").invoke("setStyle", {width: "100%"});
       
     </script>
     

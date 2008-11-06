@@ -113,7 +113,8 @@ Plumb.Recognition = {
     // widths are 100%.
     if (container.stretchy && container.type == 'rows') {
       container.children.each(function(c) {
-        c.width = 1;
+        if (c.stretchy)
+          c.width = 1;
       });
     }
     

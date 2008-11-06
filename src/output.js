@@ -30,8 +30,14 @@ Plumb.Output = {
   },
   
   output: function(box, container) {
-    if (box.root)
-      box = { children: [box], type: box.type == "rows" ? "columns" : "rows" };
+    if (box.root) {
+      if (box.prepend > 0 || box.append > 0)
+        box = { children: [box], type: "rows" };
+      else if (box.type == "rows")
+        box = { children: [box], type: "columns" };
+      else
+        box = { children: [box], type: "rows" };
+    }
     
     if (box.type == "columns")
       this.outputColumns(box, container);
@@ -42,6 +48,42 @@ Plumb.Output = {
   outputRows: function(parent, container) {
     var O = this.options;
     var boxes = parent.children;
+    
+    boxes.each(function(box) {
+      if (box.children) {
+        if (box.prepend > 0) {
+          box.children.unshift({ width: box.prepend, stretchy: false, id: box.id + "-prepend", spacing: true });
+          if (!box.stretchy)
+            box.width += box.prepend;
+        }
+        
+        if (box.append > 0) {
+          box.children.push({ width: box.append, stretchy: false, id: box.id + "-append", spacing: true });
+          if (!box.stretchy)
+            box.width += box.append;
+        }
+        
+      } else {
+        box.children = [];
+        
+        if (box.prepend > 0) {
+          box.children.push({ width: box.prepend, stretchy: false, id: box.id + "-prepend", spacing: true });
+          box.children.push({ width: box.width, stretchy: box.stretchy, height: box.height, id: box.id });
+          if (!box.stretchy)
+            box.width += box.prepend;
+        }
+        
+        if (box.append > 0) {
+          if (box.children.length == 0)
+            box.children.push({ width: box.width, stretchy: box.stretchy, height: box.height, id: box.id });
+          box.children.push({ width: box.append, stretchy: false, id: box.id + "-append", spacing: true });
+          if (!box.stretchy)
+            box.width += box.append;
+        }
+        
+      }
+      
+    });
     
     boxes.each(function(box, i) {
       if (box.stretchy) {
@@ -64,6 +106,11 @@ Plumb.Output = {
           "marginRight": right + prepend + append + "px"
         });
       
+        var inner = new Element("div");
+        var element = new Element("div", { "class": "box stretchy row" });
+        
+        if (box.spacing)
+          element.addClassName("spacing");
       
         var inner = new Element("div");
         
@@ -74,17 +121,13 @@ Plumb.Output = {
           "width": (box.width * 100) + "%",
           "marginLeft": prepend + "px"
         });
-        
-        
-        var element = new Element("div", { "class": "box stretchy row" });
-      
-        if (box.id) element.id = box.id;
       
         if (box.children && box.children.length > 0) {
           element.className = "container stretchy row";
           Plumb.Output.outputColumns(box, element);
         } else {
           element.setStyle({
+            "height": box.height + "px",
             "marginLeft": O.margin + "px",
             "height": box.height + "px"
           });
@@ -98,15 +141,15 @@ Plumb.Output = {
         // calculate measurements
         width = (O.width * box.width) + (O.margin * (box.width - 1));
         
-        left = O.margin + (box.prepend * (O.width + O.margin));
-        
-        if (box.append > 0)
-          right = O.margin + (box.append * (O.width + O.margin));
-        else
-          right = 0;
+        left = O.margin;
+        right = 0;
       
         // create and insert element
         var element = new Element("div", { className: "box row" });
+        
+        if (box.spacing)
+          element.addClassName("spacing");
+          
         if (box.id) element.id = box.id;
       
         if (box.children && box.children.length > 0) {
@@ -137,7 +180,17 @@ Plumb.Output = {
   
   outputColumns: function(parent, container) {
     var O = this.options;
-    var boxes = parent.children;
+    
+    var boxes = [];
+    parent.children.each(function(box) {
+      if (box.prepend > 0)
+        boxes.push({ width: box.prepend, stretchy: false, spacing: true });
+        
+      boxes.push(box);
+      
+      if (box.append > 0)
+        boxes.push({ width: box.append, stretchy: false, spacing: true });
+    });
     
     var totalFixedSpace = this.calculateFixedSpace(boxes);
     var usedFixedSpace = 0;
@@ -180,6 +233,9 @@ Plumb.Output = {
         var inner = new Element("div");
         var element = new Element("div", { "class": "box stretchy column" });
         
+        if (box.spacing)
+          element.addClassName("spacing");
+        
         if (box.id) inner.id = box.id + "-inner";
         if (box.id) element.id = box.id;
       
@@ -221,17 +277,17 @@ Plumb.Output = {
         // calculate width and left margin, adjust used fixed space
         width = (box.width * (O.width + O.margin)) - O.margin;
         
-        left = O.margin + (box.prepend * (O.width + O.margin));
-        
-        if (box.append > 0)
-          right = O.margin + (box.append * (O.width + O.margin));
-        else
-          right = 0;
+        left = O.margin;
+        right = 0;
         
         usedFixedSpace += width + left;
         
         // create and insert element
         var element = new Element("div", { className: "box column" });
+        
+        if (box.spacing)
+          element.addClassName("spacing");
+          
         if (box.id) element.id = box.id;
         
         if (box.children && box.children.length > 0) {
@@ -243,8 +299,7 @@ Plumb.Output = {
         element.setStyle({
           "float": "left",
           "width": width + "px",
-          "marginLeft": left + "px",
-          "marginRight": right + "px"
+          "marginLeft": left + "px"
         });
         
         if (box.children && box.children.length > 0) {
