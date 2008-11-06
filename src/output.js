@@ -21,22 +21,6 @@ Plumb.Output = {
     return space;
   },
   
-  addSpacing: function(boxes) {
-    result = [];
-    
-    boxes.each(function(box) {
-      if (box.prepend > 0)
-        result.push({ width: box.prepend, stretchy: false });
-      
-      result.push(box);
-      
-      if (box.append > 0)
-        result.push({ width: box.append, stretchy: false });
-    });
-    
-    return result;
-  },
-  
   output: function(box, container) {
     if (box.root)
       box = { children: [box], type: box.type == "rows" ? "columns" : "rows" };
@@ -49,9 +33,15 @@ Plumb.Output = {
   
   outputRows: function(parent, container) {
     var O = this.options;
-    var boxes = this.addSpacing(parent.children);
+    var boxes = parent.children;
     
     boxes.each(function(box, i) {
+      if (box.prepend > 0)
+        box.children.unshift({ width: box.prepend, stretchy: false });
+        
+      if (box.append > 0)
+        box.children.push({ width: box.append, stretchy: false });
+      
       if (box.stretchy) {
         var left = 0;
         var right = 0;
@@ -133,7 +123,19 @@ Plumb.Output = {
   
   outputColumns: function(parent, container) {
     var O = this.options;
-    var boxes = this.addSpacing(parent.children);
+    
+    var boxes = [];
+    parent.children.each(function(box) {
+      if (box.prepend > 0)
+        boxes.push({ width: box.prepend, stretchy: false });
+        
+      boxes.push(box);
+      
+      if (box.append > 0)
+        boxes.push({ width: box.append, stretchy: false });
+    });
+    
+    console.log("outputting columns: ", Object.toJSON(boxes));
     
     var totalFixedSpace = this.calculateFixedSpace(boxes);
     var usedFixedSpace = 0;
