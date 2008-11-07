@@ -8,17 +8,12 @@ Plumb.Output = {
     
     boxes.each(function(box, index) {
       if (box.stretchy) {
-        if (!lastWasStretchy || box.prepend > 0)
+        if (!lastWasStretchy)
           space += O.margin;
-          
-        space += box.prepend * (O.width + O.margin);
-        space += box.append * (O.width + O.margin);
         
         lastWasStretchy = true;
       } else {
         space += box.width * (O.width + O.margin);
-        space += box.prepend * (O.width + O.margin);
-        space += box.append * (O.width + O.margin);
         
         lastWasStretchy = false;
       }
@@ -30,14 +25,8 @@ Plumb.Output = {
   },
   
   output: function(box, container) {
-    if (box.root) {
-      if (box.prepend > 0 || box.append > 0)
-        box = { children: [box], type: "rows" };
-      else if (box.type == "rows")
-        box = { children: [box], type: "columns" };
-      else
-        box = { children: [box], type: "rows" };
-    }
+    if (box.root)
+      box = { children: [box], type: box.type == "rows" ? "columns" : "rows" };
     
     if (box.type == "columns")
       this.outputColumns(box, container);
@@ -48,42 +37,6 @@ Plumb.Output = {
   outputRows: function(parent, container) {
     var O = this.options;
     var boxes = parent.children;
-    
-    boxes.each(function(box) {
-      if (box.children) {
-        if (box.prepend > 0) {
-          box.children.unshift({ width: box.prepend, stretchy: false, id: box.id + "-prepend", spacing: true });
-          if (!box.stretchy)
-            box.width += box.prepend;
-        }
-        
-        if (box.append > 0) {
-          box.children.push({ width: box.append, stretchy: false, id: box.id + "-append", spacing: true });
-          if (!box.stretchy)
-            box.width += box.append;
-        }
-        
-      } else {
-        box.children = [];
-        
-        if (box.prepend > 0) {
-          box.children.push({ width: box.prepend, stretchy: false, id: box.id + "-prepend", spacing: true });
-          box.children.push({ width: box.width, stretchy: box.stretchy, height: box.height, id: box.id });
-          if (!box.stretchy)
-            box.width += box.prepend;
-        }
-        
-        if (box.append > 0) {
-          if (box.children.length == 0)
-            box.children.push({ width: box.width, stretchy: box.stretchy, height: box.height, id: box.id });
-          box.children.push({ width: box.append, stretchy: false, id: box.id + "-append", spacing: true });
-          if (!box.stretchy)
-            box.width += box.append;
-        }
-        
-      }
-      
-    });
     
     boxes.each(function(box, i) {
       if (box.stretchy) {
@@ -181,16 +134,7 @@ Plumb.Output = {
   outputColumns: function(parent, container) {
     var O = this.options;
     
-    var boxes = [];
-    parent.children.each(function(box) {
-      if (box.prepend > 0)
-        boxes.push({ width: box.prepend, stretchy: false, spacing: true });
-        
-      boxes.push(box);
-      
-      if (box.append > 0)
-        boxes.push({ width: box.append, stretchy: false, spacing: true });
-    });
+    var boxes = parent.children;
     
     var totalFixedSpace = this.calculateFixedSpace(boxes);
     var usedFixedSpace = 0;
