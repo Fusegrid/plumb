@@ -50,45 +50,13 @@ Plumb.Recognition = {
     container.right = container.children.max(function(c) { return c.right; });
     container.bottom = container.children.max(function(c) { return c.bottom; });
     
+    if (container.root) {
+      container.left = 0;
+      container.right = Plumb.Layout.getMeasurements().width - 1;
+    }
+    
     container.height = container.bottom - container.top;
     container.width = container.right - container.left + 1;
-    
-    
-    // Calculate append and prepend
-    if (container.root) {
-      container.prepend = container.left;
-      container.append = Plumb.Layout.getMeasurements().width - (container.right + 1);
-    }
-    
-    if (container.type == "columns") {
-      container.children.each(function(c, i) {
-        if (i == 0 && c.left > container.left)
-          c.prepend = c.left - container.left;
-        else if (i > 0 && c.left > container.children[i - 1].right + 1)
-          c.prepend = c.left - (container.children[i - 1].right + 1);
-        else
-          c.prepend = 0;
-        
-        // For columns, we append space only on the last column, every
-        // other columns use only prepending.
-        if (i == container.children.length - 1 && c.right < container.right)
-          c.append = container.right - c.right;
-        else
-          c.append = 0;
-      });
-    } else {
-      container.children.each(function(c, i) {
-        if (c.left > container.left)
-          c.prepend = c.left - container.left;
-        else
-          c.prepend = 0;
-          
-        if (c.right < container.right)
-          c.append = container.right - c.right;
-        else
-          c.append = 0;
-      });
-    }
     
     
     // This container is stretchy if any of its children are.
@@ -121,6 +89,93 @@ Plumb.Recognition = {
     // If the root container is stretchy, it has a width of 100%.
     if (container.stretchy && container.root)
       container.width = 1;
+      
+    
+    // Add append and prepend boxes
+    
+    if (container.type == "rows") {
+      var children = [];
+      
+      container.children.each(function(c, i) {
+        var prepend, append;
+      
+        if (c.left > container.left)
+          prepend = c.left - container.left;
+        else
+          prepend = 0;
+          
+        if (c.right < container.right)
+          append = container.right - c.right;
+        else
+          append = 0;
+        
+        if (prepend > 0 || append > 0) {
+          var child = {
+            type: "columns",
+            left: container.left,
+            right: container.right,
+            top: c.top,
+            bottom: c.bottom,
+            height: c.bottom - c.top,
+            width: c.stretchy ? 1 : container.width,
+            children: [],
+            stretchy: container.stretchy
+          }
+          
+          if (prepend > 0)
+            child.children.push({ type: "spacing", width: prepend, stretchy: false, id: c.id + "-prepend" });
+          
+          if (c.type == "columns") {
+            child.id = c.id;
+            child.children = child.children.concat(c.children);
+          } else {
+            child.id = (this.index++).toLetters();
+            child.children.push(c);
+          }
+          
+          if (append > 0)
+            child.children.push({ type: "spacing", width: append, stretchy: false, id: c.id + "-append" });
+          
+          children.push(child);
+          
+        } else {
+          children.push(c);
+        }
+      }.bind(this));
+      
+      container.children = children;
+      
+    } else {
+      var children = [];
+    
+      container.children.each(function(c, i) {
+        var prepend, append;
+        
+        if (i == 0 && c.left > container.left)
+          prepend = c.left - container.left;
+        else if (i > 0 && c.left > container.children[i - 1].right + 1)
+          prepend = c.left - (container.children[i - 1].right + 1);
+        else
+          prepend = 0;
+        
+        if (prepend > 0)
+          children.push({ type: "spacing", width: prepend, stretchy: false, id: c.id + "-prepend" });
+        
+        children.push(c);
+        
+        // For columns, we append space only on the last column, every
+        // other columns use only prepending.
+        if (i == container.children.length - 1 && c.right < container.right)
+          append = container.right - c.right;
+        else
+          append = 0;
+        
+        if (append > 0)
+          children.push({ type: "spacing", width: append, stretchy: false, id: c.id + "-append" });
+      }.bind(this));
+      
+      container.children = children;
+    }
     
     return container;
   },

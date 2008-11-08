@@ -45,9 +45,6 @@ Plumb.Output = {
         
         if (box.root)
           right = O.margin;
-          
-        var prepend = box.prepend * (O.margin + O.width);
-        var append = box.append * (O.margin + O.width);
       
         // assemble elements
         var outer = new Element("div");
@@ -56,13 +53,13 @@ Plumb.Output = {
       
         outer.setStyle({
           "marginLeft": left + "px",
-          "marginRight": right + prepend + append + "px"
+          "marginRight": right + "px"
         });
       
         var inner = new Element("div");
         var element = new Element("div", { "class": "box stretchy row" });
         
-        if (box.spacing)
+        if (box.type == "spacing")
           element.addClassName("spacing");
       
         var inner = new Element("div");
@@ -71,8 +68,7 @@ Plumb.Output = {
     
         inner.setStyle({
           "float": "left",
-          "width": (box.width * 100) + "%",
-          "marginLeft": prepend + "px"
+          "width": (box.width * 100) + "%"
         });
       
         if (box.children && box.children.length > 0) {
@@ -100,7 +96,7 @@ Plumb.Output = {
         // create and insert element
         var element = new Element("div", { className: "box row" });
         
-        if (box.spacing)
+        if (box.type == "spacing")
           element.addClassName("spacing");
           
         if (box.id) element.id = box.id;
@@ -177,7 +173,7 @@ Plumb.Output = {
         var inner = new Element("div");
         var element = new Element("div", { "class": "box stretchy column" });
         
-        if (box.spacing)
+        if (box.type == "spacing")
           element.addClassName("spacing");
         
         if (box.id) inner.id = box.id + "-inner";
@@ -209,9 +205,6 @@ Plumb.Output = {
     
     boxes.each(function(box) {
       if (box.stretchy) {
-        if (box.prepend > 0 && stretchy.length > 0)
-          emitStretchy();
-        
         stretchy.push(box);
         
       } else {
@@ -229,7 +222,7 @@ Plumb.Output = {
         // create and insert element
         var element = new Element("div", { className: "box column" });
         
-        if (box.spacing)
+        if (box.type == "spacing")
           element.addClassName("spacing");
           
         if (box.id) element.id = box.id;
