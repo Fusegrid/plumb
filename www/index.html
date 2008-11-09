@@ -23,18 +23,15 @@
     
     <button id="recognize">Recognize &amp; test</button>
     
-    <div id="preview" class="clearfix">
-    </div>
+    <div id="preview" class="clearfix"></div>
     
     <button id="code">Get HTML &amp; CSS</button>
     
-    <div id="code-output">
-    </div>
+    <div id="code-output"></div>
     
     <button id="debug">Get debugging info</button>
     
-    <div id="debug-output">
-    </div>
+    <div id="debug-output"></div>
     
     <script type="text/javascript" charset="utf-8">
       
@@ -101,8 +98,6 @@
               box.insert( new Element("div", { className: "handle-v" }) );
           });
           
-          $("preview").scrollTo();
-          
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
             alert("Sorry, Plumb can't recognize layouts like that.");
@@ -115,7 +110,6 @@
       $("debug").observe("click", function() {
         try {
           $("debug-output").innerHTML = Object.toJSON(Plumb.Recognition.getShapes()).escapeHTML();
-          $("debug-output").scrollTo();
           
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
@@ -131,8 +125,42 @@
           var container = new Element("div");
           Plumb.Output.output(Plumb.Recognition.recognize(), container);
           
-          $("code-output").innerHTML = container.innerHTML.escapeHTML();
-          $("code-output").scrollTo();
+          var css = "";
+          var html = "";
+          
+          function outputChildren(element, level) {
+            if (Object.isUndefined(level))
+              level = 0;
+            
+            element.immediateDescendants().each(function(child) {
+              css += "#" + child.id + " {\n"
+              
+              $A(child.style).each(function(property) {
+                if (property != "height")
+                  css += "  " + property + ": " + child.style.getPropertyValue(property) + ";\n";
+              });
+              
+              css += "}\n\n";
+              
+              html += "  ".times(level) + "<div id=\"" + child.id + "\"";
+              
+              if (child.className != "")
+                html += " class=\"" + child.className
+                
+              html += "\">\n";
+                
+              outputChildren(child, level + 1);
+              
+              html += "  ".times(level) + "</div>\n";
+            });
+            
+            if (element.hasClassName("box") && !element.hasClassName("spacing"))
+              html += "  ".times(level) + "Lorem ipsum dolor\n";
+          }
+          
+          outputChildren(container);
+          
+          $("code-output").innerHTML = ("~~ CSS ~~\n\n" + css + "\n~~ HTML ~~\n\n" + html).escapeHTML();
           
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {

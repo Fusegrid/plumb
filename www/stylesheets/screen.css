@@ -135,3 +135,7 @@ button {
 #debug-output, #code-output {
   font: 80% courier, monospace;
 }
+
+#code-output {
+  white-space: pre;
+}
