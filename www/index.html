@@ -100,6 +100,9 @@
             if (!box.hasClassName("spacing"))
               box.insert( new Element("div", { className: "handle-v" }) );
           });
+          
+          $("preview").scrollTo();
+          
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
             alert("Sorry, Plumb can't recognize layouts like that.");
@@ -112,6 +115,8 @@
       $("debug").observe("click", function() {
         try {
           $("debug-output").innerHTML = Object.toJSON(Plumb.Recognition.getShapes()).escapeHTML();
+          $("debug-output").scrollTo();
+          
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
             alert("Sorry, Plumb can't recognize layouts like that.");
@@ -127,6 +132,7 @@
           Plumb.Output.output(Plumb.Recognition.recognize(), container);
           
           $("code-output").innerHTML = container.innerHTML.escapeHTML();
+          $("code-output").scrollTo();
           
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
