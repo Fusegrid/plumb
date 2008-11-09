@@ -12,6 +12,7 @@ body {
   color: #fff;
   padding: 2em 1em 1em 1em;
   margin: -1em -1em 1em -1em;
+  line-height: 1.2;
 }
 
 #bottom {
@@ -19,6 +20,7 @@ body {
   color: #fff;
   padding: 1em;
   margin: 1em -1em -1em -1em;
+  line-height: 1.2;
 }
 
 #top h1 {
