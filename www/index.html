@@ -9,6 +9,22 @@
   </head>
   <body>
     
+    <div id="top">
+<h1>||)) ||   || || ||~||~|| ||))
+||   ||__ ||_|| || || || ||))</h1>
+
+      <p>“Plumb” is a tool for drawing web layouts that figures out HTML and CSS from shapes you draw. Static and liquid layouts are supported.</p>
+      
+      <p>An quick intro to Plumb can be found <a href="#bottom">below</a>.</p>
+      
+      <p>Plumb is <b>fairly experimental</b> and generates more markup than necessary in some cases. An small apology to Internet Explorer users – Plumb hasn’t been tested on <b>any</b> version of that browser yet. If you find a bug or find Plumb useful, <a href="mailto:michael@mdaines.com">tell me about it!</a></p>
+      
+      <p>Plumb was created by <a href="http://mdaines.com">Michael Daines</a>. The project is hosted <a href="http://github.com/mdaines/plumb">at github</a>.</p>
+      
+  </div>
+    
+  <div id="middle">
+    
     <div id="toolbar">
       <div class="group modes">
         <div class="select button"><img src="images/select.gif"></div>
@@ -23,15 +39,17 @@
     
     <button id="recognize">Recognize &amp; test</button>
     
-    <div id="preview" class="clearfix"></div>
+    <div id="preview" style="display:none;" class="clearfix"></div>
     
     <button id="code">Get HTML &amp; CSS</button>
     
-    <div id="code-output"></div>
+    <div id="code-output" style="display:none;"></div>
     
     <button id="debug">Get debugging info</button>
     
-    <div id="debug-output"></div>
+    <div id="debug-output" style="display:none;"></div>
+  
+  </div>
     
     <script type="text/javascript" charset="utf-8">
       
@@ -98,6 +116,8 @@
               box.insert( new Element("div", { className: "handle-v" }) );
           });
           
+          $("preview").show();
+          
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
             alert("Sorry, Plumb can't recognize layouts like that.");
@@ -110,6 +130,8 @@
       $("debug").observe("click", function() {
         try {
           $("debug-output").innerHTML = Object.toJSON(Plumb.Recognition.getShapes()).escapeHTML();
+          
+          $("debug-output").show();
           
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
@@ -162,6 +184,8 @@
           
           $("code-output").innerHTML = ("~~ CSS ~~\n\n" + css + "\n~~ HTML ~~\n\n" + html).escapeHTML();
           
+          $("code-output").show();
+          
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
             alert("Sorry, Plumb can't recognize layouts like that.");
@@ -172,6 +196,52 @@
       });
       
     </script>
+    
+    <div id="bottom">
+      <h3>The basics of Plumb</h3>
+      
+      <h4>Drawing layouts</h4>
+      
+      <p>Above that area with the vertical stripes, there’s a toolbar with buttons. The ones to the left work like most vector drawing programs: the arrow is for selecting boxes, the rectangle draws boxes. The one on the right switches boxes between being stretchy and not stretchy.</p>
+      
+      <p><img src="images/about/toolbar.gif"></p>
+      
+      <p>Those vertical stripes are guides for a vertical grid. Plumb constrains all the boxes you draw to a vertical grid.</p>
+      
+      <p>Here’s what the work area might look like after drawing some stuff. This is a pretty common layout for a blog, say. It has a stretchy content area on the left, a sidebar on the right, and stretchy header and footer boxes:</p>
+      
+      <p><img src="images/about/layout.gif"></p>
+      
+      <h4>Testing your layout</h4>
+      
+      <p>After you've drawn your layout, you test it. Click the “Recognize &amp; test” button below the work area. Here’s what we get:</p>
+      
+      <p><img src="images/about/preview.gif"></p>
+      
+      <p>The little black squares are handles for changing the size of stuff. The one on the right changes the size of the testing area, so you can see how a stretchy layout will respond to changes in the browser’s window size. If you drag it left, the stretchy boxes get smaller:</p>
+      
+      <p><img src="images/about/thinner.gif"></p>
+      
+      <p>If you drag one of the handles at the bottom of a box downwards, you can see what would happen if the amount of content inside that box changed:</p>
+      
+      <p><img src="images/about/taller.gif"></p>
+      
+      <h4>Blank space</h4>
+      
+      <p>If you draw a layout that has space between boxes, Plumb will fill in that space with boxes of its own:</p>
+      
+      <p><img src="images/about/spacing.gif"></p>
+      
+      <p>Spacing boxes are never stretchy. If you want the effect of stretchy spacing boxes, just draw your own stretchy spacing boxes.</p>
+      
+      <h4>Getting the code!</h4>
+      
+      <p>To get HTML &amp; CSS for the layout you’ve drawn, click on the “Get HTML &amp; CSS” button, and the code will appear below the button.</p>
+      
+      <h4>If something weird happens</h4>
+      
+      <p>If an error occurs, or something strange happens with your layout, try clicking on the “Get debugging info” button. Send me what appears below the button (if anything) via email and I’ll check it out. My email address is <a href="mailto:michael@mdaines.com">michael@mdaines.com</a>.</p>
+    </div>
     
   </body>
 </html>

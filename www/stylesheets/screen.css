@@ -1,24 +1,50 @@
-.clearfix:after {
-  content: ".";
-  display: block;
-  clear: both;
-  visibility: hidden;
-  line-height: 0;
-  height: 0;
+body {
+  margin: 0;
+  padding: 1em;
+  font: 100% helvetica neue;
 }
 
-.clearfix {
-  display: inline-block;
+
+/* explanation */
+
+#top {
+  background: #111;
+  color: #fff;
+  padding: 2em 1em 1em 1em;
+  margin: -1em -1em 1em -1em;
 }
 
-html[xmlns] .clearfix {
-  display: block;
+#bottom {
+  background: #111;
+  color: #fff;
+  padding: 1em;
+  margin: 1em -1em -1em -1em;
 }
 
-* html .clearfix {
-  height: 1%;
+#top h1 {
+  white-space: pre;
+  margin: 0;
+  font: bold 150% monaco, monospace;
 }
 
+#bottom h3 {
+  margin: 0;
+}
+
+h4 {
+  margin-bottom: -0.5em;
+}
+
+a {
+  color: #cc5;
+}
+
+a:hover {
+  color: #ee3;
+}
+
+
+/* the actual "app" */
 
 #toolbar {
   width: 730px;
@@ -133,9 +159,33 @@ button {
 }
 
 #debug-output, #code-output {
-  font: 80% courier, monospace;
+  font: 90% courier, monospace;
+  background: #111;
+  color: #fff;
+  padding: 1em;
 }
 
 #code-output {
   white-space: pre;
+}
+
+.clearfix:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+
+.clearfix {
+  display: inline-block;
+}
+
+html[xmlns] .clearfix {
+  display: block;
+}
+
+* html .clearfix {
+  height: 1%;
 }
