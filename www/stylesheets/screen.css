@@ -5,12 +5,49 @@ body {
 }
 
 
+/* header */
+
+#header {
+  background: #111;
+  color: #fff;
+  padding: 1.25em 1em 0.25em 1em;
+  margin: -1em -1em 1em -1em;
+  line-height: 1.2;
+}
+
+#footer {
+  background: #111;
+  color: #fff;
+  padding: 0.25em 1em 0.25em 1em;
+  margin: 1em -1em -1em -1em;
+  line-height: 1.2;
+}
+
+h1 {
+  white-space: pre;
+  margin: 0;
+  font: bold 150% monaco, monospace;
+}
+
+#header p, #footer p {
+  margin: 1em 0;
+}
+
+#header a, #footer a {
+  color: #cc5;
+}
+ 
+#header a:hover, #footer a:hover {
+  color: #ee3;
+}
+
+
 /* the actual "app" */
 
 #toolbar {
   width: 970px;
   overflow: auto;
-  background: #ccc;
+  background: #bbb;
 }
 
 #toolbar .button {
@@ -40,14 +77,14 @@ body {
 #layout {
   height: 250px;
   width: 970px;
-  background: #ddd;
+  background: #ccc;
   overflow: none;
   position: relative;
 }
 
 #layout .column {
   height: 100%;
-  background: #eee;
+  background: #ddd;
   float: left;
 }
 
@@ -91,7 +128,7 @@ button {
   padding-top: 10px;
   margin: 0 auto;
   width: 970px;
-  background: #ddd;
+  background: #ccc;
 }
 
 #preview .inner {
@@ -106,7 +143,7 @@ button {
   position: relative;
   width: 100%;
   height: 25px;
-  background: #bbb;
+  background: #eee;
 }
 
 #preview .handle {
