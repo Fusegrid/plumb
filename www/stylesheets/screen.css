@@ -76,6 +76,16 @@ button {
   display: block;
 }
 
+#debug-output, #code-output {
+  font: 90% courier, monospace;
+  background: #111;
+  color: #fff;
+  padding: 1em;
+}
+
+
+/* preview */
+
 #preview {
   position: relative;
   padding-top: 10px;
@@ -84,21 +94,22 @@ button {
   background: #ddd;
 }
 
+#preview .inner {
+  margin-left: 10px;
+}
+
+#preview .column {
+  margin-bottom: 10px;
+}
+
 #preview .box {
   position: relative;
-  height: 40px;
-  margin-bottom: 10px;
+  width: 100%;
+  height: 25px;
   background: #bbb;
 }
 
-#preview .box.spacing {
-  position: relative;
-  height: 25px;
-  margin-bottom: 10px;
-  background: #eee;
-}
-
-#preview .box .handle {
+#preview .handle {
   position: absolute;
   bottom: -4px;
   left: 50%;
@@ -108,16 +119,117 @@ button {
   background: #000;
 }
 
-#debug-output, #code-output {
-  font: 90% courier, monospace;
-  background: #111;
-  color: #fff;
-  padding: 1em;
+#preview .column,
+#preview div.span-1,
+#preview div.span-2,
+#preview div.span-3,
+#preview div.span-4,
+#preview div.span-5,
+#preview div.span-6,
+#preview div.span-7,
+#preview div.span-8,
+#preview div.span-9,
+#preview div.span-10,
+#preview div.span-11,
+#preview div.span-12,
+#preview div.span-13,
+#preview div.span-14,
+#preview div.span-15,
+#preview div.span-16,
+#preview div.span-17,
+#preview div.span-18,
+#preview div.span-19,
+#preview div.span-20,
+#preview div.span-21,
+#preview div.span-22,
+#preview div.span-23,
+#preview div.span-24 {
+  float: left;
+  margin-right: 10px; 
 }
 
-#code-output {
-  white-space: pre;
-}
+/* The last column in a row needs this class. */
+#preview .last,
+#preview div.last { margin-right: 0; }
+
+/* Use these classes to set the width of a column. */
+#preview .span-1  { width: 30px; }
+#preview .span-2  { width: 70px; }
+#preview .span-3  { width: 110px; }
+#preview .span-4  { width: 150px; }
+#preview .span-5  { width: 190px; }
+#preview .span-6  { width: 230px; }
+#preview .span-7  { width: 270px; }
+#preview .span-8  { width: 310px; }
+#preview .span-9  { width: 350px; }
+#preview .span-10 { width: 390px; }
+#preview .span-11 { width: 430px; }
+#preview .span-12 { width: 470px; }
+#preview .span-13 { width: 510px; }
+#preview .span-14 { width: 550px; }
+#preview .span-15 { width: 590px; }
+#preview .span-16 { width: 630px; }
+#preview .span-17 { width: 670px; }
+#preview .span-18 { width: 710px; }
+#preview .span-19 { width: 750px; }
+#preview .span-20 { width: 790px; }
+#preview .span-21 { width: 830px; }
+#preview .span-22 { width: 870px; }
+#preview .span-23 { width: 910px; }
+#preview .span-24 { width: 950px; margin: 0; }
+
+/* Add these to a column to append empty cols. */
+#preview .append-1  { padding-right: 40px; }  
+#preview .append-2  { padding-right: 80px; } 
+#preview .append-3  { padding-right: 120px; } 
+#preview .append-4  { padding-right: 160px; } 
+#preview .append-5  { padding-right: 200px; } 
+#preview .append-6  { padding-right: 240px; } 
+#preview .append-7  { padding-right: 280px; } 
+#preview .append-8  { padding-right: 320px; } 
+#preview .append-9  { padding-right: 360px; } 
+#preview .append-10 { padding-right: 400px; } 
+#preview .append-11 { padding-right: 440px; } 
+#preview .append-12 { padding-right: 480px; } 
+#preview .append-13 { padding-right: 520px; } 
+#preview .append-14 { padding-right: 560px; } 
+#preview .append-15 { padding-right: 600px; } 
+#preview .append-16 { padding-right: 640px; } 
+#preview .append-17 { padding-right: 680px; } 
+#preview .append-18 { padding-right: 720px; } 
+#preview .append-19 { padding-right: 760px; } 
+#preview .append-20 { padding-right: 800px; } 
+#preview .append-21 { padding-right: 840px; } 
+#preview .append-22 { padding-right: 880px; } 
+#preview .append-23 { padding-right: 920px; } 
+
+/* Add these to a column to prepend empty cols. */
+#preview .prepend-1  { padding-left: 40px; }  
+#preview .prepend-2  { padding-left: 80px; } 
+#preview .prepend-3  { padding-left: 120px; } 
+#preview .prepend-4  { padding-left: 160px; } 
+#preview .prepend-5  { padding-left: 200px; } 
+#preview .prepend-6  { padding-left: 240px; } 
+#preview .prepend-7  { padding-left: 280px; } 
+#preview .prepend-8  { padding-left: 320px; } 
+#preview .prepend-9  { padding-left: 360px; } 
+#preview .prepend-10 { padding-left: 400px; } 
+#preview .prepend-11 { padding-left: 440px; } 
+#preview .prepend-12 { padding-left: 480px; } 
+#preview .prepend-13 { padding-left: 520px; } 
+#preview .prepend-14 { padding-left: 560px; } 
+#preview .prepend-15 { padding-left: 600px; } 
+#preview .prepend-16 { padding-left: 640px; } 
+#preview .prepend-17 { padding-left: 680px; } 
+#preview .prepend-18 { padding-left: 720px; } 
+#preview .prepend-19 { padding-left: 760px; } 
+#preview .prepend-20 { padding-left: 800px; } 
+#preview .prepend-21 { padding-left: 840px; } 
+#preview .prepend-22 { padding-left: 880px; } 
+#preview .prepend-23 { padding-left: 920px; }
+
+
+/* clearfix */
 
 .clearfix:after {
   content: ".";

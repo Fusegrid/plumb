@@ -78,11 +78,19 @@
           var spec = Plumb.Recognition.recognize();
           
           $("preview").immediateDescendants().invoke("remove");
-          Plumb.Output.output(spec, $("preview"));
+          
+          var inner = new Element("div", { className: "inner" });
+          $("preview").insert(inner);
+          
+          Plumb.Output.output(spec, inner);
+          
+          $("preview").select(".column").each(function(col) {
+            col.insert( new Element("div", { className: "box" }).setStyle({ height: col.getStyle("height") }));
+            col.setStyle({ height: null });
+          });
           
           $("preview").select(".box").each(function(box) {
-            if (!box.hasClassName("spacing"))
-              box.insert( new Element("div", { className: "handle" }) );
+            box.insert( new Element("div", { className: "handle" }) );
           });
           
           $("preview").show();
@@ -116,7 +124,6 @@
           var container = new Element("div");
           Plumb.Output.output(Plumb.Recognition.recognize(), container);
           
-          var css = "";
           var html = "";
           
           function outputChildren(element, level) {
@@ -124,35 +131,20 @@
               level = 0;
             
             element.immediateDescendants().each(function(child) {
-              css += "#" + child.id + " {\n"
+              html += "&nbsp;&nbsp;".times(level) + "&lt;div class=&quot;" + child.className + "&quot;&gt;<br>";
               
-              $A(child.style).each(function(property) {
-                if (property != "height")
-                  css += "  " + property + ": " + child.style.getPropertyValue(property) + ";\n";
-              });
+              if (child.hasClassName("column"))
+                html += "&nbsp;&nbsp;".times(level + 1) + "Lorem ipsum dolor<br>";
+              else
+                outputChildren(child, level + 1);
               
-              css += "}\n\n";
-              
-              html += "  ".times(level) + "<div id=\"" + child.id + "\"";
-              
-              if (child.className != "")
-                html += " class=\"" + child.className
-                
-              html += "\">\n";
-                
-              outputChildren(child, level + 1);
-              
-              html += "  ".times(level) + "</div>\n";
+              html += "&nbsp;&nbsp;".times(level) + "&lt;/div&gt;<br>";
             });
-            
-            if (element.hasClassName("box") && !element.hasClassName("spacing"))
-              html += "  ".times(level) + "Lorem ipsum dolor\n";
           }
           
           outputChildren(container);
           
-          $("code-output").innerHTML = ("~~ CSS ~~\n\n" + css + "\n~~ HTML ~~\n\n" + html).escapeHTML();
-          
+          $("code-output").innerHTML = html;
           $("code-output").show();
           
         } catch (e) {
