@@ -8,7 +8,7 @@ body {
 /* the actual "app" */
 
 #toolbar {
-  width: 730px;
+  width: 970px;
   overflow: auto;
   background: #ccc;
 }
@@ -39,7 +39,7 @@ body {
 
 #layout {
   height: 250px;
-  width: 730px;
+  width: 970px;
   background: #ddd;
   overflow: none;
   position: relative;
@@ -80,7 +80,7 @@ button {
   position: relative;
   padding-top: 10px;
   margin: 0 auto;
-  width: 730px;
+  width: 970px;
   background: #ddd;
 }
 
