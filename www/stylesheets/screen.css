@@ -5,47 +5,6 @@ body {
 }
 
 
-/* explanation */
-
-#top {
-  background: #111;
-  color: #fff;
-  padding: 2em 1em 1em 1em;
-  margin: -1em -1em 1em -1em;
-  line-height: 1.2;
-}
-
-#bottom {
-  background: #111;
-  color: #fff;
-  padding: 1em;
-  margin: 1em -1em -1em -1em;
-  line-height: 1.2;
-}
-
-#top h1 {
-  white-space: pre;
-  margin: 0;
-  font: bold 150% monaco, monospace;
-}
-
-#bottom h3 {
-  margin: 0;
-}
-
-h4 {
-  margin-bottom: -0.5em;
-}
-
-a {
-  color: #cc5;
-}
-
-a:hover {
-  color: #ee3;
-}
-
-
 /* the actual "app" */
 
 #toolbar {
@@ -125,17 +84,6 @@ button {
   background: #ddd;
 }
 
-#preview .handle-h {
-  position: absolute;
-  right: -4px;
-  top: 50%;
-  margin-top: -4px;
-  height: 8px;
-  width: 8px;
-  background: #000;
-  clear: both;
-}
-
 #preview .box {
   position: relative;
   height: 40px;
@@ -150,7 +98,7 @@ button {
   background: #eee;
 }
 
-#preview .box .handle-v {
+#preview .box .handle {
   position: absolute;
   bottom: -4px;
   left: 50%;

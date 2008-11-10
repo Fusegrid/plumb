@@ -9,26 +9,10 @@
   </head>
   <body>
     
-    <div id="top">
-<h1>||)) ||   || || ||~||~|| ||))
-||   ||__ ||_|| || || || ||))</h1>
-
-      <p>“Plumb” is a tool for drawing web layouts that figures out HTML and CSS from shapes you draw. Static and liquid layouts are supported. <a href="#bottom">See below</a> for a quick introduction.</p>
-      
-      <p>Plumb is <b>fairly experimental</b> at this point. On the roadmap: being able to change the sizes of columns and gutters in the final output, compatibility with Internet Explorer, etc. If you notice something amiss, bug reports are great and patches are always welcome. Just <a href="mailto:michael@mdaines.com">send me an email</a>.</p>
-        
-      <p>Plumb was created by <a href="http://mdaines.com">Michael Daines</a>. The project is <a href="http://github.com/mdaines/plumb">hosted at github</a>.</p>
-  </div>
-    
-  <div id="middle">
-    
     <div id="toolbar">
       <div class="group modes">
         <div class="select button"><img src="images/select.gif"></div>
         <div class="draw button"><img src="images/draw.gif"></div>
-      </div>
-      <div class="group buttons">
-        <div class="stretchy button"><img src="images/spring.gif"></div>
       </div>
     </div>
     <div id="layout">
@@ -45,8 +29,6 @@
     <button id="debug">Get debugging info</button>
     
     <div id="debug-output" style="display:none;"></div>
-  
-  </div>
     
     <script type="text/javascript" charset="utf-8">
       
@@ -57,14 +39,12 @@
       
       var LayoutTest = {
         start: function(event) {
-          this.handleH = event.findElement(".handle-h");
-          this.handleV = event.findElement(".handle-v");
+          this.handle = event.findElement(".handle");
           
-          if (this.handleH || this.handleV) {
+          if (this.handle) {
             this.measurements = {
               pointer: event.pointer(),
-              width: this.handleH ? this.handleH.up("#preview").offsetWidth : null,
-              height: this.handleV ? this.handleV.up(".box").offsetHeight : null
+              height: this.handle.up(".box").offsetHeight
             }
             this.dragging = true;
             
@@ -74,17 +54,10 @@
         
         drag: function(event) {
           if (this.dragging) {
-            if (this.handleH)
-              var dim = this.measurements.width - (this.measurements.pointer.x - event.pointer().x);
-            else
-              var dim = this.measurements.height - (this.measurements.pointer.y - event.pointer().y);
-            
+            var dim = this.measurements.height - (this.measurements.pointer.y - event.pointer().y);
             if (dim < 25) dim = 25;
             
-            if (this.handleH)
-              this.handleH.up("#preview").setStyle({ width: dim + "px" });
-            else
-              this.handleV.up(".box").setStyle({ height: dim + "px" });
+            this.handle.up(".box").setStyle({ height: dim + "px" });
             
             event.stop();
           }
@@ -106,11 +79,9 @@
           $("preview").immediateDescendants().invoke("remove");
           Plumb.Output.output(spec, $("preview"));
           
-          $("preview").insert( new Element("div", { className: "handle-h" }) );
-          
           $("preview").select(".box").each(function(box) {
             if (!box.hasClassName("spacing"))
-              box.insert( new Element("div", { className: "handle-v" }) );
+              box.insert( new Element("div", { className: "handle" }) );
           });
           
           $("preview").show();
@@ -193,52 +164,6 @@
       });
       
     </script>
-    
-    <div id="bottom">
-      <h3>The basics of Plumb</h3>
-      
-      <h4>Drawing layouts</h4>
-      
-      <p>Above that area with the vertical stripes, there’s a toolbar with buttons. The ones to the left work like most vector drawing programs: the arrow is for selecting boxes, the rectangle draws boxes. The one on the right switches boxes between being stretchy and not stretchy.</p>
-      
-      <p><img src="images/about/toolbar.gif"></p>
-      
-      <p>Those vertical stripes are guides for a vertical grid. Plumb constrains all the boxes you draw to a vertical grid.</p>
-      
-      <p>Here’s what the work area might look like after drawing some stuff. This is a pretty common layout for a blog, say. It has a stretchy content area on the left, a sidebar on the right, and stretchy header and footer boxes:</p>
-      
-      <p><img src="images/about/layout.gif"></p>
-      
-      <h4>Testing your layout</h4>
-      
-      <p>After you've drawn your layout, you test it. Click the “Recognize &amp; test” button below the work area. Here’s what we get:</p>
-      
-      <p><img src="images/about/preview.gif"></p>
-      
-      <p>The little black squares are handles for changing the size of stuff. The one on the right changes the size of the testing area, so you can see how a stretchy layout will respond to changes in the browser’s window size. If you drag it left, the stretchy boxes get smaller:</p>
-      
-      <p><img src="images/about/thinner.gif"></p>
-      
-      <p>If you drag one of the handles at the bottom of a box downwards, you can see what would happen if the amount of content inside that box changed:</p>
-      
-      <p><img src="images/about/taller.gif"></p>
-      
-      <h4>Blank space</h4>
-      
-      <p>If you draw a layout that has space between boxes, Plumb will fill in that space with boxes of its own:</p>
-      
-      <p><img src="images/about/spacing.gif"></p>
-      
-      <p>Spacing boxes are never stretchy. If you want the effect of stretchy spacing boxes, just draw your own stretchy spacing boxes.</p>
-      
-      <h4>Getting the code!</h4>
-      
-      <p>To get HTML &amp; CSS for the layout you’ve drawn, click on the “Get HTML &amp; CSS” button, and the code will appear below the button.</p>
-      
-      <h4>If something weird happens</h4>
-      
-      <p>If an error occurs, or something strange happens with your layout, try clicking on the “Get debugging info” button. Send me what appears below the button (if anything) via email and I’ll check it out. My email address is <a href="mailto:michael@mdaines.com">michael@mdaines.com</a>.</p>
-    </div>
     
   </body>
 </html>
