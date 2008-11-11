@@ -33,6 +33,11 @@
     <div id="layout">
     </div>
     
+    <div id="warnings">
+      <div id="unsupported" style="display: none;"><b>Warning:</b> Plumb can't fully subdivide the rows and columns in this layout.</div>
+      <div id="overlap" style="display: none;"><b>Warning:</b> Plumb can’t recognize layouts with overlapping shapes.</div>
+    </div>
+    
     <div id="recognize-help" class="help">
       <p>After you draw some boxes, click “Recognize &amp; test”. Plumb figures out how to construct your layout and generates a preview. You can click and drag the handles at the bottom of boxes to get a sense of how your layout will work with different content.</p>
     </div>
@@ -101,6 +106,28 @@
       Event.observe(window, "mousemove", function(e) { LayoutTest.drag(e); });
       Event.observe(window, "mouseup", function(e) { LayoutTest.finish(e); });
       
+      function recognizeWarnings() {
+        try {
+          $("unsupported").hide();
+          $("overlap").hide();
+          
+          Plumb.Recognition.recognize();
+        } catch (e) {
+          console.log(e);
+          
+          if (e === Plumb.UnsupportedLayout) {
+            $("unsupported").show();
+          } else if (e === Plumb.Overlap) {
+            $("overlap").show();
+          } else {
+            throw e;
+          }
+        }
+      }
+      
+      Plumb.Layout.observe("plumb:finishedresizing", recognizeWarnings);
+      Plumb.Layout.observe("plumb:finisheddragging", recognizeWarnings);
+      
       $("recognize").observe("click", function() {
         try {
           var spec = Plumb.Recognition.recognize();
@@ -125,7 +152,9 @@
           
         } catch (e) {
           if (e == Plumb.UnsupportedLayout) {
-            alert("Sorry, Plumb can't recognize layouts like that.");
+            alert("Plumb can't fully subdivide the rows and columns in this layout.");
+          } else if (e == Plumb.Overlap) {
+            alert("Plumb can't recognize layouts with overlapping shapes.");
           } else {
             throw e;
           }
