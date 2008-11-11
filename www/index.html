@@ -18,9 +18,29 @@
     </div>
     
     <div id="layout-help" class="help">
-      <h4>How to use Plumb</h4>
+      <div class="inner">
+        <h4>How to use Plumb</h4>
       
-      <p>Plumb works like a regular drawing program. This tool <img src="images/draw.gif" class="button-help"> is for drawing boxes. This tool <img src="images/select.gif" class="button-help"> is for selecting boxes and moving them around. To remove a box, select it and press the backspace key on your keyboard. You can shift-click boxes to select more than one at once.</p>
+        <div class="span-8 column">
+          <p>Plumb works like a regular drawing program. You can click and drag to create boxes with this tool <img src="images/draw.gif" class="button-help"> and move and resize them with this tool <img src="images/select.gif" class="button-help">. You can shift-click to select more than one box. To remove boxes, select them and press the backspace key on your keyboard.</p>
+        </div>
+
+        <div class="span-8 column">
+          <p>In Plumb, vertical space is used only to determine whether or not boxes are in the same row. These two layouts will produce the same HTML:</p>
+          
+          <p><img src="images/samples/2a.gif"> <img src="images/samples/2b.gif"></p>
+    
+          <p>Any vertical spacing you draw won’t be reflected in the HTML Plumb produces (but you can add spacing using the prepend-top and append-bottom classes).</p>
+        </div>
+
+        <div class="span-8 last column">
+          <p>After drawing a layout, click “Recognize &amp; test” to preview it and see what happens when your boxes have more or less content in them:</p>
+      
+          <p><img src="images/samples/3a.gif"> <img src="images/samples/3b.gif"></p>
+      
+          <p>In the preview, Plumb keeps the height of the boxes you drew and shows them with vertical spacing.</p>
+        </div>
+      </div>
     </div>
     
     <div id="toolbar">
@@ -38,29 +58,21 @@
       <div id="overlap" style="display: none;"><b>Warning:</b> Plumb can’t recognize layouts with overlapping shapes.</div>
     </div>
     
-    <div id="recognize-help" class="help">
-      <p>After you draw some boxes, click “Recognize &amp; test”. Plumb figures out how to construct your layout and generates a preview. You can click and drag the handles at the bottom of boxes to get a sense of how your layout will work with different content.</p>
-    </div>
-    
     <button id="recognize">Recognize &amp; test</button>
     
     <div id="preview" style="display:none;" class="clearfix"></div>
-    
-    <div id="html-help" class="help">
-      <p>To get HTML code for your layout, click “Get HTML”. You’ll need to put it inside a webpage with the Blueprint stylesheets linked.</p>
-    </div>
     
     <button id="code">Get HTML</button>
     
     <div id="code-output" style="display:none;"></div>
     
-    <div id="debug-help" class="help">
-      <p>If something doesn’t work the way you expect, let me know and I’ll try to fix it. To make it easier to fix the problem, click “Get debugging info” and send me the result with a description of what’s going on. My email address is <a href="mailto:michael@mdaines.com">michael@mdaines.com</a>.</p>
-    </div>
-    
     <button id="debug">Get debugging info</button>
     
     <div id="debug-output" style="display:none;"></div>
+    
+    <div id="debug-help" class="help">
+      <p>If something doesn’t work the way you expect, let me know and I’ll try to fix it. To make it easier to fix the problem, click “Get debugging info” and send me the result with a description of what’s going on. My email address is <a href="mailto:michael@mdaines.com">michael@mdaines.com</a>.</p>
+    </div>
     
     <script type="text/javascript" charset="utf-8">
       

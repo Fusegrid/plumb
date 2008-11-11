@@ -12,7 +12,7 @@ body {
   color: #fff;
   padding: 1.25em 1em 0.25em 1em;
   margin: -1em -1em 1em -1em;
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 #footer {
@@ -20,15 +20,7 @@ body {
   color: #fff;
   padding: 0.25em 1em 0.25em 1em;
   margin: 1em -1em -1em -1em;
-  line-height: 1.2;
-}
-
-#layout-help {
-  margin-top: -1em;
-}
-
-#recognize-help, #html-help, #debug-help, #footer {
-  margin-top: 2em;
+  line-height: 1.3;
 }
 
 .help {
@@ -36,7 +28,36 @@ body {
   color: #fff;
   padding: 0.25em 1em 0.25em 1em;
   margin: 1em -1em;
-  line-height: 1.2;
+  line-height: 1.3;
+}
+
+#layout-help {
+  margin-top: -1em;
+  overflow: auto;
+}
+
+#layout-help .inner {
+  width: 950px;
+  font-size: 90%;
+}
+
+#layout-help .column {
+  float: left;
+  margin-right: 10px;
+}
+
+#layout-help .span-8 {
+  width: 310px;
+}
+
+#layout-help .last { margin-right: 0; }
+
+#debug-help {
+  margin-bottom: -1em;
+}
+
+#debug-help p {
+  width: 950px;
 }
 
 h1 {
@@ -66,7 +87,7 @@ h1 {
 }
 
 .help h4 {
-  margin: 1em 0 -0.5em 0;
+  margin: 1em 0 -0.25em 0;
 }
 
 
