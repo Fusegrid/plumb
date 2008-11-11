@@ -1,8 +1,10 @@
+require "tempfile"
+
 task :build_javascripts => ["www/javascripts/prototype.js", "www/javascripts/letters.js", "www/javascripts/plumb.js"]
 
 task "www/javascripts/prototype.js" do
   mkdir_p "www/javascripts"
-  cp "vendor/prototype.js", "www/javascripts/prototype.js"
+  `java -jar vendor/shrinksafe.jar vendor/prototype.js > www/javascripts/prototype.js`
 end
 
 task "www/javascripts/letters.js" do
@@ -19,7 +21,9 @@ task "www/javascripts/plumb.js" do
     src += File.read(path) + "\n\n"
   end
   
-  File.open("www/javascripts/plumb.js", "w+") do |f|
-    f << src
-  end
+  tmp = Tempfile.new("plumb")
+  tmp << src
+  tmp.close
+  
+  `java -jar vendor/shrinksafe.jar #{tmp.path} > www/javascripts/plumb.js`
 end
