@@ -23,22 +23,50 @@ body {
   line-height: 1.2;
 }
 
+#layout-help {
+  margin-top: -1em;
+}
+
+#recognize-help, #html-help, #debug-help, #footer {
+  margin-top: 2em;
+}
+
+.help {
+  background: #333;
+  color: #fff;
+  padding: 0.25em 1em 0.25em 1em;
+  margin: 1em -1em;
+  line-height: 1.2;
+}
+
 h1 {
   white-space: pre;
   margin: 0;
   font: bold 150% monaco, monospace;
 }
 
-#header p, #footer p {
+#header p, #footer p, .help p, .help h4 {
   margin: 1em 0;
 }
 
-#header a, #footer a {
+#header a, #footer a, .help a {
   color: #cc5;
 }
  
-#header a:hover, #footer a:hover {
+#header a:hover, #footer a:hover, .help a:hover {
   color: #ee3;
+}
+
+.help .button-help {
+  vertical-align: bottom;
+  border: 1px outset #eee;
+  background: #fff;
+  padding: 0;
+  margin: 0 0.1em;
+}
+
+.help h4 {
+  margin: 1em 0 -0.5em 0;
 }
 
 
@@ -143,7 +171,7 @@ button {
 }
 
 #preview .column {
-  margin-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 #preview .box {
