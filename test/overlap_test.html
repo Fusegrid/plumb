@@ -45,6 +45,22 @@
             {"left": 6, "top": 80, "height": 110, "width": 2, "right": 7, "bottom": 190},
             {"left": 1, "top": 139, "height": 50, "width": 5, "right": 5, "bottom": 189}
           ]));
+        },
+        
+        testEdgeToEdgeDoesntRaiseOverlap: function() {
+          this.assertRaise("Overlap", function() {
+            Plumb.Recognition.recognize([
+              {"left": 0, "top": 9, "height": 59, "width": 7, "right": 6, "bottom": 68},
+              {"left": 0, "top": 67, "height": 69, "width": 7, "right": 6, "bottom": 136}
+            ]);
+          });
+          
+          this.assertNothingRaised(function() {
+            Plumb.Recognition.recognize([
+              {"left": 0, "top": 9, "height": 59, "width": 7, "right": 6, "bottom": 68},
+              {"left": 0, "top": 68, "height": 69, "width": 7, "right": 6, "bottom": 137}
+            ]);
+          });
         }
       });
       
