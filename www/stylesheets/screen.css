@@ -23,71 +23,22 @@ body {
   line-height: 1.3;
 }
 
-.help {
-  background: #333;
-  color: #fff;
-  padding: 0.25em 1em 0.25em 1em;
-  margin: 1em -1em;
-  line-height: 1.3;
-}
-
-#layout-help {
-  margin-top: -1em;
-  overflow: auto;
-}
-
-#layout-help .inner {
-  width: 950px;
-  font-size: 90%;
-}
-
-#layout-help .column {
-  float: left;
-  margin-right: 10px;
-}
-
-#layout-help .span-8 {
-  width: 310px;
-}
-
-#layout-help .last { margin-right: 0; }
-
-#debug-help {
-  margin-bottom: -1em;
-}
-
-#debug-help p {
-  width: 950px;
-}
-
 h1 {
   white-space: pre;
   margin: 0;
   font: bold 150% monaco, monospace;
 }
 
-#header p, #footer p, .help p, .help h4 {
+#header p, #footer p {
   margin: 1em 0;
 }
 
-#header a, #footer a, .help a {
+#header a, #footer a {
   color: #cc5;
 }
  
-#header a:hover, #footer a:hover, .help a:hover {
+#header a:hover, #footer a:hover {
   color: #ee3;
-}
-
-.help .button-help {
-  vertical-align: bottom;
-  border: 1px outset #eee;
-  background: #fff;
-  padding: 0;
-  margin: 0 0.1em;
-}
-
-.help h4 {
-  margin: 1em 0 -0.25em 0;
 }
 
 
