@@ -164,9 +164,9 @@
               html += "  ".times(level) + "<div id=\"" + child.id + "\"";
               
               if (child.className != "")
-                html += " class=\"" + child.className
+                html += " class=\"" + child.className + "\"";
                 
-              html += "\">\n";
+              html += ">\n";
                 
               outputChildren(child, level + 1);
               
