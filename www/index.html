@@ -85,8 +85,8 @@
       }
       
       $("preview").observe("mousedown", function(e) { LayoutTest.start(e); });
-      Event.observe(window, "mousemove", function(e) { LayoutTest.drag(e); });
-      Event.observe(window, "mouseup", function(e) { LayoutTest.finish(e); });
+      Event.observe(document.body, "mousemove", function(e) { LayoutTest.drag(e); });
+      Event.observe(document.body, "mouseup", function(e) { LayoutTest.finish(e); });
       
       function recognizeWarnings() {
         try {
