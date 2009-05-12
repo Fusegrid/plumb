@@ -1,3 +1,8 @@
+//= require <prototype.js>
+
+/* Plumb (c) 2007-2009 Michael Daines
+ * Distributed under the terms of an MIT-style license */
+
 var Plumb = {
   DEFAULTS: {
     layout: {
@@ -48,3 +53,18 @@ var Plumb = {
     }.bind(this));
   }
 }
+
+//= require "plumb/column.js"
+//= require "plumb/creation.js"
+//= require "plumb/dragging.js"
+//= require "plumb/focus.js"
+//= require "plumb/handle.js"
+//= require "plumb/layout.js"
+//= require "plumb/modes.js"
+//= require "plumb/output.js"
+//= require "plumb/recognition.js"
+//= require "plumb/resizing.js"
+//= require "plumb/selection.js"
+//= require "plumb/shape.js"
+//= require "plumb/toolbar.js"
+//= require "letters.js"

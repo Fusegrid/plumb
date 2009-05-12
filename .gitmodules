@@ -1,0 +1,3 @@
+[submodule "vendor/prototype"]
+	path = vendor/prototype
+	url = git://github.com/sstephenson/prototype.git

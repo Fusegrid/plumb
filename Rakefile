@@ -1,49 +1,20 @@
-require "tempfile"
+require "rake/clean"
 
-task :build_javascripts => ["www/javascripts/prototype.js", "www/javascripts/letters.js", "www/javascripts/plumb.js"]
+CLOBBER << ["www/plumb.js"]
 
-task :copy_javascripts do
-  mkdir_p "www/javascripts"
+desc "Use Sprockets to build www/plumb.js"
+task :build_javascripts do
+  require "rubygems"
+  require "sprockets"
   
-  cp "vendor/prototype.js", "www/javascripts/prototype.js"
+  secretary = Sprockets::Secretary.new(
+    :asset_root   => "www",
+    :load_path    => ["vendor/*/src"],
+    :source_files => ["src/plumb.js"]
+  )
   
-  cp "lib/letters.js", "www/javascripts/letters.js"
-  
-  src = ""
-  
-  FileList["lib/plumb.js", "lib/plumb/*.js"].each do |path|
-    src += File.read(path) + "\n\n"
-  end
-  
-  tmp = Tempfile.new("plumb")
-  tmp << src
-  tmp.close
-  
-  cp tmp.path, "www/javascripts/plumb.js"
+  concatenation = secretary.concatenation
+  concatenation.save_to("www/plumb.js")
 end
 
-task "www/javascripts/prototype.js" do
-  mkdir_p "www/javascripts"
-  `java -jar vendor/shrinksafe.jar vendor/prototype.js > www/javascripts/prototype.js`
-end
-
-task "www/javascripts/letters.js" do
-  mkdir_p "www/javascripts"
-  cp "lib/letters.js", "www/javascripts/letters.js"
-end
-
-task "www/javascripts/plumb.js" do
-  mkdir_p "www/javascripts"
-  
-  src = ""
-  
-  FileList["lib/plumb.js", "lib/plumb/*.js"].each do |path|
-    src += File.read(path) + "\n\n"
-  end
-  
-  tmp = Tempfile.new("plumb")
-  tmp << src
-  tmp.close
-  
-  `java -jar vendor/shrinksafe.jar #{tmp.path} > www/javascripts/plumb.js`
-end
+task :default => :build_javascripts
