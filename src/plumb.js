@@ -67,4 +67,3 @@ var Plumb = {
 //= require "plumb/selection.js"
 //= require "plumb/shape.js"
 //= require "plumb/toolbar.js"
-//= require "letters.js"

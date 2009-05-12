@@ -16,8 +16,6 @@ Plumb.Recognition = {
     container.type = type || 'rows';
     container.children = [];
     
-    container.id = (this.index++).toLetters();
-    
     var originalShapesLength = shapes.length;
     var section;
     
@@ -40,10 +38,9 @@ Plumb.Recognition = {
         container.type = container.type == 'rows' ? 'columns' : 'rows';
       }
       
-      if (section.length == 1) {
-        section[0].id = (this.index++).toLetters();
+      if (section.length == 1)
         container.children.push(section[0]);
-      } else
+      else
         container.children.push(this.buildContainer(section, container.type == 'rows' ? 'columns' : 'rows'));
     }
     
