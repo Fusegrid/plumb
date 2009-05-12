@@ -15,32 +15,32 @@
       <p>This is <b>Plumb</b>, a tool for composing web layouts for use with the <a href="http://blueprintcss.org">Blueprint CSS framework</a>.</p>
     </div>
     
-    <div id="toolbar">
-      <div class="group modes">
-        <div class="select button"><img src="images/select.gif"></div>
-        <div class="draw button"><img src="images/draw.gif"></div>
+    <div id="container">
+    
+      <div id="toolbar-container">
+        <div id="toolbar">
+          <div class="group modes">
+            <div class="select button"><img src="images/select-t.gif"></div>
+            <div class="draw button"><img src="images/draw-t.gif"></div>
+          </div>
+          <div class="group actions">
+            <div class="preview button">Preview layout</div>
+            <div class="output button">Get HTML</div>
+          </div>
+        </div>
       </div>
+  
+      <div id="layout">
+    
+    
+        <div id="warnings">
+          <div id="unsupported" style="display: none;"><b>Warning:</b> Plumb can't fully subdivide the rows and columns in this layout.</div>
+          <div id="overlap" style="display: none;"><b>Warning:</b> Plumb can’t recognize layouts with overlapping shapes.</div>
+        </div>
+    
+      </div>
+      
     </div>
-    
-    <div id="layout">
-    </div>
-    
-    <div id="warnings">
-      <div id="unsupported" style="display: none;"><b>Warning:</b> Plumb can't fully subdivide the rows and columns in this layout.</div>
-      <div id="overlap" style="display: none;"><b>Warning:</b> Plumb can’t recognize layouts with overlapping shapes.</div>
-    </div>
-    
-    <button id="recognize">Recognize &amp; test</button>
-    
-    <div id="preview" style="display:none;" class="clearfix"></div>
-    
-    <button id="code">Get HTML</button>
-    
-    <div id="code-output" style="display:none;"></div>
-    
-    <button id="debug">Get debugging info</button>
-    
-    <div id="debug-output" style="display:none;"></div>
     
     <script type="text/javascript" charset="utf-8">
       
@@ -50,41 +50,6 @@
         column: { width: 30, margin: 10 },
         shape: { border: 1 }
       });
-      
-      var LayoutTest = {
-        start: function(event) {
-          this.handle = event.findElement(".handle");
-          
-          if (this.handle) {
-            this.measurements = {
-              pointer: event.pointer(),
-              height: this.handle.up(".box").offsetHeight
-            }
-            this.dragging = true;
-            
-            event.stop();
-          }
-        },
-        
-        drag: function(event) {
-          if (this.dragging) {
-            var dim = this.measurements.height - (this.measurements.pointer.y - event.pointer().y);
-            if (dim < 25) dim = 25;
-            
-            this.handle.up(".box").setStyle({ height: dim + "px" });
-            
-            event.stop();
-          }
-        },
-        
-        finish: function(event) {
-          this.dragging = false;
-        }
-      }
-      
-      $("preview").observe("mousedown", function(e) { LayoutTest.start(e); });
-      Event.observe(document.body, "mousemove", function(e) { LayoutTest.drag(e); });
-      Event.observe(document.body, "mouseup", function(e) { LayoutTest.finish(e); });
       
       function recognizeWarnings() {
         try {
@@ -108,96 +73,7 @@
       Plumb.Layout.observe("plumb:finishedresizing", recognizeWarnings);
       Plumb.Layout.observe("plumb:finisheddragging", recognizeWarnings);
       
-      $("recognize").observe("click", function() {
-        try {
-          var spec = Plumb.Recognition.recognize();
-          
-          $("preview").immediateDescendants().invoke("remove");
-          
-          var inner = new Element("div", { className: "inner" });
-          $("preview").insert(inner);
-          
-          Plumb.Output.output(spec, inner);
-          
-          $("preview").select(".column").each(function(col) {
-            col.insert( new Element("div", { className: "box" }).setStyle({ height: col.getStyle("height") }));
-            col.setStyle({ height: null });
-          });
-          
-          $("preview").select(".box").each(function(box) {
-            box.insert( new Element("div", { className: "handle" }) );
-          });
-          
-          $("preview").show();
-          
-        } catch (e) {
-          if (e == Plumb.UnsupportedLayout) {
-            alert("Plumb can't fully subdivide the rows and columns in this layout.");
-          } else if (e == Plumb.Overlap) {
-            alert("Plumb can't recognize layouts with overlapping shapes.");
-          } else {
-            throw e;
-          }
-        }
-      });
-      
-      $("debug").observe("click", function() {
-        try {
-          $("debug-output").innerHTML = Object.toJSON(Plumb.Recognition.getShapes()).escapeHTML();
-          
-          $("debug-output").show();
-          
-        } catch (e) {
-          if (e == Plumb.UnsupportedLayout) {
-            alert("Sorry, Plumb can't recognize layouts like that.");
-          } else {
-            throw e;
-          }
-        }
-      });
-      
-      $("code").observe("click", function() {
-        try {
-          var container = new Element("div");
-          Plumb.Output.output(Plumb.Recognition.recognize(), container);
-          
-          var html = "";
-          
-          function outputChildren(element, level) {
-            if (Object.isUndefined(level))
-              level = 0;
-            
-            element.immediateDescendants().each(function(child) {
-              html += "&nbsp;&nbsp;".times(level) + "&lt;div class=&quot;" + child.className + "&quot;&gt;<br>";
-              
-              if (child.hasClassName("column"))
-                html += "&nbsp;&nbsp;".times(level + 1) + "Lorem ipsum dolor<br>";
-              else
-                outputChildren(child, level + 1);
-              
-              html += "&nbsp;&nbsp;".times(level) + "&lt;/div&gt;<br>";
-            });
-          }
-          
-          outputChildren(container);
-          
-          $("code-output").innerHTML = html;
-          $("code-output").show();
-          
-        } catch (e) {
-          if (e == Plumb.UnsupportedLayout) {
-            alert("Sorry, Plumb can't recognize layouts like that.");
-          } else {
-            throw e;
-          }
-        }
-      });
-      
     </script>
-    
-    <div id="footer">
-      <p>Plumb was made by <a href="http://mdaines.com">Michael Daines</a>. The code is hosted at <a href="http://github.com/mdaines/plumb/tree/blueprint">GitHub</a>.</p>
-    </div>
     
   </body>
 </html>
