@@ -29,19 +29,19 @@ Plumb.Selection = {
     this.clear();
     this.selection = [shape];
     shape.select(".handle").invoke("show");
-    Plumb.Layout.fire("plumb:selectionchanged");
+    Plumb.fire("plumb:selectionchanged");
   },
   
   add: function(shape) {
     this.selection.push(shape);
     shape.select(".handle").invoke("show");
-    Plumb.Layout.fire("plumb:selectionchanged");
+    Plumb.fire("plumb:selectionchanged");
   },
   
   remove: function(shape) {
     this.selection = this.selection.without(shape);
     shape.select(".handle").invoke("hide");
-    Plumb.Layout.fire("plumb:selectionchanged");
+    Plumb.fire("plumb:selectionchanged");
   },
   
   toggle: function(shape) {
@@ -56,7 +56,7 @@ Plumb.Selection = {
       shape.select(".handle").invoke("hide");
     });
     this.selection = [];
-    Plumb.Layout.fire("plumb:selectionchanged");
+    Plumb.fire("plumb:selectionchanged");
   },
   
   destroyAll: function() {
@@ -64,6 +64,6 @@ Plumb.Selection = {
       shape.remove();
     });
     this.selection = [];
-    Plumb.Layout.fire("plumb:selectionchanged");
+    Plumb.fire("plumb:selectionchanged");
   }
 }

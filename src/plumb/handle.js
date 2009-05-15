@@ -1,7 +1,5 @@
 Plumb.Handle = {
   setup: function() {
-    var s = this.options.size;
-    
     this.positioning = {
       tl: { top: -0.5, left: -0.5 },
       tr: { top: -0.5, right: -0.5 },
@@ -16,7 +14,7 @@ Plumb.Handle = {
     for (rule in this.positioning) {
       for (name in this.positioning[rule]) {
         if (!Object.isString(this.positioning[rule][name]))
-          this.positioning[rule][name] = (this.positioning[rule][name] * this.options.size) + "px";
+          this.positioning[rule][name] = (this.positioning[rule][name] * Plumb.HANDLE_SIZE) + "px";
       }
     }
   },
@@ -26,10 +24,11 @@ Plumb.Handle = {
     
     handle.setStyle({
       'position': 'absolute',
-      'width': this.options.size + 'px',
-      'height': this.options.size + 'px',
+      'width': Plumb.HANDLE_SIZE + 'px',
+      'height': Plumb.HANDLE_SIZE + 'px',
       'display': 'none'
     });
+    
     handle.setStyle(this.positioning[options.type]);
     
     handle.observe('mousedown', function(e) { Plumb.Resizing.start(e); });

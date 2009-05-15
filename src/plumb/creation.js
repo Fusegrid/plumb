@@ -1,24 +1,11 @@
 Plumb.Creation = {
   setup: function() {
-    Event.observe(document.body, 'mousemove', function(e) { Plumb.Creation.drag(e); });
-    Event.observe(document.body, 'mouseup', function(e) { Plumb.Creation.finish(e); });
+    Event.observe(Plumb.element, 'mousemove', function(e) { Plumb.Creation.drag(e); });
+    Event.observe(Plumb.element, 'mouseup', function(e) { Plumb.Creation.finish(e); });
   },
   
   start: function(event) {
-    var L = Plumb.Layout.getMeasurements();
-    
-    var pointer = event.pointer();
-    
-    this.layoutOffset = {
-      left: L.left,
-      top: L.top
-    };
-    
-    this.origin = {
-      left: pointer.x - this.layoutOffset.left,
-      top: pointer.y - this.layoutOffset.top
-    };
-      
+    this.origin = event.pointer();
     event.stop();
   },
   
@@ -26,18 +13,13 @@ Plumb.Creation = {
     if (this.origin) {
       var pointer = event.pointer();
       
-      var pointerOffsetInLayout = {
-        left: pointer.x - this.layoutOffset.left,
-        top: pointer.y - this.layoutOffset.top
-      };
-      
-      if (pointerOffsetInLayout.left > this.origin.left && pointerOffsetInLayout.top >= this.origin.top + Plumb.Shape.MIN_HEIGHT)
+      if (pointer.x > this.origin.x && pointer.y >= this.origin.y + Plumb.Shape.MIN_HEIGHT)
         this.create('br');
-      else if (pointerOffsetInLayout.left < this.origin.left && pointerOffsetInLayout.top >= this.origin.top + Plumb.Shape.MIN_HEIGHT)
+      else if (pointer.x < this.origin.x && pointer.y >= this.origin.y + Plumb.Shape.MIN_HEIGHT)
         this.create('bl');
-      else if (pointerOffsetInLayout.left < this.origin.left && pointerOffsetInLayout.top <= this.origin.top - Plumb.Shape.MIN_HEIGHT)
+      else if (pointer.x < this.origin.x && pointer.y <= this.origin.y - Plumb.Shape.MIN_HEIGHT)
         this.create('tl');
-      else if (pointerOffsetInLayout.left > this.origin.left && pointerOffsetInLayout.top <= this.origin.top - Plumb.Shape.MIN_HEIGHT)
+      else if (pointer.x > this.origin.x && pointer.y <= this.origin.y - Plumb.Shape.MIN_HEIGHT)
         this.create('tr');
     }
     
@@ -45,21 +27,19 @@ Plumb.Creation = {
   },
   
   create: function(type) {
-    var C = Plumb.Column.getMeasurements();
-    
     // Always put the shape either in the column we started dragging in, or if
     // starting from a margin, in the column we started dragging into.
     var measurements = {
-      left: Math.floor(this.origin.left / (C.width + C.margin)),
-      top: this.origin.top,
+      left: Math.floor(this.origin.x / (Plumb.WIDTH + Plumb.MARGIN)),
+      top: this.origin.y,
       width: 1,
       height: Plumb.Shape.MIN_HEIGHT
     }
     
     // If we started in the margin and are dragging right, move this shape
     // right a column.
-    if (this.origin.left > ((measurements.left * (C.width + C.margin)) + C.width) &&
-        this.origin.left < (measurements.left * (C.width + C.margin)) + C.width + C.margin &&
+    if (this.origin.x > ((measurements.left * (Plumb.WIDTH + Plumb.MARGIN)) + Plumb.WIDTH) &&
+        this.origin.x < (measurements.left * (Plumb.WIDTH + Plumb.MARGIN)) + Plumb.WIDTH + Plumb.MARGIN &&
         type.include('r'))
           measurements.left += 1;
     

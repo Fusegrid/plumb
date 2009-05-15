@@ -4,66 +4,41 @@
  * Distributed under the terms of an MIT-style license */
 
 var Plumb = {
-  DEFAULTS: {
-    layout: {
-      width: 12
-    },
+  WIDTH: 30,
+  MARGIN: 10,
+  BORDER: 1,
+  HANDLE_SIZE: 8,
+  
+  setup: function(element) {
+    this.element = $(element);
     
-    column: {
-      width: 50,
-      margin: 10
-    },
-    
-    handle: {
-      size: 8
-    },
-    
-    output: {
-      width: 50,
-      margin: 10
-    },
-    
-    shape: {
-      border: 0
-    }
+    Plumb.Creation.setup();
+    Plumb.Dragging.setup();
+    Plumb.Handle.setup();
+    Plumb.Layout.setup();
+    Plumb.Resizing.setup();
+    Plumb.Shape.setup();
   },
   
-  modules: $w("layout column creation dragging focus handle modes resizing selection shape toolbar output"),
-  elements: $w("layout toolbar"),
+  setMode: function(mode) {
+    this.mode = mode;
+    this.fire("plumb:modechanged");
+  },
   
-  setup: function(options) {
-    options = options || {};
-    
-    // ensure that we have correct element references
-    this.elements.each(function(e) {
-      if (options[e] && options[e].element)
-        options[e].element = $(options[e].element);
-    });
-    
-    // propagate options
-    this.modules.each(function(m) {
-      if (this[m.capitalize()])
-        this[m.capitalize()].options = Object.extend(this.DEFAULTS[m] || {}, options[m] || {});
-    }.bind(this));
-    
-    // call setup routines
-    this.modules.each(function(m) {
-      if (this[m.capitalize()] && this[m.capitalize()].setup)
-        this[m.capitalize()].setup();
-    }.bind(this));
+  observe: function(eventName, handler) {
+    Plumb.element.observe(eventName, handler);
+  },
+  
+  fire: function(eventName) {
+    Plumb.element.fire(eventName);
   }
 }
 
 //= require "plumb/column.js"
 //= require "plumb/creation.js"
 //= require "plumb/dragging.js"
-//= require "plumb/focus.js"
 //= require "plumb/handle.js"
 //= require "plumb/layout.js"
-//= require "plumb/modes.js"
-//= require "plumb/output.js"
-//= require "plumb/recognition.js"
 //= require "plumb/resizing.js"
 //= require "plumb/selection.js"
 //= require "plumb/shape.js"
-//= require "plumb/toolbar.js"

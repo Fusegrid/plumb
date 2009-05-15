@@ -25,12 +25,8 @@ Plumb.Resizing = {
     b: function(measurements, handle) {
       var adjusted = {};
       var MIN = Plumb.Shape.MIN_HEIGHT;
-      var L = Plumb.Layout.getMeasurements();
       
       adjusted.height = handle.top - measurements.top;
-      
-      if (measurements.top + adjusted.height > L.height)
-        adjusted.height = L.height - measurements.top;
     
       if (adjusted.height < MIN)
         adjusted.height = MIN;
@@ -40,7 +36,6 @@ Plumb.Resizing = {
     
     l: function(measurements, handle) {
       var adjusted = {};
-      var C = Plumb.Column.getMeasurements();
       
       adjusted.left = handle.left;
       
@@ -59,24 +54,19 @@ Plumb.Resizing = {
     
     r: function(measurements, handle) {
       var adjusted = {};
-      var C = Plumb.Column.getMeasurements();
-      var L = Plumb.Layout.getMeasurements();
       
       adjusted.width = handle.left - measurements.left + 1;
       
       if (adjusted.width < 1)
         adjusted.width = 1;
-        
-      if (measurements.left + adjusted.width >= L.width)
-        adjusted.width = L.width - measurements.left;
     
       return adjusted;
     }
   },
   
   setup: function() {
-    Event.observe(document.body, 'mousemove', function(e) { this.drag(e); }.bind(this));
-    Event.observe(document.body, 'mouseup', function(e) { this.finish(e); }.bind(this));
+    Event.observe(Plumb.element, 'mousemove', function(e) { this.drag(e); }.bind(this));
+    Event.observe(Plumb.element, 'mouseup', function(e) { this.finish(e); }.bind(this));
   },
   
   start: function(event) {
@@ -85,16 +75,9 @@ Plumb.Resizing = {
   },
   
   begin: function(handle) {
-    var L = Plumb.Layout.getMeasurements();
-    
     this.resizing = true;
     this.shape = handle.up(".shape");
     this.measurements = this.shape.getMeasurements();
-    
-    this.layoutOffset = {
-      left: L.left,
-      top: L.top
-    };
     
     this.type = handle.classNames().detect(function(n) {
       return this.HANDLE_TYPES.include(n);
@@ -107,7 +90,7 @@ Plumb.Resizing = {
     if (this.resizing) {
       var handle = {
         left: Plumb.Column.fromEvent(event),
-        top: event.pointerY() - this.layoutOffset.top
+        top: event.pointerY()
       }
       
       this.type.split("").each(function(component) {
@@ -122,6 +105,6 @@ Plumb.Resizing = {
 
   finish: function(event) {
     this.resizing = false;
-    Plumb.Layout.fire("plumb:finishedresizing");
+    Plumb.fire("plumb:finishedresizing");
   }
 }

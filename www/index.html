@@ -3,75 +3,40 @@
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <script src="plumb.js" type="text/javascript" charset="utf-8"></script>
-    <link rel="stylesheet" href="stylesheets/screen.css" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="stylesheets/plumb.css" type="text/css" media="screen" charset="utf-8">
     <title>Plumb</title>
   </head>
   <body>
     
     <div id="header">
-      <h1>||)) ||   || || ||~||~|| ||))
-||   ||__ ||_|| || || || ||))</h1>
-
       <p>This is <b>Plumb</b>, a tool for composing web layouts for use with the <a href="http://blueprintcss.org">Blueprint CSS framework</a>.</p>
     </div>
     
-    <div id="container">
-    
-      <div id="toolbar-container">
-        <div id="toolbar">
-          <div class="group modes">
-            <div class="select button"><img src="images/select-t.gif"></div>
-            <div class="draw button"><img src="images/draw-t.gif"></div>
-          </div>
-          <div class="group actions">
-            <div class="preview button">Preview layout</div>
-            <div class="output button">Get HTML</div>
-          </div>
-        </div>
-      </div>
-  
-      <div id="layout">
-    
-    
-        <div id="warnings">
-          <div id="unsupported" style="display: none;"><b>Warning:</b> Plumb can't fully subdivide the rows and columns in this layout.</div>
-          <div id="overlap" style="display: none;"><b>Warning:</b> Plumb can’t recognize layouts with overlapping shapes.</div>
-        </div>
-    
-      </div>
-      
+    <div id="modes">
+      <button id="select"><img src="images/select-t.gif"></button>
+      <button id="draw"><img src="images/draw-t.gif"></button>
     </div>
+    
+    <div id="layout"></div>
     
     <script type="text/javascript" charset="utf-8">
       
-      Plumb.setup({
-        layout: { element: "layout", width: 24 },
-        toolbar: { element: "toolbar" },
-        column: { width: 30, margin: 10 },
-        shape: { border: 1 }
+      Event.observe(document, "dom:loaded", function() {
+        Plumb.setup("layout");
+        
+        $("select").observe("mousedown", function() { Plumb.setMode("select"); });
+        $("draw").observe("mousedown", function() { Plumb.setMode("draw"); });
+        
+        Plumb.observe("plumb:modechanged", function() {
+          $("layout").removeClassName("select", "draw");
+          $("layout").addClassName(Plumb.mode);
+          
+          $("modes").select("button").invoke("removeClassName", "set");
+          $(Plumb.mode).addClassName("set");
+        });
+        
+        Plumb.setMode("draw");
       });
-      
-      function recognizeWarnings() {
-        try {
-          $("unsupported").hide();
-          $("overlap").hide();
-          
-          Plumb.Recognition.recognize();
-        } catch (e) {
-          console.log(e);
-          
-          if (e === Plumb.UnsupportedLayout) {
-            $("unsupported").show();
-          } else if (e === Plumb.Overlap) {
-            $("overlap").show();
-          } else {
-            throw e;
-          }
-        }
-      }
-      
-      Plumb.Layout.observe("plumb:finishedresizing", recognizeWarnings);
-      Plumb.Layout.observe("plumb:finisheddragging", recognizeWarnings);
       
     </script>
     
