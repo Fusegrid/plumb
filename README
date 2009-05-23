@@ -2,4 +2,5 @@
   ||)) ||   || || ||~||~|| ||))
   ||   ||__ ||_|| || || || ||))
 
-  This is Plumb, a tool for composing web layouts.
+Plumb is a tool for composing web layouts that figures out
+HTML and CSS from shapes you draw.
