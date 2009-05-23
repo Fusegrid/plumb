@@ -1,8 +1,4 @@
-require "rake/clean"
-
-CLOBBER << ["www/plumb.js"]
-
-desc "Use Sprockets to build www/plumb.js"
+desc "Use Sprockets to build plumb.js"
 task :build_javascripts do
   require "rubygems"
   require "sprockets"
@@ -14,7 +10,7 @@ task :build_javascripts do
   )
   
   concatenation = secretary.concatenation
-  concatenation.save_to("www/plumb.js")
+  concatenation.save_to("plumb.js")
 end
 
 task :default => :build_javascripts
