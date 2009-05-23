@@ -31,6 +31,10 @@ var Plumb = {
   
   fire: function(eventName) {
     Plumb.element.fire(eventName);
+  },
+  
+  shapes: function() {
+    return Plumb.element.select(".shape");
   }
 }
 
@@ -39,6 +43,8 @@ var Plumb = {
 //= require "plumb/dragging.js"
 //= require "plumb/handle.js"
 //= require "plumb/layout.js"
+//= require "plumb/output.js"
+//= require "plumb/recognition.js"
 //= require "plumb/resizing.js"
 //= require "plumb/selection.js"
 //= require "plumb/shape.js"

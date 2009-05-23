@@ -15,8 +15,8 @@
     
     <div id="layout"></div>
     
-    <div id="html">
-      <pre><code>HTML goes here!</code></pre>
+    <div id="html" style="display: none;">
+      <pre><code></code></pre>
     </div>
     
     <script type="text/javascript" charset="utf-8">
@@ -36,6 +36,50 @@
         });
         
         Plumb.setMode("draw");
+        
+        function updateOutput() {
+          $("html").show();
+          
+          try {
+            var container = new Element("div");
+            Plumb.Output.output(Plumb.Recognition.recognize(), container);
+          
+            var html = "";
+          
+            function outputChildren(element, level) {
+              if (Object.isUndefined(level))
+                level = 0;
+            
+              element.immediateDescendants().each(function(child) {
+                html += "&nbsp;&nbsp;".times(level) + "&lt;div class=&quot;" + child.className + "&quot;&gt;\n";
+              
+                if (child.hasClassName("column"))
+                  html += "&nbsp;&nbsp;".times(level + 1) + "Lorem ipsum dolor\n";
+                else
+                  outputChildren(child, level + 1);
+              
+                html += "&nbsp;&nbsp;".times(level) + "&lt;/div&gt;\n";
+              });
+            }
+          
+            outputChildren(container);
+          
+            $("html").down("pre code").update(html);
+            
+          } catch (e) {
+            if (e == Plumb.UnsupportedLayout) {
+              $("html").down("pre code").update("Plumb can't fully subdivide the rows and columns in this layout.");
+            } else if (e == Plumb.Overlap) {
+              $("html").down("pre code").update("Plumb can't recognize layouts with overlapping shapes.");
+            } else {
+              throw e;
+            }
+          }
+        }
+        
+        Plumb.observe("plumb:finishedresizing", updateOutput);
+        Plumb.observe("plumb:finisheddragging", updateOutput);
+        Plumb.observe("plumb:selectiondestroyed", updateOutput);
       });
       
     </script>

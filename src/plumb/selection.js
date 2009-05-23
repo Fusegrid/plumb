@@ -64,6 +64,6 @@ Plumb.Selection = {
       shape.remove();
     });
     this.selection = [];
-    Plumb.fire("plumb:selectionchanged");
+    Plumb.fire("plumb:selectiondestroyed");
   }
 }

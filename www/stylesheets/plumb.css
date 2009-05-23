@@ -70,11 +70,12 @@ body {
   position: absolute;
   top: 400px;
   left: 0;
+  width: 100%;
 }
 
 #html pre {
   margin: 8pt;
-  padding: 4pt;
+  padding: 8pt;
   background: #333;
   color: #fff;
   border: 1px solid #666;

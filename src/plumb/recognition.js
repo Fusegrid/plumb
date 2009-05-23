@@ -1,6 +1,6 @@
 Plumb.Recognition = {
   getShapes: function() {
-    return Plumb.Layout.shapes().map(function(shape) {
+    return Plumb.shapes().map(function(shape) {
       return shape.getMeasurements();
     });
   },
@@ -53,7 +53,7 @@ Plumb.Recognition = {
     
     if (container.root) {
       container.left = 0;
-      container.right = Plumb.Layout.getMeasurements().width - 1;
+      container.right = Plumb.Layout.getWidth() - 1;
     }
     
     container.height = container.bottom - container.top;
