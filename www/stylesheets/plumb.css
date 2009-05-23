@@ -66,15 +66,36 @@ body {
 }
 
 
-#html {
+#show {
   position: absolute;
   top: 400px;
   left: 0;
   width: 100%;
 }
 
-#html pre {
+#show #about {
   margin: 8pt;
+  color: #fff;
+  font-family: helvetica, sans-serif;
+  font-size: 12pt;
+}
+
+#show #about a {
+  color: #cc5;
+}
+ 
+#show #about a:hover {
+  color: #ee3;
+}
+
+#show #about address {
+  display: block;
+  font-style: italic;
+  margin-top: 8pt;
+}
+
+#show #html pre {
+  margin: 12pt 8pt 8pt 8pt;
   padding: 8pt;
   background: #333;
   color: #fff;
