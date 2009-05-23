@@ -2,5 +2,4 @@
   ||)) ||   || || ||~||~|| ||))
   ||   ||__ ||_|| || || || ||))
 
-Plumb is a tool for composing web layouts that figures out
-HTML and CSS from shapes you draw.
+Plumb is a web layout composition tool for use with the Blueprint framework.
