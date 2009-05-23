@@ -44,27 +44,27 @@
             var container = new Element("div");
             Plumb.Output.output(Plumb.Recognition.recognize(), container);
           
-            var html = "";
-          
             function outputChildren(element, level) {
+              var html = "";
+              
               if (Object.isUndefined(level))
                 level = 0;
             
               element.immediateDescendants().each(function(child) {
                 html += "&nbsp;&nbsp;".times(level) + "&lt;div class=&quot;" + child.className + "&quot;&gt;\n";
               
-                if (child.hasClassName("column"))
-                  html += "&nbsp;&nbsp;".times(level + 1) + "Lorem ipsum dolor\n";
+                if (child.immediateDescendants().any())
+                  html += outputChildren(child, level + 1);
                 else
-                  outputChildren(child, level + 1);
+                  html += "&nbsp;&nbsp;".times(level + 1) + "Lorem ipsum dolor\n";
               
                 html += "&nbsp;&nbsp;".times(level) + "&lt;/div&gt;\n";
               });
+              
+              return html;
             }
-          
-            outputChildren(container);
-          
-            $("html").down("pre code").update(html);
+            
+            $("html").down("pre code").update(outputChildren(container));
             
           } catch (e) {
             if (e == Plumb.UnsupportedLayout) {

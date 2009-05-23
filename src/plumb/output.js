@@ -19,7 +19,6 @@ Plumb.Output = {
         this.output(child, element);
       } else {
         container.insert(element);
-        element.addClassName("column");
         element.setStyle({ height: child.height + "px" });
       }
     }.bind(this));
